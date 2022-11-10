@@ -1,5 +1,3 @@
-import { BeakerIcon } from '@heroicons/react/24/solid';
-
 import { Card } from 'flowbite-react';
 import Head from 'next/head';
 
@@ -24,7 +22,6 @@ export default function Home() {
             far, in reverse chronological order.
           </p>
         </Card>
-        <BeakerIcon className="h-6 w-6 text-blue-500" />
       </div>
     </div>
   );
