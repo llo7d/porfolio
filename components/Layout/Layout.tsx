@@ -1,8 +1,6 @@
 import {
   UserIcon,
-  SunIcon,
   ArrowRightOnRectangleIcon,
-  ChevronDoubleUpIcon,
   ChevronDownIcon,
   Squares2X2Icon,
   GlobeAmericasIcon,
@@ -18,7 +16,6 @@ type Props = {
 };
 
 const Layout: React.FC<Props> = ({ children }) => {
-  const [isDarkModeActive, setIsDarkModeActive] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [isCreateAccount, setIsCreateAccount] = useState(false);
   const router = useRouter();
@@ -66,7 +63,7 @@ const Layout: React.FC<Props> = ({ children }) => {
     });
   }, [isLoggedIn]);
 
-  //   Responsible for?? (I don't know what this does.)
+  //Responsible for?? (I don't know what this does.)
   useEffect(() => {
     refAccountDropdown.current?.hide();
   }, [router.asPath]);
