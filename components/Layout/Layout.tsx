@@ -11,16 +11,16 @@ import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 import { auth, googleAuthProvider } from '../../lib/firebase';
-import { useSignInWithGoogle, useAuthState } from 'react-firebase-hooks/auth';
 import { signInWithPopup, signOut } from 'firebase/auth';
-
+import { useContext } from 'react';
+import { FirebaseContext } from '../../lib/context';
 type Props = {
   children?: JSX.Element | JSX.Element[];
 };
 
 const Layout: React.FC<Props> = ({ children }) => {
-  // Sign in with google
-  const [user, loadingUser, errorUser] = useAuthState(auth);
+  const { user, loadingUser } = useContext(FirebaseContext);
+  // const [user, loadingUser, errorUser] = useAuthState(auth);
 
   const handleSignInWithGoogle = async () => {
     try {
@@ -30,9 +30,13 @@ const Layout: React.FC<Props> = ({ children }) => {
     }
   };
 
-  // const [user, setUser] = useState(false);
-  // const [isLoggedIn, setIsLoggedIn] = useState(true);
-  // const [isCreateAccount, setIsCreateAccount] = useState(false);
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const router = useRouter();
 
   const refModalLoginElement = useRef(null);
@@ -52,8 +56,6 @@ const Layout: React.FC<Props> = ({ children }) => {
               'bg-black bg-opacity-70 backdrop-blur-sm fixed inset-0 z-40',
             onHide: () => {
               document.body.style.overflow = 'auto';
-
-              // setIsCreateAccount(false);
             },
             onShow: () => {
               document.body.style.overflow = 'hidden';
@@ -79,7 +81,6 @@ const Layout: React.FC<Props> = ({ children }) => {
 
     console.log(user);
   }, [user]);
-  // Changed isLoggedIn to user
 
   //Responsible for?? (I don't know what this does.)
   useEffect(() => {
@@ -103,7 +104,6 @@ const Layout: React.FC<Props> = ({ children }) => {
               </span>
             </a>
           </Link>
-
           {/* Menu */}
           <div
             className="hidden justify-between items-center w-full absolute left-1/2 -translate-x-1/2 md:flex md:w-auto"
@@ -152,87 +152,93 @@ const Layout: React.FC<Props> = ({ children }) => {
               </li>
             </ul>
           </div>
-
-          {/* User LoggedIn */}
-          {user && (
-            <div className="flex items-center">
-              <button
-                ref={refAccountButtonElement}
-                type="button"
-                className="flex items-center text-sm bg-gray-800 rounded-full"
-                id="user-menu-button"
-                aria-expanded="false"
-                data-dropdown-toggle="user-dropdown"
-                data-dropdown-placement="bottom"
-              >
-                <span className="sr-only">Open user menu</span>
-                <img
-                  className="w-8 h-8 rounded-full object-cover mr-3"
-                  src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                  alt="user photo"
-                />
-                <ChevronDownIcon className="text-gray-500 w-5 h-5" />
-              </button>
-              <div
-                ref={refAccountMenuElement}
-                className="hidden w-64 border overflow-hidden z-50 my-4 list-none bg-gray-800 rounded-xl divide-y border-gray-700 shadow !-translate-x-14 !top-16 !left-auto !right-12"
-                id="user-dropdown"
-              >
-                <ul aria-labelledby="user-menu-button">
-                  <li className="px-4 border-b border-gray-700 hover:bg-gray-900">
-                    <Link legacyBehavior href="/profile/edit">
-                      <a className="flex items-center py-3 text-sm text-white">
-                        <UserIcon className="mr-3 w-6 h-6" />
-                        <p className="">My Profile</p>
-                      </a>
-                    </Link>
-                  </li>
-                  <li>
-                    <button
-                      className="px-4 flex items-center w-full py-3 text-sm text-red-500 hover:bg-gray-900"
-                      onClick={() => {
-                        signOut(auth);
-                      }}
+          {/* First show loading, once user is loaded, show the rest. */}
+          {loadingUser ? (
+            <h1 className="text-white">Loading...</h1>
+          ) : (
+            <>
+              {/* User LoggedIn */}
+              {user && (
+                <div className="flex items-center">
+                  <button
+                    ref={refAccountButtonElement}
+                    type="button"
+                    className="flex items-center text-sm bg-gray-800 rounded-full"
+                    id="user-menu-button"
+                    aria-expanded="false"
+                    data-dropdown-toggle="user-dropdown"
+                    data-dropdown-placement="bottom"
+                  >
+                    <span className="sr-only">Open user menu</span>
+                    <img
+                      className="w-8 h-8 rounded-full object-cover mr-3"
+                      src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                      alt="user photo"
+                    />
+                    <ChevronDownIcon className="text-gray-500 w-5 h-5" />
+                  </button>
+                  <div
+                    ref={refAccountMenuElement}
+                    className="hidden w-64 border overflow-hidden z-50 my-4 list-none bg-gray-800 rounded-xl divide-y border-gray-700 shadow !-translate-x-14 !top-16 !left-auto !right-12"
+                    id="user-dropdown"
+                  >
+                    <ul aria-labelledby="user-menu-button">
+                      <li className="px-4 border-b border-gray-700 hover:bg-gray-900">
+                        <Link legacyBehavior href="/profile/edit">
+                          <a className="flex items-center py-3 text-sm text-white">
+                            <UserIcon className="mr-3 w-6 h-6" />
+                            <p className="">My Profile</p>
+                          </a>
+                        </Link>
+                      </li>
+                      <li>
+                        <button
+                          className="px-4 flex items-center w-full py-3 text-sm text-red-500 hover:bg-gray-900"
+                          onClick={() => {
+                            handleSignOut();
+                          }}
+                        >
+                          <ArrowRightOnRectangleIcon className="mr-3 w-6 h-6" />
+                          <p className="">Log Out</p>
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                  <button
+                    data-collapse-toggle="mobile-menu-2"
+                    type="button"
+                    className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                    aria-controls="mobile-menu-2"
+                    aria-expanded="false"
+                  >
+                    <span className="sr-only">Open main menu</span>
+                    <svg
+                      className="w-6 h-6"
+                      aria-hidden="true"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
                     >
-                      <ArrowRightOnRectangleIcon className="mr-3 w-6 h-6" />
-                      <p className="">Log Out</p>
-                    </button>
-                  </li>
-                </ul>
-              </div>
-              <button
-                data-collapse-toggle="mobile-menu-2"
-                type="button"
-                className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
-                aria-controls="mobile-menu-2"
-                aria-expanded="false"
-              >
-                <span className="sr-only">Open main menu</span>
-                <svg
-                  className="w-6 h-6"
-                  aria-hidden="true"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
+                      <path
+                        fillRule="evenodd"
+                        d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                        clipRule="evenodd"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              )}
+              {/* User NOT LoggedIn*/}
+              {!user && (
+                <button
+                  className="text-white font-sans"
+                  type="button"
+                  onClick={() => refModalLogin.current?.show()}
                 >
-                  <path
-                    fillRule="evenodd"
-                    d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-              </button>
-            </div>
-          )}
-          {/* User NOT LoggedIn*/}
-          {!user && (
-            <button
-              className="text-white font-sans"
-              type="button"
-              onClick={() => refModalLogin.current?.show()}
-            >
-              Login
-            </button>
+                  Login
+                </button>
+              )}
+            </>
           )}
         </div>
       </nav>
@@ -334,7 +340,7 @@ const Layout: React.FC<Props> = ({ children }) => {
                   className="text-blue-500 hover:underline"
                   type="button"
                   onClick={() => {
-                    console.log('clicked');
+                    router.push('/about');
                   }}
                 >
                   Learn more

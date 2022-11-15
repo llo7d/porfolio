@@ -1,1 +1,1 @@
-- Based on the current NavBar implement login with firebase
+- Auth is there, clean it up even more ( componetns etc... )
