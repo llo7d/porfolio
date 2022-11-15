@@ -10,14 +10,29 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
+import { auth, googleAuthProvider } from '../../lib/firebase';
+import { useSignInWithGoogle, useAuthState } from 'react-firebase-hooks/auth';
+import { signInWithPopup, signOut } from 'firebase/auth';
 
 type Props = {
   children?: JSX.Element | JSX.Element[];
 };
 
 const Layout: React.FC<Props> = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [isCreateAccount, setIsCreateAccount] = useState(false);
+  // Sign in with google
+  const [user, loadingUser, errorUser] = useAuthState(auth);
+
+  const handleSignInWithGoogle = async () => {
+    try {
+      await signInWithPopup(auth, googleAuthProvider);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // const [user, setUser] = useState(false);
+  // const [isLoggedIn, setIsLoggedIn] = useState(true);
+  // const [isCreateAccount, setIsCreateAccount] = useState(false);
   const router = useRouter();
 
   const refModalLoginElement = useRef(null);
@@ -38,7 +53,7 @@ const Layout: React.FC<Props> = ({ children }) => {
             onHide: () => {
               document.body.style.overflow = 'auto';
 
-              setIsCreateAccount(false);
+              // setIsCreateAccount(false);
             },
             onShow: () => {
               document.body.style.overflow = 'hidden';
@@ -61,7 +76,10 @@ const Layout: React.FC<Props> = ({ children }) => {
         }
       }
     });
-  }, [isLoggedIn]);
+
+    console.log(user);
+  }, [user]);
+  // Changed isLoggedIn to user
 
   //Responsible for?? (I don't know what this does.)
   useEffect(() => {
@@ -135,7 +153,8 @@ const Layout: React.FC<Props> = ({ children }) => {
             </ul>
           </div>
 
-          {isLoggedIn && (
+          {/* User LoggedIn */}
+          {user && (
             <div className="flex items-center">
               <button
                 ref={refAccountButtonElement}
@@ -168,33 +187,12 @@ const Layout: React.FC<Props> = ({ children }) => {
                       </a>
                     </Link>
                   </li>
-                  {/* Dark mode Button */}
-                  {/* <li className="px-4 border-b border-gray-700 hover:bg-gray-900">
-                    <div className="flex items-center py-3 text-sm text-white">
-                      <SunIcon className="mr-3 w-6 h-6" />
-                      <p className="mr-auto">Dark Theme</p>
-                      <label
-                        htmlFor="checked-toggle"
-                        className="inline-flex relative items-center cursor-pointer"
-                      >
-                        <input
-                          type="checkbox"
-                          value=""
-                          id="checked-toggle"
-                          className="sr-only peer"
-                          checked={isDarkModeActive}
-                          onChange={() =>
-                            setIsDarkModeActive(!isDarkModeActive)
-                          }
-                        />
-                        <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                      </label>
-                    </div>
-                  </li> */}
                   <li>
                     <button
                       className="px-4 flex items-center w-full py-3 text-sm text-red-500 hover:bg-gray-900"
-                      onClick={() => setIsLoggedIn(false)}
+                      onClick={() => {
+                        signOut(auth);
+                      }}
                     >
                       <ArrowRightOnRectangleIcon className="mr-3 w-6 h-6" />
                       <p className="">Log Out</p>
@@ -226,7 +224,8 @@ const Layout: React.FC<Props> = ({ children }) => {
               </button>
             </div>
           )}
-          {!isLoggedIn && (
+          {/* User NOT LoggedIn*/}
+          {!user && (
             <button
               className="text-white font-sans"
               type="button"
@@ -282,7 +281,6 @@ const Layout: React.FC<Props> = ({ children }) => {
                   type="button"
                   className="mb-3 w-52 justify-center text-white font-medium bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
                   onClick={() => {
-                    setIsLoggedIn(true);
                     refModalLogin.current?.hide();
                   }}
                 >
@@ -307,7 +305,7 @@ const Layout: React.FC<Props> = ({ children }) => {
                   type="button"
                   className="text-white justify-center w-52 bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
                   onClick={() => {
-                    setIsLoggedIn(true);
+                    handleSignInWithGoogle();
                     refModalLogin.current?.hide();
                   }}
                 >
@@ -335,7 +333,9 @@ const Layout: React.FC<Props> = ({ children }) => {
                 <button
                   className="text-blue-500 hover:underline"
                   type="button"
-                  onClick={() => setIsCreateAccount(true)}
+                  onClick={() => {
+                    console.log('clicked');
+                  }}
                 >
                   Learn more
                 </button>
