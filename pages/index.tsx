@@ -1,7 +1,10 @@
 import { Card } from 'flowbite-react';
 import Head from 'next/head';
+import { useContext } from 'react';
+import { FirebaseContext } from '../lib/context';
 
 export default function Home() {
+  const { user, loadingUser } = useContext(FirebaseContext);
   return (
     <div>
       <Head>
@@ -10,7 +13,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="max-w-sm">
-        <h1>You are logged in: Name</h1>
+        <h1>You are logged in: {user?.displayName}</h1>
       </div>
     </div>
   );

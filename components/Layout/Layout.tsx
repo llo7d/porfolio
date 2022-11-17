@@ -14,6 +14,7 @@ import { auth, googleAuthProvider } from '../../lib/firebase';
 import { signInWithPopup, signOut } from 'firebase/auth';
 import { useContext } from 'react';
 import { FirebaseContext } from '../../lib/context';
+import Image from 'next/image';
 type Props = {
   children?: JSX.Element | JSX.Element[];
 };
@@ -170,11 +171,19 @@ const Layout: React.FC<Props> = ({ children }) => {
                     data-dropdown-placement="bottom"
                   >
                     <span className="sr-only">Open user menu</span>
+                    <Image
+                      className="w-8 h-8 rounded-full object-cover mr-3"
+                      src={user?.photoURL as string}
+                      width={40}
+                      height={40}
+                      alt="User Profile Picture"
+                    />
+                    {/* 
                     <img
                       className="w-8 h-8 rounded-full object-cover mr-3"
-                      src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                      src={user?.photoURL as string}
                       alt="user photo"
-                    />
+                    /> */}
                     <ChevronDownIcon className="text-gray-500 w-5 h-5" />
                   </button>
                   <div
