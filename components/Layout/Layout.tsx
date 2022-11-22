@@ -5,16 +5,28 @@ import {
   Squares2X2Icon,
   GlobeAmericasIcon,
   QuestionMarkCircleIcon,
+  HeartIcon,
+  DocumentIcon,
 } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
-import { auth, googleAuthProvider } from '../../lib/firebase';
-import { signInWithPopup, signOut } from 'firebase/auth';
+import { auth, firestore, googleAuthProvider } from '../../lib/firebase';
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  serverTimestamp,
+  setDoc,
+} from 'firebase/firestore';
+
+import { signInWithPopup, signOut, GithubAuthProvider } from 'firebase/auth';
 import { useContext } from 'react';
 import { FirebaseContext } from '../../lib/context';
 import Image from 'next/image';
+
 type Props = {
   children?: JSX.Element | JSX.Element[];
 };
@@ -24,10 +36,42 @@ const Layout: React.FC<Props> = ({ children }) => {
   // const [user, loadingUser, errorUser] = useAuthState(auth);
 
   const handleSignInWithGoogle = async () => {
-    try {
-      await signInWithPopup(auth, googleAuthProvider);
-    } catch (error) {
-      console.log(error);
+    await signInWithPopup(auth, googleAuthProvider);
+
+    let loggedUser = auth.currentUser;
+
+    if (loggedUser) {
+      // Maybe not needed, ill add later.
+    }
+  };
+
+  const handleSignInWithGithub = async () => {
+    // Sign in using a redirect.
+    const provider = new GithubAuthProvider();
+
+    // Add scope to only grab user profile and username
+    provider.addScope('read:user user:email');
+    await signInWithPopup(auth, provider);
+
+    let loggedUser = auth.currentUser;
+
+    if (loggedUser) {
+      // Check if user exists in firestore
+      const docSnap = await getDoc(doc(firestore, 'users', loggedUser.uid));
+
+      if (!docSnap.exists()) {
+        // Write a new document in the users collection
+        await setDoc(doc(firestore, 'users', loggedUser.uid), {
+          username: loggedUser.displayName,
+          email: loggedUser.email,
+          photoURL: loggedUser.photoURL,
+          createdAt: serverTimestamp(),
+          provider: loggedUser.providerData[0].providerId,
+          uid: loggedUser.uid,
+        });
+      } else {
+        console.log('User already exists in firestore');
+      }
     }
   };
 
@@ -38,6 +82,7 @@ const Layout: React.FC<Props> = ({ children }) => {
       console.log(error);
     }
   };
+
   const router = useRouter();
 
   const refModalLoginElement = useRef(null);
@@ -90,8 +135,8 @@ const Layout: React.FC<Props> = ({ children }) => {
 
   return (
     <div className="pt-16">
-      {/* Navigation Bar */}
       <nav className="fixed top-0 w-full bg-gray-800 border-b border-gray-700 px-28">
+        {/* Left side of the navbar */}
         <div className="flex flex-wrap justify-between items-center mx-auto h-16">
           <Link href="/" legacyBehavior>
             <a className="flex items-center">
@@ -105,7 +150,7 @@ const Layout: React.FC<Props> = ({ children }) => {
               </span>
             </a>
           </Link>
-          {/* Menu */}
+
           <div
             className="hidden justify-between items-center w-full absolute left-1/2 -translate-x-1/2 md:flex md:w-auto"
             id="mobile-menu-2"
@@ -153,7 +198,8 @@ const Layout: React.FC<Props> = ({ children }) => {
               </li>
             </ul>
           </div>
-          {/* First show loading, once user is loaded, show the rest. */}
+
+          {/* Logged in User */}
           {loadingUser ? (
             <h1 className="text-white">Loading...</h1>
           ) : (
@@ -177,6 +223,7 @@ const Layout: React.FC<Props> = ({ children }) => {
                       width={40}
                       height={40}
                       alt="User Profile Picture"
+                      loading="eager"
                     />
                     {/* 
                     <img
@@ -200,6 +247,23 @@ const Layout: React.FC<Props> = ({ children }) => {
                           </a>
                         </Link>
                       </li>
+                      <li className="px-4 border-b border-gray-700 hover:bg-gray-900">
+                        <Link legacyBehavior href="/profile/edit">
+                          <a className="flex items-center py-3 text-sm text-white">
+                            <DocumentIcon className="mr-3 w-6 h-6" />
+                            <p className="">My Posts</p>
+                          </a>
+                        </Link>
+                      </li>
+                      {/* To be added in the future */}
+                      {/* <li className="px-4 border-b border-gray-700 hover:bg-gray-900">
+                        <Link legacyBehavior href="/profile/hearted">
+                          <a className="flex items-center py-3 text-sm text-white">
+                            <HeartIcon className="mr-3 w-6 h-6" />
+                            <p className="">Liked Posts </p>
+                          </a>
+                        </Link>
+                      </li> */}
                       <li>
                         <button
                           className="px-4 flex items-center w-full py-3 text-sm text-red-500 hover:bg-gray-900"
@@ -296,6 +360,7 @@ const Layout: React.FC<Props> = ({ children }) => {
                   type="button"
                   className="mb-3 w-52 justify-center text-white font-medium bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
                   onClick={() => {
+                    handleSignInWithGithub();
                     refModalLogin.current?.hide();
                   }}
                 >

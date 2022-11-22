@@ -1,1 +1,4 @@
-- Auth is there, clean it up even more ( componetns etc... )
+- Create document of user on signin ( check if alrdy exists )
+
+- Create firebase database and fill homepage with fake posts.
+-> Posts delete themselfs after 15 days ( to remove inactive users )
