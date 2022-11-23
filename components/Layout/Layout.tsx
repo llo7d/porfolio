@@ -33,17 +33,15 @@ type Props = {
 
 const Layout: React.FC<Props> = ({ children }) => {
   const { user, loadingUser } = useContext(FirebaseContext);
-  // const [user, loadingUser, errorUser] = useAuthState(auth);
 
-  const handleSignInWithGoogle = async () => {
-    await signInWithPopup(auth, googleAuthProvider);
-
-    let loggedUser = auth.currentUser;
-
-    if (loggedUser) {
-      // Maybe not needed, ill add later.
-    }
-  };
+  // We call the github api with user id to get github user data
+  async function getGitHubUserData(githubIdOrLogin: string | undefined) {
+    return fetch(`https://api.github.com/user/${githubIdOrLogin}`, {
+      headers: { Accept: 'application/json' },
+    }).then((res) => {
+      return res.json();
+    });
+  }
 
   const handleSignInWithGithub = async () => {
     // Sign in using a redirect.
@@ -59,10 +57,18 @@ const Layout: React.FC<Props> = ({ children }) => {
       // Check if user exists in firestore
       const docSnap = await getDoc(doc(firestore, 'users', loggedUser.uid));
 
+      // If user does not exist, create it
       if (!docSnap.exists()) {
+        // Calling github api with githubUserId to get github data
+        const { html_url, login } = await getGitHubUserData(
+          loggedUser.providerData.map((data) => data.uid)[0]
+        );
+
         // Write a new document in the users collection
         await setDoc(doc(firestore, 'users', loggedUser.uid), {
-          username: loggedUser.displayName,
+          url: html_url,
+          username: login,
+          githubId: loggedUser.providerData.map((data) => data.uid),
           email: loggedUser.email,
           photoURL: loggedUser.photoURL,
           createdAt: serverTimestamp(),
@@ -381,7 +387,8 @@ const Layout: React.FC<Props> = ({ children }) => {
                   </svg>
                   Sign in with Github
                 </button>
-                <button
+                {/* // Google */}
+                {/* <button
                   type="button"
                   className="text-white justify-center w-52 bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
                   onClick={() => {
@@ -405,7 +412,7 @@ const Layout: React.FC<Props> = ({ children }) => {
                     ></path>
                   </svg>
                   Sign in with Google
-                </button>
+                </button> */}
               </div>
               <div className="flex items-center justify-center text-sm font-medium text-gray-300">
                 <span className="mr-1">What is Portfolior?</span>
