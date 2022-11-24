@@ -66,14 +66,15 @@ const Layout: React.FC<Props> = ({ children }) => {
 
         // Write a new document in the users collection
         await setDoc(doc(firestore, 'users', loggedUser.uid), {
-          url: html_url,
-          username: login,
-          githubId: loggedUser.providerData.map((data) => data.uid),
+          githubUsername: login,
+          githubUrl: html_url,
+          githubId: loggedUser.providerData.map((data) => data.uid)[0],
           email: loggedUser.email,
           photoURL: loggedUser.photoURL,
           createdAt: serverTimestamp(),
           provider: loggedUser.providerData[0].providerId,
           uid: loggedUser.uid,
+          displayName: loggedUser.displayName,
         });
       } else {
         console.log('User already exists in firestore');
@@ -246,7 +247,9 @@ const Layout: React.FC<Props> = ({ children }) => {
                   >
                     <ul aria-labelledby="user-menu-button">
                       <li className="px-4 border-b border-gray-700 hover:bg-gray-900">
-                        <Link legacyBehavior href="/profile/edit">
+                        {/* Link to user /profile/{user?.uid} */}
+                        <Link href={`/profile/${user?.uid}`} legacyBehavior>
+                          {/* <Link legacyBehavior href="/profile/{user?.iod}" > */}
                           <a className="flex items-center py-3 text-sm text-white">
                             <UserIcon className="mr-3 w-6 h-6" />
                             <p className="">My Profile</p>

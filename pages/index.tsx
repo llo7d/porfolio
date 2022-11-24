@@ -8,49 +8,6 @@ import { FirebaseContext } from '../lib/context';
 
 export default function Home() {
   const { user, loadingUser } = useContext(FirebaseContext);
-  const refSortMenuElement = useRef(null);
-  const refSortButtonElement = useRef(null);
-  const refSortDropdown = useRef<any>(null);
-
-  const refSkillMenuElement = useRef(null);
-  const refSkillButtonElement = useRef(null);
-  const refSkillDropdown = useRef<any>(null);
-
-  const [skillIDs, setSkillIDs] = useState<number[]>([]);
-  const [favoriteProjectIDs, setFavoriteProjectIDs] = useState<number[]>([1]);
-
-  const skills = [
-    {
-      id: 1,
-      name: 'HTML',
-    },
-    {
-      id: 2,
-      name: 'CSS',
-    },
-    {
-      id: 3,
-      name: 'JS',
-    },
-  ];
-  const levels = [
-    {
-      id: 1,
-      name: 'All Levels',
-    },
-    {
-      id: 2,
-      name: 'Beginner',
-    },
-    {
-      id: 3,
-      name: 'Intermediate',
-    },
-    {
-      id: 4,
-      name: 'Expert',
-    },
-  ];
 
   return (
     <div>

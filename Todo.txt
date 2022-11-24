@@ -1,9 +1,7 @@
 - Create document of user on signin ( check if alrdy exists ) ( X )
--> With Github, grab username + profile link.
+-> With Github, grab username + profile link. ( X )
 
-
-
-- Create firebase database and fill homepage with fake posts.
+- Create firebase database and fill homepage with fake posts. ( )
 -> Posts delete themselfs after 15 days ( to remove inactive users )
 
 
