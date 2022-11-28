@@ -5,9 +5,62 @@ import Link from 'next/link';
 import { useContext, useRef, useState } from 'react';
 import Post from '../components/Post';
 import { FirebaseContext } from '../lib/context';
+import { firestore } from '../lib/firebase';
+import {
+  collectionGroup,
+  getDocs,
+  query,
+  orderBy,
+  limit,
+} from 'firebase/firestore';
 
-export default function Home() {
+const postLimit = 5;
+
+interface Post {
+  id: string;
+  title: string;
+  content: string;
+  createdAt: number;
+  updatedAt: number;
+}
+
+export async function getServerSideProps() {
+  const postsQuery = query(
+    collectionGroup(firestore, 'posts'),
+    orderBy('createdAt', 'asc'),
+    limit(postLimit)
+  );
+  const postsDocs = await getDocs(postsQuery);
+
+  // doc.data() and return as json
+  const posts = postsDocs.docs.map((doc) => {
+    const data = doc.data();
+
+    // turn data into json
+    const json = JSON.parse(JSON.stringify(data));
+    // // add id
+    // json.id = doc.id;
+    return json;
+  });
+
+  // const posts = {
+  //   posts: [
+  //     {
+  //       id: '1',
+  //       title: 'Post 1',
+  //     },
+  //   ],
+  // };
+
+  return {
+    props: { posts },
+  };
+}
+
+export default function Home({ posts }: { posts: Post[] }) {
   const { user, loadingUser } = useContext(FirebaseContext);
+
+  console.log(posts);
 
   return (
     <div>
