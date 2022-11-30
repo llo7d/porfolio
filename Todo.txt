@@ -1,8 +1,20 @@
 - Create document of user on signin ( check if alrdy exists ) ( X )
 -> With Github, grab username + profile link. ( X )
 
-- Create firebase database and fill homepage with fake posts. ( X )
 
--> Posts delete themselfs after 15 days ( to remove inactive users )
+
+- Fix the data hydration,  either some useeffect or load state not sure ( X )
+-> Seems to be fixxed due to me having the h2 in h1 but double check later ( )
+
+- Create firebase database and fill homepage with fake posts. ( X )
+-> Display the data on the homepage in the post component ( X )
+-> Navigate to the full post ( )
+-> Posts delete themselfs after 15 days ( )
+
+- Enable user create a post ( )
+-> Display user posts in the "My Posts" section
+
+- Add profile/post also having github link
+
 
 

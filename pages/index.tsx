@@ -13,16 +13,9 @@ import {
   orderBy,
   limit,
 } from 'firebase/firestore';
+import { IPost } from '../lib/interfaces';
 
-const postLimit = 5;
-
-interface Post {
-  id: string;
-  title: string;
-  content: string;
-  createdAt: number;
-  updatedAt: number;
-}
+const postLimit = 3;
 
 export async function getServerSideProps() {
   const postsQuery = query(
@@ -38,27 +31,21 @@ export async function getServerSideProps() {
 
     // turn data into json
     const json = JSON.parse(JSON.stringify(data));
-    // // add id
-    // json.id = doc.id;
+
     return json;
   });
-
-  // const posts = {
-  //   posts: [
-  //     {
-  //       id: '1',
-  //       title: 'Post 1',
-  //     },
-  //   ],
-  // };
 
   return {
     props: { posts },
   };
 }
 
-export default function Home({ posts }: { posts: Post[] }) {
+export default function Home(props: { posts: IPost[] }) {
   const { user, loadingUser } = useContext(FirebaseContext);
+
+  const [posts, setPosts] = useState<IPost[]>(props.posts);
+  const [loading, setLoading] = useState(false);
+  const [postEnd, setPostEnd] = useState(false);
 
   console.log(posts);
 
@@ -89,7 +76,19 @@ export default function Home({ posts }: { posts: Post[] }) {
         </div>
         {/* Posts */}
         <div>
-          <Post
+          {posts.map((post) => (
+            <Post
+              key={post.slug}
+              title={post.title}
+              description={post.description}
+              tags={post.tags}
+              level={post.level}
+              slug={post.slug}
+              createdAt={post.createdAt}
+              uid={post.uid}
+            />
+          ))}
+          {/* <Post
             title="Portfolio site design"
             url="/projects/portfolio-site-design"
             body="I made a Wireframe with Figma and I need help to transform it to realiity with css, I was able to somewhat do some of it myself but not fully so I need your help to finish that!"
@@ -113,7 +112,7 @@ export default function Home({ posts }: { posts: Post[] }) {
                 color: '#EA5D76',
               },
             ]}
-          />
+          /> */}
         </div>
       </main>
     </div>

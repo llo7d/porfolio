@@ -1,53 +1,49 @@
 import Link from 'next/link';
+import { IPost } from '../lib/interfaces';
 
-type Props = {
-  title: string;
-  url: string;
-  level: string;
-  date: string;
-  posted: string;
-  body: string;
-  tags: {
-    id: number;
-    label: string;
-    color: string;
-  }[];
-};
-
-const Post: React.FC<Props> = ({
+const Post: React.FC<IPost> = ({
   title,
-  url,
+  createdAt,
+  description,
+  slug,
   level,
-  date,
-  posted,
-  body,
   tags,
+  uid,
 }) => {
-  const isLongBody = body.split(' ').length > 25;
-  const truncatedBody = body.split(' ').slice(0, 25).join(' ');
+  const shortDescription = description?.split(' ').slice(0, 25).join(' ');
+
+  // createdAt to a readable date
+  const readableDate = new Date(createdAt.seconds * 1000).toLocaleDateString(
+    'en-US',
+    {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    }
+  );
 
   return (
     <div className="py-6 px-8 bg-gray-800 rounded-xl mb-8 transition-shadow duration-300 hover:shadow-2xl">
       <div className="flex justify-between">
         <div className="w-[80%]">
-          <Link legacyBehavior href={url}>
+          <Link legacyBehavior href={`/${uid}/${slug}`}>
             <a>
               <h2 className="text-xl text-white font-medium mb-5">{title}</h2>
             </a>
           </Link>
           <p className="text-white text-xs mb-3">
-            Level Required - {level} - Posted {posted}
+            Level Required - {level} - Posted {'posted'}
           </p>
           <p className="text-white font-sans mb-6 text-xs">
-            {isLongBody ? (
+            {description?.split(' ').length > 25 ? (
               <>
-                {truncatedBody}
-                <Link legacyBehavior href={url}>
+                {shortDescription}
+                <Link legacyBehavior href={`/${uid}/${slug}`}>
                   <a className="text-white font-medium"> ...read more</a>
                 </Link>
               </>
             ) : (
-              body
+              description
             )}
           </p>
         </div>
@@ -80,7 +76,7 @@ const Post: React.FC<Props> = ({
             );
           })}
         </div>
-        <p className="text-xs text-gray-400">{date}</p>
+        <p className="text-xs text-gray-400">{readableDate}</p>
       </div>
     </div>
   );
