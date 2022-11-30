@@ -20,7 +20,6 @@ import {
   getDoc,
   serverTimestamp,
   setDoc,
-  
 } from 'firebase/firestore';
 
 import { signInWithPopup, signOut, GithubAuthProvider } from 'firebase/auth';
@@ -249,7 +248,7 @@ const Layout: React.FC<Props> = ({ children }) => {
                     <ul aria-labelledby="user-menu-button">
                       <li className="px-4 border-b border-gray-700 hover:bg-gray-900">
                         {/* Link to user /profile/{user?.uid} */}
-                        <Link href={`/profile/${user?.uid}`} legacyBehavior>
+                        <Link href={`/${user?.uid}`} legacyBehavior>
                           {/* <Link legacyBehavior href="/profile/{user?.iod}" > */}
                           <a className="flex items-center py-3 text-sm text-white">
                             <UserIcon className="mr-3 w-6 h-6" />
