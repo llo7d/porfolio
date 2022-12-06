@@ -1,7 +1,8 @@
 import { initializeApp, getApp, getApps } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { getFirestore, Firestore,  } from "firebase/firestore";
+import { getFirestore, query, collectionGroup, where, limit, getDocs, } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { IUserInfo } from "./interfaces";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -25,3 +26,28 @@ const googleAuthProvider = new GoogleAuthProvider();
 const storage = getStorage(app);
 
 export { app, auth, firestore, storage, googleAuthProvider };
+
+// Helper functions
+
+/**
+ * Gets a user document with uid
+ * @param {string} uid
+*/
+export async function getUserWithUID(uid: string) {
+  const postQuery = query(
+    collectionGroup(firestore, 'users'),
+    where('uid', '==', uid),
+    limit(1)
+  );
+
+  const postQuerySnapshot = await getDocs(postQuery);
+  const postDoc = postQuerySnapshot.docs[0];
+
+  // doc.data() and return as json
+  const postData = postDoc.data();
+
+  // turn data into json
+  const json = JSON.parse(JSON.stringify(postData));
+
+  return json as IUserInfo;
+}

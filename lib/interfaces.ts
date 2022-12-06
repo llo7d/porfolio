@@ -19,3 +19,19 @@ export interface IPost {
     url?: string;
   }
   
+
+  export interface IUserInfo {
+    data(): unknown;
+    createdAt: {
+      seconds: number;
+      nanoseconds: number;
+    }
+    email:          string;
+    githubId:       string;
+    githubUrl:      string;
+    provider:       string;
+    uid:            string;
+    photoURL:       string;
+    displayName:    string;
+    githubUsername: string;
+}

@@ -257,7 +257,7 @@ const Layout: React.FC<Props> = ({ children }) => {
                         </Link>
                       </li>
                       <li className="px-4 border-b border-gray-700 hover:bg-gray-900">
-                        <Link legacyBehavior href="/profile/edit">
+                        <Link legacyBehavior href={`/${user?.uid}/myposts`}>
                           <a className="flex items-center py-3 text-sm text-white">
                             <DocumentIcon className="mr-3 w-6 h-6" />
                             <p className="">My Posts</p>

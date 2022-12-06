@@ -14,10 +14,11 @@ import {
   limit,
 } from 'firebase/firestore';
 import { IPost } from '../lib/interfaces';
+import { GetStaticProps } from 'next';
+import { async } from '@firebase/util';
 
 const postLimit = 3;
-
-export async function getServerSideProps() {
+export const getServerSideProps: GetStaticProps = async () => {
   const postsQuery = query(
     collectionGroup(firestore, 'posts'),
     orderBy('createdAt', 'asc'),
@@ -38,7 +39,7 @@ export async function getServerSideProps() {
   return {
     props: { posts },
   };
-}
+};
 
 export default function Home(props: { posts: IPost[] }) {
   const { user, loadingUser } = useContext(FirebaseContext);
@@ -47,7 +48,7 @@ export default function Home(props: { posts: IPost[] }) {
   const [loading, setLoading] = useState(false);
   const [postEnd, setPostEnd] = useState(false);
 
-  console.log(posts);
+  // console.log(posts);
 
   return (
     <div>
