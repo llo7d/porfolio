@@ -17,46 +17,40 @@ import { userAgent } from 'next/server';
 
 type Params = {
   uid: string;
-  post: string;
+  postslug: string;
 };
 
 export async function getServerSideProps({ params }: { params: Params }) {
-  const { uid, post } = params;
+  const { uid, postslug } = params;
   // grab the post from firestore
-  // const postQuery = query(
-  //   collectionGroup(firestore, 'posts'),
-  //   where('uid', '==', uid),
-  //   where('slug', '==', post)
-  // );
+  const postQuery = query(
+    collectionGroup(firestore, 'posts'),
+    where('uid', '==', uid),
+    where('slug', '==', postslug),
+    limit(1)
+  );
 
   // Grab the userdata from firestore
 
-  // // const postQuery = getUserWithUID(uid)
-  // const postQuery = query(
-  //   collectionGroup(firestore, 'users'),
-  //   where('uid', '==', uid),
-  //   limit(1)
-  // );
+  const postsDocs = await getDocs(postQuery);
 
-  // const postsDocs = await getDocs(postQuery);
+  // doc.data() and return as json
+  const postData = postsDocs.docs.map((doc) => {
+    const data = doc.data();
 
-  // // doc.data() and return as json
-  // const postData = postsDocs.docs.map((doc) => {
-  //   const data = doc.data();
+    // turn data into json
+    const json = JSON.parse(JSON.stringify(data));
 
-  //   // turn data into json
-  //   const json = JSON.parse(JSON.stringify(data));
+    return json;
+  });
 
-  //   return json;
-  // });
+  const userData = await getUserWithUID(uid);
 
-  const postData = await getUserWithUID(uid);
-
-  const user = postData;
+  const user = userData;
 
   // const user = 'Test';
   return {
-    props: { user },
+    props: { user, post: postData[0] },
   };
 }
 
@@ -64,8 +58,8 @@ interface Props {
   user: IUserInfo;
   post: IPost;
 }
-const UserPost: NextPage<Props> = ({ user }) => {
-  console.log(user);
+const UserPost: NextPage<Props> = ({ user, post }) => {
+  console.log(user, post);
 
   const [isDiscordOpen, setIsDiscordOpen] = useState(false);
   const [isTwitterOpen, setIsTwitterOpen] = useState(false);
