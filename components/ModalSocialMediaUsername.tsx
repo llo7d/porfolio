@@ -88,7 +88,8 @@ const ModalSocialMediaUsername: React.FC<Props> = forwardRef(
               </button>
             </div>
             <div className="px-6 py-12">
-              {/*@ts-ignore */}
+              {/* Add a turnory operator if false then show "User has not provided " else what is below */}
+
               <a href={link} target="_blank">
                 <p className="text-center font-bold text-xl text-gray-900 dark:text-gray-400">
                   {socialMedia} name:&nbsp;&nbsp;

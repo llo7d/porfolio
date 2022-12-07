@@ -21,7 +21,6 @@ export interface IPost {
   
 
   export interface IUserInfo {
-    data(): unknown;
     createdAt: {
       seconds: number;
       nanoseconds: number;
@@ -34,4 +33,5 @@ export interface IPost {
     photoURL:       string;
     displayName:    string;
     githubUsername: string;
+    aboutme:        string;
 }

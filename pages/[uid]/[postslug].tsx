@@ -58,8 +58,6 @@ const UserPost: NextPage<Props> = ({ user, post }) => {
   dayjs().format();
   dayjs.extend(require('dayjs/plugin/relativeTime'));
 
-  console.log(user);
-
   const [isDiscordOpen, setIsDiscordOpen] = useState(false);
   const [isTwitterOpen, setIsTwitterOpen] = useState(false);
   const [isGithubOpen, setIsGithubOpen] = useState(false);
@@ -139,16 +137,15 @@ const UserPost: NextPage<Props> = ({ user, post }) => {
                 <div className="w-40 h-40 mb-8">
                   <img
                     className="w-40 h-40 rounded-full object-cover"
-                    src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                    src={user.photoURL}
                   />
                 </div>
                 <div className="w-full px-10 flex flex-col items-center">
                   <p className="text-center font-sans text-white font-bold text-xl mb-8">
-                    Peter Smeder
+                    {user.displayName ? user.displayName : user.githubUsername}
                   </p>
                   <p className="text-center font-sans text-gray-500 text-sm mb-14">
-                    A dude who likes to make stuff and create stuff. I am from
-                    Huston.
+                    {user.aboutme}
                   </p>
                   <div className="flex items-center gap-5 mb-24">
                     <button
@@ -169,7 +166,9 @@ const UserPost: NextPage<Props> = ({ user, post }) => {
                   </div>
                   <div className="border-t border-gray-500 w-full mt-auto" />
                   <p className="text-xs text-gray-500 mt-8">
-                    Member since Mar 15, 2021
+                    Member since{' '}
+                    {dayjs(user.createdAt.seconds * 1000).format('MMM D, YYYY')}
+                    {/* Member since Mar 15, 2021 */}
                   </p>
                 </div>
               </div>
