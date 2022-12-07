@@ -58,9 +58,9 @@ const UserPost: NextPage<Props> = ({ user, post }) => {
   dayjs().format();
   dayjs.extend(require('dayjs/plugin/relativeTime'));
 
+  console.log(user);
+
   const [isDiscordOpen, setIsDiscordOpen] = useState(false);
-  const [isTwitterOpen, setIsTwitterOpen] = useState(false);
-  const [isGithubOpen, setIsGithubOpen] = useState(false);
 
   return (
     <div>
@@ -148,27 +148,42 @@ const UserPost: NextPage<Props> = ({ user, post }) => {
                     {user.aboutme}
                   </p>
                   <div className="flex items-center gap-5 mb-24">
-                    <button
-                      type="button"
-                      onClick={() => setIsDiscordOpen(true)}
+                    {/* I think later remake this as a component, too much shit and it looks shit */}
+                    {user.discordName === 'false' ||
+                    user.discordName == null ? null : (
+                      <button
+                        type="button"
+                        onClick={() => setIsDiscordOpen(true)}
+                      >
+                        <img
+                          className="w-5 h-5"
+                          src="/images/icon-discord.png"
+                        />
+                      </button>
+                    )}
+                    {user.twitterUsername === 'false' ||
+                    user.twitterUsername == null ? null : (
+                      <a
+                        href={`https://twitter.com/${user.twitterUsername}`}
+                        target="_blank"
+                      >
+                        <img
+                          className="w-5 h-5"
+                          src="/images/icon-twitter.png"
+                        />
+                      </a>
+                    )}
+                    <a
+                      href={`https://github.com/${user.githubUsername}`}
+                      target="_blank"
                     >
-                      <img className="w-5 h-5" src="/images/icon-discord.png" />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setIsTwitterOpen(true)}
-                    >
-                      <img className="w-5 h-5" src="/images/icon-twitter.png" />
-                    </button>
-                    <button type="button" onClick={() => setIsGithubOpen(true)}>
                       <img className="w-5 h-5" src="/images/icon-github.png" />
-                    </button>
+                    </a>
                   </div>
                   <div className="border-t border-gray-500 w-full mt-auto" />
                   <p className="text-xs text-gray-500 mt-8">
                     Member since{' '}
                     {dayjs(user.createdAt.seconds * 1000).format('MMM D, YYYY')}
-                    {/* Member since Mar 15, 2021 */}
                   </p>
                 </div>
               </div>
@@ -178,26 +193,20 @@ const UserPost: NextPage<Props> = ({ user, post }) => {
 
         <ModalSocialMediaUsername
           socialMedia="Discord"
-          username="name#1234"
+          // @ts-ignore
+          username={user.discordName}
           isOpen={isDiscordOpen}
           onRequestClose={() => setIsDiscordOpen(false)}
           link="https://discord.com"
         />
-        <ModalSocialMediaUsername
-          socialMedia="Twitter"
-          username="username"
-          isOpen={isTwitterOpen}
-          onRequestClose={() => setIsTwitterOpen(false)}
-          link={`https://twitter.com/${'user.twitterUsername'}`}
-        />
-        <ModalSocialMediaUsername
+        {/* <ModalSocialMediaUsername
           socialMedia="Github"
           username={user.githubUsername}
           isOpen={isGithubOpen}
           onRequestClose={() => setIsGithubOpen(false)}
           // link={`https://github.com/${user.githubUsername}`}
           link={user.githubUrl}
-        />
+        /> */}
       </div>
     </div>
   );

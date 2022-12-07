@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { IPost } from '../lib/interfaces';
+import dayjs from 'dayjs';
 
 const Post: React.FC<IPost> = ({
   title,
@@ -11,6 +12,10 @@ const Post: React.FC<IPost> = ({
   uid,
 }) => {
   const shortDescription = description?.split(' ').slice(0, 25).join(' ');
+
+  // This is needed to display the date since the post was created
+  dayjs().format();
+  dayjs.extend(require('dayjs/plugin/relativeTime'));
 
   // createdAt to a readable date
   const readableDate = new Date(createdAt.seconds * 1000).toLocaleDateString(
@@ -32,7 +37,8 @@ const Post: React.FC<IPost> = ({
             </a>
           </Link>
           <p className="text-white text-xs mb-3">
-            Level Required - {level} - Posted {'posted'}
+            Level Required - {level} - Posted {/* @ts-ignore */}
+            {' ' + dayjs(createdAt.seconds * 1000).fromNow()}
           </p>
           <p className="text-white font-sans mb-6 text-xs">
             {description?.split(' ').length > 25 ? (

@@ -3,7 +3,7 @@ import { forwardRef, useEffect, useRef } from 'react';
 
 type Props = {
   socialMedia?: string;
-  username?: string;
+  username?: string | null | undefined | null;
   isOpen?: boolean;
   onRequestClose?: () => void;
   link?: string;
@@ -88,14 +88,17 @@ const ModalSocialMediaUsername: React.FC<Props> = forwardRef(
               </button>
             </div>
             <div className="px-6 py-12">
-              {/* Add a turnory operator if false then show "User has not provided " else what is below */}
-
-              <a href={link} target="_blank">
+              {/* <a href={link} target="_blank">
                 <p className="text-center font-bold text-xl text-gray-900 dark:text-gray-400">
                   {socialMedia} name:&nbsp;&nbsp;
                   <span className="text-white">{username}</span>
                 </p>
-              </a>
+              </a> */}
+
+              <p className="text-center font-bold text-xl text-gray-900 dark:text-gray-400">
+                {socialMedia} name:&nbsp;&nbsp;
+                <span className="text-white">{username}</span>
+              </p>
             </div>
           </div>
         </div>
