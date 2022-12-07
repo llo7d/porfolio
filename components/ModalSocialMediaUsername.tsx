@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { forwardRef, useEffect, useRef } from 'react';
 
 type Props = {
@@ -5,10 +6,11 @@ type Props = {
   username?: string;
   isOpen?: boolean;
   onRequestClose?: () => void;
+  link?: string;
 };
 
 const ModalSocialMediaUsername: React.FC<Props> = forwardRef(
-  ({ socialMedia, username, isOpen, onRequestClose }, ref) => {
+  ({ socialMedia, username, isOpen, onRequestClose, link }, ref) => {
     const refModalDetailElement = useRef(null);
     const refModalDetail = useRef<any>(null);
 
@@ -86,10 +88,13 @@ const ModalSocialMediaUsername: React.FC<Props> = forwardRef(
               </button>
             </div>
             <div className="px-6 py-12">
-              <p className="text-center font-bold text-xl text-gray-900 dark:text-gray-400">
-                {socialMedia} name:&nbsp;&nbsp;
-                <span className="text-white">{username}</span>
-              </p>
+              {/*@ts-ignore */}
+              <a href={link} target="_blank">
+                <p className="text-center font-bold text-xl text-gray-900 dark:text-gray-400">
+                  {socialMedia} name:&nbsp;&nbsp;
+                  <span className="text-white">{username}</span>
+                </p>
+              </a>
             </div>
           </div>
         </div>

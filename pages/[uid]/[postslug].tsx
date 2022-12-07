@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
 import { NextPage } from 'next';
 import ModalSocialMediaUsername from '../../components/ModalSocialMediaUsername';
-import { HeartIcon } from '@heroicons/react/24/solid';
 import Head from 'next/head';
 import {
   collectionGroup,
@@ -13,7 +11,7 @@ import {
 } from 'firebase/firestore';
 import { firestore, getUserWithUID } from '../../lib/firebase';
 import { IPost, IUserInfo } from '../../lib/interfaces';
-import { userAgent } from 'next/server';
+import dayjs from 'dayjs';
 
 type Params = {
   uid: string;
@@ -22,17 +20,16 @@ type Params = {
 
 export async function getServerSideProps({ params }: { params: Params }) {
   const { uid, postslug } = params;
+
   // grab the post from firestore
-  const postQuery = query(
-    collectionGroup(firestore, 'posts'),
-    where('uid', '==', uid),
-    where('slug', '==', postslug),
-    limit(1)
+  const postsDocs = await getDocs(
+    query(
+      collectionGroup(firestore, 'posts'),
+      where('uid', '==', uid),
+      where('slug', '==', postslug),
+      limit(1)
+    )
   );
-
-  // Grab the userdata from firestore
-
-  const postsDocs = await getDocs(postQuery);
 
   // doc.data() and return as json
   const postData = postsDocs.docs.map((doc) => {
@@ -44,13 +41,11 @@ export async function getServerSideProps({ params }: { params: Params }) {
     return json;
   });
 
+  // Grab the user data
   const userData = await getUserWithUID(uid);
 
-  const user = userData;
-
-  // const user = 'Test';
   return {
-    props: { user, post: postData[0] },
+    props: { user: userData, post: postData[0] },
   };
 }
 
@@ -59,34 +54,21 @@ interface Props {
   post: IPost;
 }
 const UserPost: NextPage<Props> = ({ user, post }) => {
-  console.log(user, post);
+  // This is needed to display the date since the post was created
+  dayjs().format();
+  dayjs.extend(require('dayjs/plugin/relativeTime'));
+
+  console.log(user);
 
   const [isDiscordOpen, setIsDiscordOpen] = useState(false);
   const [isTwitterOpen, setIsTwitterOpen] = useState(false);
-
-  const tags = [
-    {
-      id: 1,
-      label: 'Wireframe',
-      color: '#5FBE50',
-    },
-    {
-      id: 2,
-      label: 'TailwindCSS',
-      color: '#EA5D76',
-    },
-    {
-      id: 3,
-      label: 'TailwindCSS',
-      color: '#EA5D76',
-    },
-  ];
+  const [isGithubOpen, setIsGithubOpen] = useState(false);
 
   return (
     <div>
       <div>
         <Head>
-          <title>Project Details | Project Listings</title>
+          <title>Project Details {post.title}</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
@@ -101,22 +83,12 @@ const UserPost: NextPage<Props> = ({ user, post }) => {
             <div className="flex bg-gray-800 rounded-xl overflow-hidden">
               <div className="w-[70%] flex flex-col py-8 px-12">
                 <div className="flex justify-between">
-                  <div className="w-[80%] mb-20">
+                  <div className="w-[80%] mb-10">
                     <h2 className="text-xl text-white font-medium mb-5">
-                      Portfolio Site Design
+                      {post.title}
                     </h2>
                     <p className="text-white font-sans text-sm whitespace-pre-line leading-5">
-                      I made a Wireframe with Figma and I need help to transform
-                      it to realiity with css, I was able to somewhat do some of
-                      it myself but not fully so I need your help to finish
-                      that!
-                      {'\n'}I made a Wireframe with Figma and I need help to
-                      transform it to realiity with css, I was able to somewhat
-                      do some of it myself but not fully so I need your help to
-                      finish that!{'\n'}I made a Wireframe with Figma and I need
-                      help to transform it to realiity with css, I was able to
-                      somewhat do some of it myself but not fully so I need your
-                      help to finish that!
+                      {post.description}
                     </p>
                   </div>
                   {/* <button
@@ -137,7 +109,7 @@ const UserPost: NextPage<Props> = ({ user, post }) => {
                     Skills and Expertise
                   </h3>
                   <div className="flex gap-2 w-[80%]">
-                    {tags.map((tag) => {
+                    {post.tags.map((tag) => {
                       return (
                         <span
                           key={tag.id}
@@ -152,12 +124,14 @@ const UserPost: NextPage<Props> = ({ user, post }) => {
                     })}
                   </div>
                   <p className="text-white text-xs mt-7">
-                    Level Required - Beginner - Posted 2 hours
+                    Level Required - Beginner - {/*@ts-ignore  */}
+                    {dayjs(post.createdAt.seconds * 1000).fromNow()}
                   </p>
                 </div>
 
                 <p className="text-xs text-gray-400 mt-16">
-                  Posted on Aug 12, 2020
+                  Posted on{' '}
+                  {dayjs(post.createdAt.seconds * 1000).format('MMM D, YYYY')}
                 </p>
               </div>
 
@@ -189,6 +163,9 @@ const UserPost: NextPage<Props> = ({ user, post }) => {
                     >
                       <img className="w-5 h-5" src="/images/icon-twitter.png" />
                     </button>
+                    <button type="button" onClick={() => setIsGithubOpen(true)}>
+                      <img className="w-5 h-5" src="/images/icon-github.png" />
+                    </button>
                   </div>
                   <div className="border-t border-gray-500 w-full mt-auto" />
                   <p className="text-xs text-gray-500 mt-8">
@@ -205,12 +182,22 @@ const UserPost: NextPage<Props> = ({ user, post }) => {
           username="name#1234"
           isOpen={isDiscordOpen}
           onRequestClose={() => setIsDiscordOpen(false)}
+          link="https://discord.com"
         />
         <ModalSocialMediaUsername
           socialMedia="Twitter"
           username="username"
           isOpen={isTwitterOpen}
           onRequestClose={() => setIsTwitterOpen(false)}
+          link={`https://twitter.com/${'user.twitterUsername'}`}
+        />
+        <ModalSocialMediaUsername
+          socialMedia="Github"
+          username={user.githubUsername}
+          isOpen={isGithubOpen}
+          onRequestClose={() => setIsGithubOpen(false)}
+          // link={`https://github.com/${user.githubUsername}`}
+          link={user.githubUrl}
         />
       </div>
     </div>
