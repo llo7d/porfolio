@@ -5,13 +5,33 @@ import PostLoader from '../../components/PostLoader';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import EditProfile from '../../components/EditProfile';
+import { IUserInfo } from '../../lib/interfaces';
+import { getUserWithUID } from '../../lib/firebase';
+import { userInfo } from 'os';
 // import SocialInput from '../../components/SocialInput';
 
-const Uid: NextPage = () => {
-  const { user, loadingUser } = useContext(FirebaseContext);
+interface Params {
+  uid: string;
+}
 
-  const router = useRouter();
-  const { uid } = router.query;
+export async function getServerSideProps({ params }: { params: Params }) {
+  const { uid } = params;
+
+  // Grab the user data
+  const userData = await getUserWithUID(uid);
+
+  return {
+    props: { userInfo: userData, uid },
+  };
+}
+
+type Props = {
+  userInfo: IUserInfo;
+  uid: string;
+};
+
+const Uid: NextPage<Props> = ({ userInfo, uid }) => {
+  const { user, loadingUser } = useContext(FirebaseContext);
 
   return (
     <div>
@@ -24,8 +44,8 @@ const Uid: NextPage = () => {
           <PostLoader />
         ) : (
           <div>
-            {/* Pass the profile compents etc.. later */}
-            <EditProfile />
+            {/* @ts-ignore */}
+            <EditProfile userInfo={userInfo} />
           </div>
         )}
       </main>
