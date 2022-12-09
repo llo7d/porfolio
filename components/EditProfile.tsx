@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { FormEventHandler, useState } from 'react';
 import type { NextPage } from 'next';
-import SocialInput from './SocialInputs';
 import { IUserInfo } from '../lib/interfaces';
 
 interface Props {
@@ -17,6 +16,15 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
 
   console.log(updateProfile);
 
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
+    // Submit do firebase
+
+    console.log('submit');
+  };
+
   return (
     <div>
       <main className="bg-gray-900 min-h-screen py-14 px-28">
@@ -25,7 +33,7 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
             Profile
           </h1>
 
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="mb-6">
               <label
                 htmlFor="name"
@@ -111,11 +119,11 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
                     longDescription: e.target.value,
                   })
                 }
-                // value="I like UI/UX Designs and love to come up with new ideas!"
                 required
               />
             </div>
-            <div className="grid grid-cols-12 gap-12 mb-24">
+            {/* Discord */}
+            <div className="grid grid-cols-12 gap-12 mb-2">
               <div className="col-span-5">
                 <p className="block mb-3 text-sm font-sans font-medium text-gray-400">
                   Links
@@ -131,6 +139,7 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
                     </p>
                   </div>
                   <input
+                    maxLength={32}
                     type="text"
                     name={'discordUsername'}
                     className="rounded-none placeholder:text-gray-400 text-center rounded-r-lg bg-gray-700 border text-white focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-600 p-2.5"
@@ -147,20 +156,39 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
                     }
                   />
                 </div>
-                <SocialInput
-                  name="discordUsername"
-                  // placeholder="Enter your Discord username"
-                  // value="name#1234"
-                  socialMediaIcon="/images/icon-discord-framed.png"
-                  socialMediaLabel="Discord"
-                />
-                <SocialInput
-                  name="twitterUsername"
-                  // placeholder={user.twitterUsername ? user.twitterUsername : 'Enter your Twitter username'}
-                  // value="username"
-                  socialMediaIcon="/images/icon-twitter-framed.png"
-                  socialMediaLabel="Twitter"
-                />
+              </div>
+            </div>
+            {/* Twitter */}
+            <div className="grid grid-cols-12 gap-12 mb-24">
+              <div className="col-span-5">
+                <div className="flex mb-4">
+                  <div className="inline-flex items-center w-28 px-2 pr-3 text-sm text-gray-900 bg-gray-600 rounded-l-md border border-r-0 border-gray-600 select-none">
+                    <img
+                      className="w-8 h-8 mr-2"
+                      src={'/images/icon-twitter-framed.png'}
+                    />
+                    <p className="font-sans text-white font-medium">
+                      {'Twitter'}
+                    </p>
+                  </div>
+                  <input
+                    maxLength={20}
+                    type="text"
+                    name={'twitterUsername'}
+                    className="rounded-none placeholder:text-gray-400 text-center rounded-r-lg bg-gray-700 border text-white focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-600 p-2.5"
+                    placeholder={
+                      userInfo.discordName
+                        ? (userInfo.discordName as string)
+                        : `Enter your twitter username`
+                    }
+                    onChange={(e) =>
+                      setUpdateProfile({
+                        ...updateProfile,
+                        twitter: e.target.value,
+                      })
+                    }
+                  />
+                </div>
               </div>
             </div>
 
