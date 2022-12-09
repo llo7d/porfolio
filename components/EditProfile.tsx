@@ -1,7 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type { NextPage } from 'next';
+import SocialInput from './SocialInputs';
+import { IUserInfo } from '../lib/interfaces';
 
-const EditProfile: NextPage = () => {
+interface Props {
+  userInfo: IUserInfo;
+}
+const EditProfile: NextPage<Props> = ({ userInfo }) => {
+  const [updateProfile, setUpdateProfile] = useState({
+    name: userInfo.displayName ? userInfo.displayName : userInfo.githubUsername,
+    shortDescription: userInfo.shortDescription,
+    longDescription: userInfo.longDescription,
+    discord: userInfo.discordName,
+    twitter: userInfo.twitterUsername,
+  });
+
+  console.log(updateProfile);
+
   return (
     <div>
       <main className="bg-gray-900 min-h-screen py-14 px-28">
@@ -18,15 +33,33 @@ const EditProfile: NextPage = () => {
               >
                 Name
               </label>
+
+              {/* If maxLenght for Name is reached, show a message */}
+
               <input
+                maxLength={15}
                 type="text"
                 id="name"
                 name="name"
                 className="bg-gray-700 border border-gray-600 placeholder-gray-400 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Enter your name"
-                value="Peter Sneeper"
+                placeholder={
+                  userInfo.displayName
+                    ? userInfo.displayName
+                    : userInfo.githubUsername
+                }
+                onChange={(e) =>
+                  setUpdateProfile({
+                    ...updateProfile,
+                    name: e.target.value,
+                  })
+                }
                 required
               />
+              {/* <p className="mt-3">
+                <span className="text-sm text-gray-400 font-sans mb-2 ">
+                  You have {15 - updateProfile.name.length} characters left
+                </span>
+              </p> */}
             </div>
             <div className="mb-6">
               <label
@@ -39,12 +72,18 @@ const EditProfile: NextPage = () => {
                 For example: &quot;Wireframes&quot;
               </p>
               <input
+                maxLength={45}
                 type="text"
                 id="shortDescription"
                 name="shortDescription"
                 className="bg-gray-700 border border-gray-600 placeholder-gray-400 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Enter your short description"
-                value="Wireframes"
+                placeholder={userInfo.shortDescription}
+                onChange={(e) =>
+                  setUpdateProfile({
+                    ...updateProfile,
+                    shortDescription: e.target.value,
+                  })
+                }
                 required
               />
             </div>
@@ -60,12 +99,19 @@ const EditProfile: NextPage = () => {
                 come up with ideas&quot;
               </p>
               <textarea
+                maxLength={120}
                 id="description"
                 name="description"
                 className="bg-gray-700 border border-gray-600 placeholder-gray-400 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Enter your description"
+                placeholder={userInfo.longDescription}
                 rows={5}
-                value="I like UI/UX Designs and love to come up with new ideas!"
+                onChange={(e) =>
+                  setUpdateProfile({
+                    ...updateProfile,
+                    longDescription: e.target.value,
+                  })
+                }
+                // value="I like UI/UX Designs and love to come up with new ideas!"
                 required
               />
             </div>
@@ -74,20 +120,47 @@ const EditProfile: NextPage = () => {
                 <p className="block mb-3 text-sm font-sans font-medium text-gray-400">
                   Links
                 </p>
-                {/* <SocialInput
-            name="discordUsername"
-            placeholder="Enter your Discord username"
-            value="name#1234"
-            socialMediaIcon="/images/icon-discord-framed.png"
-            socialMediaLabel="Discord"
-          />
-          <SocialInput
-            name="twitterUsername"
-            placeholder="Enter your Twitter username"
-            value="username"
-            socialMediaIcon="/images/icon-twitter-framed.png"
-            socialMediaLabel="Twitter"
-          /> */}
+                <div className="flex mb-4">
+                  <div className="inline-flex items-center w-28 px-2 pr-3 text-sm text-gray-900 bg-gray-600 rounded-l-md border border-r-0 border-gray-600 select-none">
+                    <img
+                      className="w-8 h-8 mr-2"
+                      src={'/images/icon-discord-framed.png'}
+                    />
+                    <p className="font-sans text-white font-medium">
+                      {'Discord'}
+                    </p>
+                  </div>
+                  <input
+                    type="text"
+                    name={'discordUsername'}
+                    className="rounded-none placeholder:text-gray-400 text-center rounded-r-lg bg-gray-700 border text-white focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-600 p-2.5"
+                    placeholder={
+                      userInfo.discordName
+                        ? (userInfo.discordName as string)
+                        : `Enter your discord username`
+                    }
+                    onChange={(e) =>
+                      setUpdateProfile({
+                        ...updateProfile,
+                        discord: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <SocialInput
+                  name="discordUsername"
+                  // placeholder="Enter your Discord username"
+                  // value="name#1234"
+                  socialMediaIcon="/images/icon-discord-framed.png"
+                  socialMediaLabel="Discord"
+                />
+                <SocialInput
+                  name="twitterUsername"
+                  // placeholder={user.twitterUsername ? user.twitterUsername : 'Enter your Twitter username'}
+                  // value="username"
+                  socialMediaIcon="/images/icon-twitter-framed.png"
+                  socialMediaLabel="Twitter"
+                />
               </div>
             </div>
 

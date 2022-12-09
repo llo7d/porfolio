@@ -34,6 +34,8 @@ export interface IPost {
     displayName:    string;
     githubUsername: string;
     aboutme:        string;
-    discordName:    null | string | boolean;
+    discordName:    null | string | boolean | undefined
     twitterUsername:    null | string | boolean;
+    shortDescription: string;
+    longDescription: string;
 }

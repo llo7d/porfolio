@@ -10,12 +10,15 @@
 -> Display the data on the homepage in the post component ( X )
 -> Add a load more button posts ( )
 -> Navigate to the full post ( X )
---> Display posts and user data ( )
---> Update discord/twitter in database or else show none ( )
--> Posts delete themselfs after 15 days ( )
+--> Display posts and user data ( X )
+--> Update discord/twitter in database or else show none ( X )
+
+- Profile update name / bio or social info ( )
 
 - Enable user create a post ( )
 -> Display user posts in the "My Posts" section
+-> Posts delete themselfs after 15 days ( )
+
 
 - Add profile/post also having github link
 

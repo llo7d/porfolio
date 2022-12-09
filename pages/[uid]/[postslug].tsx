@@ -21,6 +21,8 @@ type Params = {
 export async function getServerSideProps({ params }: { params: Params }) {
   const { uid, postslug } = params;
 
+  console.log('1Are we here?');
+
   // grab the post from firestore
   const postsDocs = await getDocs(
     query(
@@ -45,20 +47,21 @@ export async function getServerSideProps({ params }: { params: Params }) {
   const userData = await getUserWithUID(uid);
 
   return {
-    props: { user: userData, post: postData[0] },
+    props: { user: userData, post: postData[0], uid },
   };
 }
 
 interface Props {
   user: IUserInfo;
   post: IPost;
+  uid: string;
 }
-const UserPost: NextPage<Props> = ({ user, post }) => {
+const UserPost: NextPage<Props> = ({ user, post, uid }) => {
+  console.log('2Are we here', uid);
+
   // This is needed to display the date since the post was created
   dayjs().format();
   dayjs.extend(require('dayjs/plugin/relativeTime'));
-
-  console.log(user);
 
   const [isDiscordOpen, setIsDiscordOpen] = useState(false);
 
