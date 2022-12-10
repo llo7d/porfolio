@@ -1,6 +1,10 @@
-import React, { FormEventHandler, useState } from 'react';
+import React, { MouseEventHandler, useState } from 'react';
 import type { NextPage } from 'next';
 import { IUserInfo } from '../lib/interfaces';
+import { doc, updateDoc } from 'firebase/firestore';
+import { firestore } from '../lib/firebase';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Props {
   userInfo: IUserInfo;
@@ -16,24 +20,104 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
 
   console.log(updateProfile);
 
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
-    e.preventDefault();
-    // Submit do firebase
+  const handleClick: MouseEventHandler<HTMLButtonElement> = async (e) => {
+    // Check the last time the user updated their profile and if it was less than 24 hours ago, dont let them update it
+    if (userInfo.lastUpdated) {
+      const lastUpdated = new Date(userInfo.lastUpdated);
+      const now = new Date();
+      const diff = now.getTime() - lastUpdated.getTime();
+      const diffHours = diff / (1000 * 3600);
 
-    console.log('submit');
+      if (diffHours < 24) {
+        toast.error('🦄 You can only update your profile once every 24 hours', {
+          position: 'top-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+        return;
+      }
+    }
+    e.preventDefault();
+    console.log('clicked');
+
+    // Check if there is any changes in the form
+    if (
+      updateProfile.name === userInfo.displayName &&
+      updateProfile.shortDescription === userInfo.shortDescription &&
+      updateProfile.longDescription === userInfo.longDescription &&
+      updateProfile.discord === userInfo.discordName &&
+      updateProfile.twitter === userInfo.twitterUsername
+    ) {
+      toast.info('🦄 No changes made', {
+        position: 'top-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+      return;
+    }
+
+    // Check if the user left any fields as an empty string
+    if (
+      updateProfile.name === '' ||
+      updateProfile.shortDescription === '' ||
+      updateProfile.longDescription === ''
+    ) {
+      toast.error('🦄 Cant leave a field emtpy', {
+        position: 'top-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+      return;
+    }
+
+    // If all the checks are passed, update the database
+    await updateDoc(doc(firestore, 'users', userInfo.uid), {
+      // Include all the that is already in the database
+      ...userInfo,
+      displayName: updateProfile.name,
+      shortDescription: updateProfile.shortDescription,
+      longDescription: updateProfile.longDescription,
+      discordName: updateProfile.discord,
+      twitterUsername: updateProfile.twitter,
+    });
+
+    toast.success('🦄 Wow profile is updated', {
+      position: 'top-center',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'light',
+    });
   };
 
   return (
     <div>
       <main className="bg-gray-900 min-h-screen py-14 px-28">
-        <div className="mb-10">
+        <div>
           <h1 className="text-white font-sans font-medium text-2xl mb-10">
             Profile
           </h1>
 
-          <form onSubmit={handleSubmit}>
+          <form>
+            {/* <form> */}
             <div className="mb-6">
               <label
                 htmlFor="name"
@@ -177,8 +261,8 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
                     name={'twitterUsername'}
                     className="rounded-none placeholder:text-gray-400 text-center rounded-r-lg bg-gray-700 border text-white focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-600 p-2.5"
                     placeholder={
-                      userInfo.discordName
-                        ? (userInfo.discordName as string)
+                      userInfo.twitterUsername
+                        ? (userInfo.twitterUsername as string)
                         : `Enter your twitter username`
                     }
                     onChange={(e) =>
@@ -194,6 +278,7 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
 
             <div className="flex flex-col items-center">
               <button
+                onClick={handleClick}
                 type="button"
                 className="mx-auto text-white hover:text-gray-600 border border-blue-500 hover:border-gray-600 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               >
