@@ -38,4 +38,6 @@ export interface IPost {
     twitterUsername:    null | string | boolean;
     shortDescription: string;
     longDescription: string;
+    lastUpdated: number;
+      
 }

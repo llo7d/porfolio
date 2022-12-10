@@ -5,6 +5,7 @@ import { FirebaseContext } from '../lib/context';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../lib/firebase';
 import { StrictMode } from 'react';
+import { ToastContainer } from 'react-toastify';
 
 export default function App({ Component, pageProps }: AppProps) {
   const [user, loadingUser, error] = useAuthState(auth);
@@ -12,6 +13,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <StrictMode>
       <FirebaseContext.Provider value={{ user, loadingUser }}>
+        <ToastContainer />
         <Layout>
           <Component {...pageProps} />
         </Layout>
