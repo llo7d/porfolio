@@ -5,6 +5,7 @@ import { doc, updateDoc } from 'firebase/firestore';
 import { firestore } from '../lib/firebase';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Router from 'next/router';
 
 interface Props {
   userInfo: IUserInfo;
@@ -18,18 +19,31 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
     twitter: userInfo.twitterUsername,
   });
 
-  console.log(updateProfile);
-
   const handleClick: MouseEventHandler<HTMLButtonElement> = async (e) => {
+    e.preventDefault();
     // Check the last time the user updated their profile and if it was less than 24 hours ago, dont let them update it
     if (userInfo.lastUpdated) {
+      // create a new date object from the lastUpdated timestamp which is in seconds
       const lastUpdated = new Date(userInfo.lastUpdated);
       const now = new Date();
       const diff = now.getTime() - lastUpdated.getTime();
       const diffHours = diff / (1000 * 3600);
+      const diffMinutes = diff / (1000 * 60);
 
-      if (diffHours < 24) {
-        toast.error('🦄 You can only update your profile once every 24 hours', {
+      console.log(
+        'lastUpdated: ',
+        lastUpdated,
+        'now:',
+        now,
+        diffHours,
+        diff,
+        'diffMinutes: ',
+        diffMinutes
+      );
+
+      // If diffrence is less than 60 minute, dont let them update their profile
+      if (diffMinutes < 1) {
+        toast.error('🦄 You can only update your profile once every 1 minute', {
           position: 'top-center',
           autoClose: 5000,
           hideProgressBar: false,
@@ -41,9 +55,21 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
         });
         return;
       }
+
+      // if (diffHours < 24) {
+      //   toast.error('🦄 You can only update your profile once every 24 hours', {
+      //     position: 'top-center',
+      //     autoClose: 5000,
+      //     hideProgressBar: false,
+      //     closeOnClick: true,
+      //     pauseOnHover: true,
+      //     draggable: true,
+      //     progress: undefined,
+      //     theme: 'light',
+      //   });
+      //   return;
+      // }
     }
-    e.preventDefault();
-    console.log('clicked');
 
     // Check if there is any changes in the form
     if (
@@ -72,16 +98,53 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
       updateProfile.shortDescription === '' ||
       updateProfile.longDescription === ''
     ) {
-      toast.error('🦄 Cant leave a field emtpy', {
-        position: 'top-center',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      });
+      // Notify the user that they cant leave any fields empty and tell them the field that is empty
+      if (updateProfile.name === '') {
+        setUpdateProfile({
+          ...updateProfile,
+          name: '',
+        });
+
+        toast.error('🦄 Cant leave the NAME field empty', {
+          position: 'top-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+      } else if (updateProfile.shortDescription === '') {
+        toast.error('🦄 Cant leave shortDescriptio field emtpy', {
+          position: 'top-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+      } else if (updateProfile.longDescription === '') {
+        // Set the placeholder text to an empty string so that the user can see the placeholder text
+        setUpdateProfile({
+          ...updateProfile,
+          longDescription: '',
+        });
+
+        toast.error('🦄 Cant leave longDescription field emtpy', {
+          position: 'top-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+      }
+
       return;
     }
 
@@ -94,7 +157,12 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
       longDescription: updateProfile.longDescription,
       discordName: updateProfile.discord,
       twitterUsername: updateProfile.twitter,
+      // update the lastUpdated field with the current time in seconds
+      lastUpdated: new Date().getTime(),
     });
+
+    //@ts-ignore Reload the page with nextjs
+    Router.reload(window.location.pathname);
 
     toast.success('🦄 Wow profile is updated', {
       position: 'top-center',
@@ -134,11 +202,12 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
                 id="name"
                 name="name"
                 className="bg-gray-700 border border-gray-600 placeholder-gray-400 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder={
-                  userInfo.displayName
-                    ? userInfo.displayName
-                    : userInfo.githubUsername
-                }
+                value={updateProfile.name}
+                // placeholder={
+                //   userInfo.displayName
+                //     ? userInfo.displayName
+                //     : userInfo.githubUsername
+                // }
                 onChange={(e) =>
                   setUpdateProfile({
                     ...updateProfile,
@@ -169,7 +238,8 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
                 id="shortDescription"
                 name="shortDescription"
                 className="bg-gray-700 border border-gray-600 placeholder-gray-400 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder={userInfo.shortDescription}
+                value={updateProfile.shortDescription}
+                // placeholder={userInfo.shortDescription}
                 onChange={(e) =>
                   setUpdateProfile({
                     ...updateProfile,
@@ -195,7 +265,8 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
                 id="description"
                 name="description"
                 className="bg-gray-700 border border-gray-600 placeholder-gray-400 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder={userInfo.longDescription}
+                // placeholder={userInfo.longDescription}
+                value={updateProfile.longDescription}
                 rows={5}
                 onChange={(e) =>
                   setUpdateProfile({
