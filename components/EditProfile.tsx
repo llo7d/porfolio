@@ -42,33 +42,37 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
       );
 
       // If diffrence is less than 60 minute, dont let them update their profile
-      if (diffMinutes < 1) {
-        toast.error('🦄 You can only update your profile once every 1 minute', {
-          position: 'top-center',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
-        });
+      if (diffMinutes < 60) {
+        // show the toast.error with a slide in animation
+        toast.error(
+          '🦄 You can only update your profile once every 60 minute',
+          {
+            position: 'top-center',
+            autoClose: 2500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+          }
+        );
         return;
       }
-
-      // if (diffHours < 24) {
-      //   toast.error('🦄 You can only update your profile once every 24 hours', {
+      // toast.error(
+      //   '🦄 You can only update your profile once every 60 minute',
+      //   {
       //     position: 'top-center',
-      //     autoClose: 5000,
+      //     autoClose: 2500,
       //     hideProgressBar: false,
       //     closeOnClick: true,
       //     pauseOnHover: true,
       //     draggable: true,
       //     progress: undefined,
       //     theme: 'light',
-      //   });
-      //   return;
-      // }
+      //   }
+      // );
+      // return;
     }
 
     // Check if there is any changes in the form
@@ -81,7 +85,7 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
     ) {
       toast.info('🦄 No changes made', {
         position: 'top-center',
-        autoClose: 5000,
+        autoClose: 2500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -107,7 +111,7 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
 
         toast.error('🦄 Cant leave the NAME field empty', {
           position: 'top-center',
-          autoClose: 5000,
+          autoClose: 2500,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -118,7 +122,7 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
       } else if (updateProfile.shortDescription === '') {
         toast.error('🦄 Cant leave shortDescriptio field emtpy', {
           position: 'top-center',
-          autoClose: 5000,
+          autoClose: 2500,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -135,7 +139,7 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
 
         toast.error('🦄 Cant leave longDescription field emtpy', {
           position: 'top-center',
-          autoClose: 5000,
+          autoClose: 2500,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -166,7 +170,7 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
 
     toast.success('🦄 Wow profile is updated', {
       position: 'top-center',
-      autoClose: 5000,
+      autoClose: 2500,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,

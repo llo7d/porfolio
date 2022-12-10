@@ -13,7 +13,19 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <StrictMode>
       <FirebaseContext.Provider value={{ user, loadingUser }}>
-        <ToastContainer />
+        {/* <ToastContainer /> */}
+        <ToastContainer
+          position="top-center"
+          autoClose={2500}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss={false}
+          draggable
+          pauseOnHover={false}
+          theme="light"
+        />
         <Layout>
           <Component {...pageProps} />
         </Layout>
