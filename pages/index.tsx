@@ -87,31 +87,6 @@ export default function Home(props: { posts: IPost[] }) {
               uid={post.uid}
             />
           ))}
-          {/* <Post
-            title="Portfolio site design"
-            url="/projects/portfolio-site-design"
-            body="I made a Wireframe with Figma and I need help to transform it to realiity with css, I was able to somewhat do some of it myself but not fully so I need your help to finish that!"
-            level="Beginner"
-            date="Aug 12, 2020"
-            posted="2 hours ago"
-            tags={[
-              {
-                id: 1,
-                label: 'Wireframe',
-                color: '#5FBE50',
-              },
-              {
-                id: 2,
-                label: 'UI/UX',
-                color: '#4692A3',
-              },
-              {
-                id: 3,
-                label: 'TailwindCSS',
-                color: '#EA5D76',
-              },
-            ]}
-          /> */}
         </div>
       </main>
     </div>

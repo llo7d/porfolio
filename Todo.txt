@@ -16,7 +16,8 @@
 - Profile update name / bio or social info ( X )
 
 - Enable user create a post ( )
--> Check if a user is logged in, redirect to "please login page" with github in the middle ( )
+-> Create login with github & grab github data as a outside function in firebase ts.
+-> Check if a user is logged in, redirect to "please login page" with github in the middle (  )
 -> Display user posts in the "My Posts" section
 -> Posts delete themselfs after 15 days ( )
 

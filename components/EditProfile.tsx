@@ -203,11 +203,6 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
                 }
                 required
               />
-              {/* <p className="mt-3">
-                <span className="text-sm text-gray-400 font-sans mb-2 ">
-                  You have {15 - updateProfile.name.length} characters left
-                </span>
-              </p> */}
             </div>
             <div className="mb-6">
               <label

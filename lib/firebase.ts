@@ -51,5 +51,10 @@ export async function getUserWithUID(uid: string) {
   // We do thsi just all in one big line cuz one line = more smart
   return JSON.parse(JSON.stringify(postQuerySnapshot.docs[0].data())) as IUserInfo;
 
-
 }
+
+
+/**
+ * Sign in a user with GitHub
+ * 
+*/
