@@ -5,32 +5,18 @@ import {
   Squares2X2Icon,
   GlobeAmericasIcon,
   QuestionMarkCircleIcon,
-  HeartIcon,
   DocumentIcon,
 } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
-import {
-  auth,
-  firestore,
-  googleAuthProvider,
-  handleSignInWithGithub,
-} from '../../lib/firebase';
-import {
-  addDoc,
-  collection,
-  doc,
-  getDoc,
-  serverTimestamp,
-  setDoc,
-} from 'firebase/firestore';
+import { auth, handleSignInWithGithub } from '../../lib/firebase';
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { signInWithPopup, signOut, GithubAuthProvider } from 'firebase/auth';
+import { signOut } from 'firebase/auth';
 import { useContext } from 'react';
 import { FirebaseContext } from '../../lib/context';
 import Image from 'next/image';
@@ -42,57 +28,20 @@ type Props = {
 const Layout: React.FC<Props> = ({ children }) => {
   const { user, loadingUser } = useContext(FirebaseContext);
 
-  // // We call the github api with user id to get github user data
-  // async function getGitHubUserData(githubIdOrLogin: string | undefined) {
-  //   return fetch(`https://api.github.com/user/${githubIdOrLogin}`, {
-  //     headers: { Accept: 'application/json' },
-  //   }).then((res) => {
-  //     return res.json();
-  //   });
-  // }
-
-  // const handleSignInWithGithub = async () => {
-  //   // Sign in using a redirect.
-  //   const provider = new GithubAuthProvider();
-
-  //   // Add scope to only grab user profile and username
-  //   provider.addScope('read:user user:email');
-  //   await signInWithPopup(auth, provider);
-
-  //   let loggedUser = auth.currentUser;
-
-  //   if (loggedUser) {
-  //     // Check if user exists in firestore
-  //     const docSnap = await getDoc(doc(firestore, 'users', loggedUser.uid));
-
-  //     // If user does not exist, create it
-  //     if (!docSnap.exists()) {
-  //       // Calling github api with githubUserId to get github data
-  //       const { html_url, login } = await getGitHubUserData(
-  //         loggedUser.providerData.map((data) => data.uid)[0]
-  //       );
-
-  //       // Write a new document in the users collection
-  //       await setDoc(doc(firestore, 'users', loggedUser.uid), {
-  //         githubUsername: login,
-  //         githubUrl: html_url,
-  //         githubId: loggedUser.providerData.map((data) => data.uid)[0],
-  //         email: loggedUser.email,
-  //         photoURL: loggedUser.photoURL,
-  //         createdAt: serverTimestamp(),
-  //         provider: loggedUser.providerData[0].providerId,
-  //         uid: loggedUser.uid,
-  //         displayName: loggedUser.displayName,
-  //       });
-  //     } else {
-  //       console.log('User already exists in firestore');
-  //     }
-  //   }
-  // };
-
   const handleSignOut = async () => {
     try {
       await signOut(auth);
+
+      toast.success('🦄 You have logged out!', {
+        position: 'top-center',
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     } catch (error) {
       console.log(error);
     }
@@ -286,16 +235,6 @@ const Layout: React.FC<Props> = ({ children }) => {
                           className="px-4 flex items-center w-full py-3 text-sm text-red-500 hover:bg-gray-900"
                           onClick={() => {
                             handleSignOut();
-                            toast.success('🦄 You have logged out!', {
-                              position: 'top-center',
-                              autoClose: 2500,
-                              hideProgressBar: false,
-                              closeOnClick: true,
-                              pauseOnHover: true,
-                              draggable: true,
-                              progress: undefined,
-                              theme: 'light',
-                            });
                           }}
                         >
                           <ArrowRightOnRectangleIcon className="mr-3 w-6 h-6" />

@@ -1,5 +1,4 @@
-import { CheckIcon, PlusIcon } from '@heroicons/react/24/solid';
-import { Card } from 'flowbite-react';
+import { PlusIcon } from '@heroicons/react/24/solid';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useContext, useRef, useState } from 'react';

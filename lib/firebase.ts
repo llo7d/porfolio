@@ -56,8 +56,7 @@ export async function getUserWithUID(uid: string) {
 
 
 /**
- * Sign in a user with GitHub
- * 
+ * Sign in and or Sign Up a user with GitHub, then Grab his data from GitHub and then create a new user in firestore
 */
 export const handleSignInWithGithub = async (): Promise<any> => {
     // Grabs GitHub user data with the users github id
