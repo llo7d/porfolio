@@ -1,61 +1,59 @@
-import { GithubAuthProvider, signInWithPopup } from 'firebase/auth';
-import { getDoc, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import React from 'react';
-import { auth, firestore } from '../lib/firebase';
+import { handleSignInWithGithub } from '../lib/firebase';
 import Router from 'next/router';
 
 const MustBeSignedIn = () => {
-  // Sign in with github
-  const handleSignInWithGithub = async () => {
-    // Grabs GitHub user data with the users github id
-    const getGitHubUserData = async (githubIdOrLogin: string | undefined) => {
-      return fetch(`https://api.github.com/user/${githubIdOrLogin}`, {
-        headers: { Accept: 'application/json' },
-      }).then((res) => {
-        return res.json();
-      });
-    };
+  //   // Sign in with github
+  //   const handleSignInWithGithub = async () => {
+  //     // Grabs GitHub user data with the users github id
+  //     const getGitHubUserData = async (githubIdOrLogin: string | undefined) => {
+  //       return fetch(`https://api.github.com/user/${githubIdOrLogin}`, {
+  //         headers: { Accept: 'application/json' },
+  //       }).then((res) => {
+  //         return res.json();
+  //       });
+  //     };
 
-    // Sign in using a redirect.
-    const provider = new GithubAuthProvider();
+  //     // Sign in using a redirect.
+  //     const provider = new GithubAuthProvider();
 
-    // Add scope to only grab user profile and username
-    provider.addScope('read:user user:email');
-    await signInWithPopup(auth, provider);
+  //     // Add scope to only grab user profile and username
+  //     provider.addScope('read:user user:email');
+  //     await signInWithPopup(auth, provider);
 
-    // Redirect to the home page with Router
-    Router.push('/');
+  //     // Redirect to the home page with Router
+  //     Router.push('/');
 
-    let loggedUser = auth.currentUser;
+  //     let loggedUser = auth.currentUser;
 
-    if (loggedUser) {
-      // Check if user exists in firestore
-      const docSnap = await getDoc(doc(firestore, 'users', loggedUser.uid));
+  //     if (loggedUser) {
+  //       // Check if user exists in firestore
+  //       const docSnap = await getDoc(doc(firestore, 'users', loggedUser.uid));
 
-      // If user does not exist, create it
-      if (!docSnap.exists()) {
-        // Calling github api with githubUserId to get github data
-        const { html_url, login } = await getGitHubUserData(
-          loggedUser.providerData.map((data) => data.uid)[0]
-        );
+  //       // If user does not exist, create it
+  //       if (!docSnap.exists()) {
+  //         // Calling github api with githubUserId to get github data
+  //         const { html_url, login } = await getGitHubUserData(
+  //           loggedUser.providerData.map((data) => data.uid)[0]
+  //         );
 
-        // Write a new document in the users collection
-        await setDoc(doc(firestore, 'users', loggedUser.uid), {
-          githubUsername: login,
-          githubUrl: html_url,
-          githubId: loggedUser.providerData.map((data) => data.uid)[0],
-          email: loggedUser.email,
-          photoURL: loggedUser.photoURL,
-          createdAt: serverTimestamp(),
-          provider: loggedUser.providerData[0].providerId,
-          uid: loggedUser.uid,
-          displayName: loggedUser.displayName,
-        });
-      } else {
-        console.log('User already exists in firestore');
-      }
-    }
-  };
+  //         // Write a new document in the users collection
+  //         await setDoc(doc(firestore, 'users', loggedUser.uid), {
+  //           githubUsername: login,
+  //           githubUrl: html_url,
+  //           githubId: loggedUser.providerData.map((data) => data.uid)[0],
+  //           email: loggedUser.email,
+  //           photoURL: loggedUser.photoURL,
+  //           createdAt: serverTimestamp(),
+  //           provider: loggedUser.providerData[0].providerId,
+  //           uid: loggedUser.uid,
+  //           displayName: loggedUser.displayName,
+  //         });
+  //       } else {
+  //         console.log('User already exists in firestore');
+  //       }
+  //     }
+  //   };
 
   return (
     <main className="bg-gray-900 min-h-screen py-14 px-28">

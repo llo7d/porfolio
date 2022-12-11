@@ -12,7 +12,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
-import { auth, firestore, googleAuthProvider } from '../../lib/firebase';
+import {
+  auth,
+  firestore,
+  googleAuthProvider,
+  handleSignInWithGithub,
+} from '../../lib/firebase';
 import {
   addDoc,
   collection,
@@ -21,6 +26,9 @@ import {
   serverTimestamp,
   setDoc,
 } from 'firebase/firestore';
+
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { signInWithPopup, signOut, GithubAuthProvider } from 'firebase/auth';
 import { useContext } from 'react';
@@ -34,53 +42,53 @@ type Props = {
 const Layout: React.FC<Props> = ({ children }) => {
   const { user, loadingUser } = useContext(FirebaseContext);
 
-  // We call the github api with user id to get github user data
-  async function getGitHubUserData(githubIdOrLogin: string | undefined) {
-    return fetch(`https://api.github.com/user/${githubIdOrLogin}`, {
-      headers: { Accept: 'application/json' },
-    }).then((res) => {
-      return res.json();
-    });
-  }
+  // // We call the github api with user id to get github user data
+  // async function getGitHubUserData(githubIdOrLogin: string | undefined) {
+  //   return fetch(`https://api.github.com/user/${githubIdOrLogin}`, {
+  //     headers: { Accept: 'application/json' },
+  //   }).then((res) => {
+  //     return res.json();
+  //   });
+  // }
 
-  const handleSignInWithGithub = async () => {
-    // Sign in using a redirect.
-    const provider = new GithubAuthProvider();
+  // const handleSignInWithGithub = async () => {
+  //   // Sign in using a redirect.
+  //   const provider = new GithubAuthProvider();
 
-    // Add scope to only grab user profile and username
-    provider.addScope('read:user user:email');
-    await signInWithPopup(auth, provider);
+  //   // Add scope to only grab user profile and username
+  //   provider.addScope('read:user user:email');
+  //   await signInWithPopup(auth, provider);
 
-    let loggedUser = auth.currentUser;
+  //   let loggedUser = auth.currentUser;
 
-    if (loggedUser) {
-      // Check if user exists in firestore
-      const docSnap = await getDoc(doc(firestore, 'users', loggedUser.uid));
+  //   if (loggedUser) {
+  //     // Check if user exists in firestore
+  //     const docSnap = await getDoc(doc(firestore, 'users', loggedUser.uid));
 
-      // If user does not exist, create it
-      if (!docSnap.exists()) {
-        // Calling github api with githubUserId to get github data
-        const { html_url, login } = await getGitHubUserData(
-          loggedUser.providerData.map((data) => data.uid)[0]
-        );
+  //     // If user does not exist, create it
+  //     if (!docSnap.exists()) {
+  //       // Calling github api with githubUserId to get github data
+  //       const { html_url, login } = await getGitHubUserData(
+  //         loggedUser.providerData.map((data) => data.uid)[0]
+  //       );
 
-        // Write a new document in the users collection
-        await setDoc(doc(firestore, 'users', loggedUser.uid), {
-          githubUsername: login,
-          githubUrl: html_url,
-          githubId: loggedUser.providerData.map((data) => data.uid)[0],
-          email: loggedUser.email,
-          photoURL: loggedUser.photoURL,
-          createdAt: serverTimestamp(),
-          provider: loggedUser.providerData[0].providerId,
-          uid: loggedUser.uid,
-          displayName: loggedUser.displayName,
-        });
-      } else {
-        console.log('User already exists in firestore');
-      }
-    }
-  };
+  //       // Write a new document in the users collection
+  //       await setDoc(doc(firestore, 'users', loggedUser.uid), {
+  //         githubUsername: login,
+  //         githubUrl: html_url,
+  //         githubId: loggedUser.providerData.map((data) => data.uid)[0],
+  //         email: loggedUser.email,
+  //         photoURL: loggedUser.photoURL,
+  //         createdAt: serverTimestamp(),
+  //         provider: loggedUser.providerData[0].providerId,
+  //         uid: loggedUser.uid,
+  //         displayName: loggedUser.displayName,
+  //       });
+  //     } else {
+  //       console.log('User already exists in firestore');
+  //     }
+  //   }
+  // };
 
   const handleSignOut = async () => {
     try {
@@ -278,6 +286,16 @@ const Layout: React.FC<Props> = ({ children }) => {
                           className="px-4 flex items-center w-full py-3 text-sm text-red-500 hover:bg-gray-900"
                           onClick={() => {
                             handleSignOut();
+                            toast.success('🦄 You have logged out!', {
+                              position: 'top-center',
+                              autoClose: 2500,
+                              hideProgressBar: false,
+                              closeOnClick: true,
+                              pauseOnHover: true,
+                              draggable: true,
+                              progress: undefined,
+                              theme: 'light',
+                            });
                           }}
                         >
                           <ArrowRightOnRectangleIcon className="mr-3 w-6 h-6" />
@@ -391,31 +409,6 @@ const Layout: React.FC<Props> = ({ children }) => {
                   Sign in with Github
                 </button>
                 {/* // Google */}
-                {/* <button
-                  type="button"
-                  className="text-white justify-center w-52 bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
-                  onClick={() => {
-                    handleSignInWithGoogle();
-                    refModalLogin.current?.hide();
-                  }}
-                >
-                  <svg
-                    className="mr-3 -ml-1 w-4 h-4"
-                    aria-hidden="true"
-                    focusable="false"
-                    data-prefix="fab"
-                    data-icon="google"
-                    role="img"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 488 512"
-                  >
-                    <path
-                      fill="currentColor"
-                      d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"
-                    ></path>
-                  </svg>
-                  Sign in with Google
-                </button> */}
               </div>
               <div className="flex items-center justify-center text-sm font-medium text-gray-300">
                 <span className="mr-1">What is Portfolior?</span>
