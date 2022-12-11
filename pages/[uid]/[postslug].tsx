@@ -148,7 +148,7 @@ const UserPost: NextPage<Props> = ({ user, post, uid }) => {
                     {user.displayName ? user.displayName : user.githubUsername}
                   </p>
                   <p className="text-center font-sans text-gray-500 text-sm mb-14">
-                    {user.aboutme}
+                    {user.longDescription}
                   </p>
                   <div className="flex items-center gap-5 mb-24">
                     {/* I think later remake this as a component, too much shit and it looks shit */}

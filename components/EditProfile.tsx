@@ -43,7 +43,6 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
 
       // If diffrence is less than 60 minute, dont let them update their profile
       if (diffMinutes < 60) {
-        // show the toast.error with a slide in animation
         toast.error(
           '🦄 You can only update your profile once every 60 minute',
           {
@@ -59,20 +58,6 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
         );
         return;
       }
-      // toast.error(
-      //   '🦄 You can only update your profile once every 60 minute',
-      //   {
-      //     position: 'top-center',
-      //     autoClose: 2500,
-      //     hideProgressBar: false,
-      //     closeOnClick: true,
-      //     pauseOnHover: true,
-      //     draggable: true,
-      //     progress: undefined,
-      //     theme: 'light',
-      //   }
-      // );
-      // return;
     }
 
     // Check if there is any changes in the form
@@ -197,8 +182,6 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
               >
                 Name
               </label>
-
-              {/* If maxLenght for Name is reached, show a message */}
 
               <input
                 maxLength={15}

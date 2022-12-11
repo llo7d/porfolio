@@ -63,16 +63,14 @@ export default function Home(props: { posts: IPost[] }) {
           <h1 className="text-white font-sans font-medium text-2xl">
             Projects
           </h1>
-          <Link legacyBehavior href="/projects/create">
-            <a>
-              <button
-                type="button"
-                className="flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2.5"
-              >
-                <PlusIcon className="w-6 h-6 mr-2" />
-                <span>Create Project</span>
-              </button>
-            </a>
+          <Link legacyBehavior href="/create">
+            <button
+              type="button"
+              className="flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2.5"
+            >
+              <PlusIcon className="w-6 h-6 mr-2" />
+              <span>Create Project</span>
+            </button>
           </Link>
         </div>
         {/* Posts */}

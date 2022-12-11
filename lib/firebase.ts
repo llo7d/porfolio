@@ -1,6 +1,6 @@
 import { initializeApp, getApp, getApps } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { getFirestore, query, collectionGroup, where, limit, getDocs, } from "firebase/firestore";
+import { getFirestore, query, collectionGroup, where, limit, getDocs,  } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { IUserInfo } from "./interfaces";
 
@@ -40,14 +40,16 @@ export async function getUserWithUID(uid: string) {
     limit(1)
   );
 
-  const postQuerySnapshot = await getDocs(postQuery);
-  const postDoc = postQuerySnapshot.docs[0];
+  
+  const postQuerySnapshot = await getDocs(postQuery)
 
-  // doc.data() and return as json
-  const postData = postDoc.data();
+  if (postQuerySnapshot.empty) {
+    return null
+  }
 
-  // turn data into json
-  const json = JSON.parse(JSON.stringify(postData));
 
-  return json as IUserInfo;
+  // We do thsi just all in one big line cuz one line = more smart
+  return JSON.parse(JSON.stringify(postQuerySnapshot.docs[0].data())) as IUserInfo;
+
+
 }
