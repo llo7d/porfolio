@@ -1,49 +1,72 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import AuthCheck from '../components/AuthCheck';
 import SelectionItem from '../components/SelectionItem';
-
-// // Function that takes in an array of number skills and returns an array of skills as strings
-// const IdToString = (skills: number[]) => {
-//   const skillsAsStrings: string[] = [];
-//   skills.map((skill: any) => {
-//     if (skill === 1) {
-//       skillsAsStrings.push('frontend');
-//     }
-//     if (skill === 2) {
-//       skillsAsStrings.push('wireframe');
-//     }
-//     if (skill === 3) {
-//       skillsAsStrings.push('scripts');
-//     }
-//     if (skill === 4) {
-//       skillsAsStrings.push('just talk');
-//     }
-//     if (skill === 5) {
-//       skillsAsStrings.push('backend');
-//     }
-//     if (skill === 6) {
-//       skillsAsStrings.push('ui/ux');
-//     }
-//     if (skill === 7) {
-//       skillsAsStrings.push('just code');
-//     }
-//   });
-//   return skillsAsStrings;
-// };
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { FirebaseContext } from '../lib/context';
+import { useContext } from 'react';
+import { collection, doc, setDoc } from 'firebase/firestore';
+import { firestore } from '../lib/firebase';
 
 const SkillToObj = (skills: number[]) => {
-  const skillsAsObj: any[] = [];
+  const skillsAsObj: Array<{
+    id: number;
+    name: string;
+    label: string;
+  }> = [];
+
   skills.map((skill: any, index) => {
-    if (skill === 2) {
+    if (skill === 1) {
       skillsAsObj.push({
-        id: index,
-        name: 'Wireframe',
-        label: '#5FBE50',
+        id: index + 1,
+        name: 'frontend',
+        label: '#a34646',
       });
     }
-    console.log(index + 1);
+    if (skill === 2) {
+      skillsAsObj.push({
+        id: index + 1,
+        name: 'Wireframe',
+        label: '#a34694',
+      });
+    }
+    if (skill === 3) {
+      skillsAsObj.push({
+        id: index + 1,
+        name: 'scripts',
+        label: '#a38946',
+      });
+    }
+    if (skill === 4) {
+      skillsAsObj.push({
+        id: index + 1,
+        name: 'just talk',
+        label: '#76245f',
+      });
+    }
+    if (skill === 5) {
+      skillsAsObj.push({
+        id: index + 1,
+        name: 'backend',
+        label: '#53a346',
+      });
+    }
+    if (skill === 6) {
+      skillsAsObj.push({
+        id: index + 1,
+        name: 'ui/ux',
+        label: '#4692a3',
+      });
+    }
+    if (skill === 7) {
+      skillsAsObj.push({
+        id: index + 1,
+        name: 'just code',
+        label: '#7446a3',
+      });
+    }
   });
   return skillsAsObj;
 };
@@ -67,18 +90,15 @@ type postType = {
   description: string;
   skills: any;
   level: string | undefined;
+  slug?: string;
+  createdAt?: number;
+  uid?: string;
 };
 const CreatePost: NextPage = () => {
+  const { user, loadingUser } = useContext(FirebaseContext);
+
   const [skillIDs, setSkillIDs] = useState<number[]>([]);
   const [levelID, setLevelID] = useState<number>(1);
-
-  // create a post object, with typescript types
-  // const [post, setPost] = useState<postType>({
-  //   title: '',
-  //   description: '',
-  //   skills: [''],
-  //   level: '',
-  // });
 
   const [post, setPost] = useState<postType>({
     title: '',
@@ -103,16 +123,59 @@ const CreatePost: NextPage = () => {
     }
   };
 
-  const setupPostAsJson = () => {
+  const handleSubmit = async () => {
+    // 1. Check if the user has written a title that is is longer the 5
+    if (post.title.length < 5) {
+      alert('Please enter a title a longer title');
+      return;
+    }
+    // 2. check if the user has written a description
+    if (post.description.length < 50) {
+      alert('Please enter a longer description');
+      return;
+    }
+    // 3. lets check if the user has selected any skills
+    if (skillIDs.length === 0) {
+      alert('Please select at least one skill');
+      return;
+    }
+    // 4. check if user hasnt selected more then 3 skills
+    if (skillIDs.length > 3) {
+      alert('Please select at most 3 skills');
+      return;
+    }
+    // Reformating the data
+    const titleToKebabCase = post.title.toLowerCase().split(' ').join('-');
+
+    console.log('user: ', user);
+
+    //@ts-ignore Grabbing the current user by using his uid from the auth context
+    // const userData = await getUserWithUID(user.uid);
+
     setPost({
       ...post,
       skills: SkillToObj(skillIDs),
       level: levelToString(levelID),
+      slug: titleToKebabCase,
+      createdAt: new Date().getTime(),
+      uid: user?.uid,
     });
-    console.log(post);
-  };
 
-  console.log(post);
+    // 5. if all the checks are passed, lets create the post
+    // Kinda works but broken
+    if (user) {
+      // create a reference to the user document
+      const postRef = doc(firestore, 'users', user.uid);
+
+      // create the reference to the users posts collection
+      const postsRef = collection(postRef, 'posts');
+
+      // create the post with the kebab case as the id
+      await setDoc(doc(postsRef, titleToKebabCase), post);
+    }
+
+    // console.log('res: ', res);
+  };
 
   return (
     <AuthCheck>
@@ -140,18 +203,24 @@ const CreatePost: NextPage = () => {
                   For example: &quot;Need help with a wireframe&quot;
                 </p>
                 <input
+                  pattern="[A-Za-z]"
                   maxLength={50}
                   type="text"
                   id="title"
                   name="title"
                   className="bg-gray-700 border border-gray-600 placeholder:text-gray-400 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                   placeholder="Enter project title"
-                  // value="https://dribbble.com/shots/13967318-Dribbble-Promotion-Service-UI-Components"
+                  value={post.title}
                   spellCheck={false}
                   onChange={(e) => {
+                    // clean up the title from any symbols etc..
+                    const cleanedTitle = e.target.value.replace(
+                      /[^\w\s]/gi,
+                      ''
+                    );
                     setPost({
                       ...post,
-                      title: e.target.value,
+                      title: cleanedTitle,
                     });
                   }}
                   required
@@ -174,13 +243,19 @@ const CreatePost: NextPage = () => {
                   className="bg-gray-700 border border-gray-600 placeholder:text-gray-400 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                   placeholder="Enter project description"
                   rows={10}
-                  // value="I need help with..."
+                  value={post.description}
                   required
                   maxLength={600}
                   onChange={(e) => {
+                    // clean up the text from any symbols etc.. but allow emty string as spaces
+                    const cleanedDescription = e.target.value.replace(
+                      /[^\w\s]/gi,
+                      ''
+                    );
+
                     setPost({
                       ...post,
-                      description: e.target.value,
+                      description: cleanedDescription,
                     });
                   }}
                 />
@@ -300,7 +375,7 @@ const CreatePost: NextPage = () => {
                 <button
                   type="button"
                   className="mx-auto text-white hover:text-gray-600 border border-blue-500 hover:border-gray-600 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                  onClick={() => setupPostAsJson()}
+                  onClick={() => handleSubmit()}
                 >
                   Create Task
                 </button>
