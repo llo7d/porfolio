@@ -152,10 +152,14 @@ const CreatePost: NextPage = () => {
     //@ts-ignore Grabbing the current user by using his uid from the auth context
     // const userData = await getUserWithUID(user.uid);
 
+    // leveltostring and skillstoobj fuking broken and not working
+    const leveliii = levelToString(levelID);
+    const skillsiii = SkillToObj(skillIDs);
+
     setPost({
       ...post,
-      skills: SkillToObj(skillIDs),
-      level: levelToString(levelID),
+      skills: skillsiii,
+      level: leveliii,
       slug: titleToKebabCase,
       createdAt: new Date().getTime(),
       uid: user?.uid,
