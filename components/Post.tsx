@@ -17,15 +17,21 @@ const Post: React.FC<IPost> = ({
   dayjs().format();
   dayjs.extend(require('dayjs/plugin/relativeTime'));
 
-  // createdAt to a readable date
-  const readableDate = new Date(createdAt.seconds * 1000).toLocaleDateString(
-    'en-US',
-    {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    }
-  );
+  const readableDate = new Date(createdAt).toLocaleDateString('en-US', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+
+  // // createdAt to a readable date
+  // const readableDate = new Date(createdAt.seconds * 1000).toLocaleDateString(
+  //   'en-US',
+  //   {
+  //     day: 'numeric',
+  //     month: 'long',
+  //     year: 'numeric',
+  //   }
+  // );
 
   return (
     <div className="py-6 px-8 bg-gray-800 rounded-xl mb-8 transition-shadow duration-300 hover:shadow-2xl">
@@ -68,16 +74,17 @@ const Post: React.FC<IPost> = ({
       </div>
       <div className="flex items-center justify-between">
         <div className="flex gap-2 w-[80%]">
-          {tags.map((tag) => {
+          {tags?.map((tag) => {
+            console.log(tag);
             return (
               <span
                 key={tag.id}
                 style={{
-                  backgroundColor: tag.color,
+                  backgroundColor: tag.label,
                 }}
                 className={`text-white text-xs font-sans px-2 py-1 rounded`}
               >
-                {tag.label}
+                {tag.name}
               </span>
             );
           })}

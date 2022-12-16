@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FirebaseContext } from '../lib/context';
 import { useContext } from 'react';
-import { collection, doc, setDoc } from 'firebase/firestore';
+import { collection, doc, getDocs, setDoc } from 'firebase/firestore';
 import { firestore } from '../lib/firebase';
 
 const SkillToObj = (skills: number[]) => {
@@ -21,7 +21,7 @@ const SkillToObj = (skills: number[]) => {
     if (skill === 1) {
       skillsAsObj.push({
         id: index + 1,
-        name: 'frontend',
+        name: 'Frontend',
         label: '#a34646',
       });
     }
@@ -35,35 +35,35 @@ const SkillToObj = (skills: number[]) => {
     if (skill === 3) {
       skillsAsObj.push({
         id: index + 1,
-        name: 'scripts',
+        name: 'Scripts',
         label: '#a38946',
       });
     }
     if (skill === 4) {
       skillsAsObj.push({
         id: index + 1,
-        name: 'just talk',
+        name: 'Just talk',
         label: '#76245f',
       });
     }
     if (skill === 5) {
       skillsAsObj.push({
         id: index + 1,
-        name: 'backend',
+        name: 'Backend',
         label: '#53a346',
       });
     }
     if (skill === 6) {
       skillsAsObj.push({
         id: index + 1,
-        name: 'ui/ux',
+        name: 'UI/UX',
         label: '#4692a3',
       });
     }
     if (skill === 7) {
       skillsAsObj.push({
         id: index + 1,
-        name: 'just code',
+        name: 'Just code',
         label: '#7446a3',
       });
     }
@@ -88,7 +88,7 @@ const levelToString = (level: number) => {
 type postType = {
   title: string;
   description: string;
-  skills: any;
+  tags: any;
   level: string | undefined;
   slug?: string;
   createdAt?: number;
@@ -103,7 +103,7 @@ const CreatePost: NextPage = () => {
   const [post, setPost] = useState<postType>({
     title: '',
     description: '',
-    skills: [],
+    tags: [],
     level: '',
   });
 
@@ -121,6 +121,21 @@ const CreatePost: NextPage = () => {
 
       setSkillIDs(newSkillIDs);
     }
+  };
+
+  const reformatData = () => {
+    const titleToKebabCase = post.title.toLowerCase().split(' ').join('-');
+
+    const reformetedData = {
+      ...post,
+      level: levelToString(levelID),
+      tags: SkillToObj(skillIDs),
+      slug: titleToKebabCase,
+      createdAt: new Date().getTime(),
+      uid: user?.uid,
+    };
+
+    return reformetedData;
   };
 
   const handleSubmit = async () => {
@@ -147,23 +162,19 @@ const CreatePost: NextPage = () => {
     // Reformating the data
     const titleToKebabCase = post.title.toLowerCase().split(' ').join('-');
 
-    console.log('user: ', user);
-
     //@ts-ignore Grabbing the current user by using his uid from the auth context
     // const userData = await getUserWithUID(user.uid);
 
-    // leveltostring and skillstoobj fuking broken and not working
-    const leveliii = levelToString(levelID);
-    const skillsiii = SkillToObj(skillIDs);
+    // reformatData();
 
-    setPost({
-      ...post,
-      skills: skillsiii,
-      level: leveliii,
-      slug: titleToKebabCase,
-      createdAt: new Date().getTime(),
-      uid: user?.uid,
-    });
+    // setPost({
+    //   ...post,
+    //   skills: SkillToObj(skillIDs),
+    //   level: levelToString(levelID),
+    //   slug: titleToKebabCase,
+    //   createdAt: new Date().getTime(),
+    //   uid: user?.uid,
+    // });
 
     // 5. if all the checks are passed, lets create the post
     // Kinda works but broken
@@ -171,14 +182,62 @@ const CreatePost: NextPage = () => {
       // create a reference to the user document
       const postRef = doc(firestore, 'users', user.uid);
 
+      // Maybe check if the user has a post with the same title and if so, dont create a new post
+      // Maybe check the last time a user created a post and dont let him create it for next 15 hours.
+      // Dont allow more then 5 posts
+
       // create the reference to the users posts collection
       const postsRef = collection(postRef, 'posts');
 
-      // create the post with the kebab case as the id
-      await setDoc(doc(postsRef, titleToKebabCase), post);
-    }
+      // check how many posts the user has
+      const postsSnap = await getDocs(postsRef);
 
-    // console.log('res: ', res);
+      // console.log(postsSnap);
+
+      // if the user has more then 5 posts, dont let him create a new one
+      if (postsSnap.size >= 5) {
+        alert('You have reached the limit of 5 posts');
+        return;
+      }
+
+      if (postsSnap.docs.find((doc) => doc.id === reformatData().slug)) {
+        alert('You already have a post with this title');
+        return;
+      }
+
+      // check if the last post was created in the last 30 mintes ago
+      const lastPost = postsSnap.docs[postsSnap.docs.length - 1];
+
+      // create a date object from the last post
+      const lastPostDate = new Date(lastPost.data().createdAt);
+      // get the current date
+      const currentDate = new Date();
+
+      // get the difference between the last post and the current date in minutes
+      const differenceInMinutes = Math.floor(
+        (currentDate.getTime() - lastPostDate.getTime()) / 1000 / 60
+      );
+
+      console.log('differenceInMinutes: ', differenceInMinutes);
+
+      // if the difference is less then 60 minutes, dont let the user create a new post
+      if (differenceInMinutes < 30) {
+        alert(
+          `You have to wait ${
+            60 - differenceInMinutes
+          } minutes before you can create a new post`
+        );
+        return;
+      }
+
+      // create the post with the kebab case as the id
+      await setDoc(doc(postsRef, titleToKebabCase), reformatData());
+
+      alert('Post created successfully!');
+
+      // redirect the user to the post page
+      // router.push(`/post/${titleToKebabCase}`);
+    }
   };
 
   return (

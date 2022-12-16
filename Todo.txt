@@ -20,8 +20,9 @@
 - Create login with github & grab github data as a outside function in firebase ts. ( X )
 
 - Enable user create a post ( )
--> leveltostring and skillstoobj fuking broken and not working
+-> leveltostring and skillstoobj fuking broken and not working ( )
 -> Check if a user is logged in, redirect to "please login page" with github in the middle ( X )
+-> Allow users to put commas and a dot in create a post ( )
 -> Display user posts in the "My Posts" section (  )
 -> Posts delete themselfs after 15 days ( )
 

@@ -1,16 +1,17 @@
 
 export interface IPost {
-    createdAt: {
-      seconds: number;
-      nanoseconds: number;
-    };
+    // createdAt: {
+    //   seconds: number;
+    //   nanoseconds: number;
+    // };
+    createdAt: number;
     description: string;
     level: string;
     slug: string;
     tags: [
       {
         label: string;
-        color: string;
+        name: string;
         id: number;
       }
     ];
