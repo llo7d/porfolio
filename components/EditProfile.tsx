@@ -16,14 +16,14 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
     shortDescription: userInfo.shortDescription,
     longDescription: userInfo.longDescription,
     discord: userInfo.discordName,
-    twitter: userInfo.twitterUsername,
+    twitter: userInfo.twitterUsername ? userInfo.twitterUsername : null,
   });
+
+  console.log('profile', updateProfile);
 
   // Check if the userInfo matches with the url uid, if yes
   // then let them update their profile
   const router = useRouter();
-
-  console.log('router: ', router);
 
   const handleClick: MouseEventHandler<HTMLButtonElement> = async (e) => {
     e.preventDefault();
@@ -157,7 +157,7 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
     });
 
     //@ts-ignore Reload the page with nextjs
-    Router.reload(window.location.pathname);
+    router.reload(window.location.pathname);
 
     toast.success('🦄 Wow profile is updated', {
       position: 'top-center',

@@ -93,6 +93,11 @@ export const handleSignInWithGithub = async (): Promise<any> => {
 
         // Write a new document in the users collection
         await setDoc(doc(firestore, 'users', loggedUser.uid), {
+          discordName: null,
+          twitterUsername: null,
+          lastUpdated: null,
+          longDescription: "I have not written anything about myself yet",
+          shortDescription: "I have not written anything about myself yet",
           githubUsername: login,
           githubUrl: html_url,
           githubId: loggedUser.providerData.map((data) => data.uid)[0],
