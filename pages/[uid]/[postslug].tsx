@@ -21,8 +21,6 @@ type Params = {
 export async function getServerSideProps({ params }: { params: Params }) {
   const { uid, postslug } = params;
 
-  console.log('1Are we here?');
-
   // grab the post from firestore
   const postsDocs = await getDocs(
     query(
@@ -57,8 +55,6 @@ interface Props {
   uid: string;
 }
 const UserPost: NextPage<Props> = ({ user, post, uid }) => {
-  console.log('2Are we here', uid);
-
   // This is needed to display the date since the post was created
   dayjs().format();
   dayjs.extend(require('dayjs/plugin/relativeTime'));
@@ -115,24 +111,23 @@ const UserPost: NextPage<Props> = ({ user, post, uid }) => {
                         <span
                           key={tag.id}
                           style={{
-                            backgroundColor: tag.color,
+                            backgroundColor: tag.label,
                           }}
                           className={`text-white text-xs font-sans px-2 py-1 rounded`}
                         >
-                          {tag.label}
+                          {tag.name}
                         </span>
                       );
                     })}
                   </div>
                   <p className="text-white text-xs mt-7">
                     Level Required - Beginner - {/*@ts-ignore  */}
-                    {dayjs(post.createdAt.seconds * 1000).fromNow()}
+                    {dayjs(post.createdAt).fromNow()}
                   </p>
                 </div>
 
                 <p className="text-xs text-gray-400 mt-16">
-                  Posted on{' '}
-                  {dayjs(post.createdAt.seconds * 1000).format('MMM D, YYYY')}
+                  Posted on {dayjs(post.createdAt).format('MMM D, YYYY')}
                 </p>
               </div>
 

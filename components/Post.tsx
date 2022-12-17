@@ -23,16 +23,6 @@ const Post: React.FC<IPost> = ({
     year: 'numeric',
   });
 
-  // // createdAt to a readable date
-  // const readableDate = new Date(createdAt.seconds * 1000).toLocaleDateString(
-  //   'en-US',
-  //   {
-  //     day: 'numeric',
-  //     month: 'long',
-  //     year: 'numeric',
-  //   }
-  // );
-
   return (
     <div className="py-6 px-8 bg-gray-800 rounded-xl mb-8 transition-shadow duration-300 hover:shadow-2xl">
       <div className="flex justify-between">
@@ -44,7 +34,7 @@ const Post: React.FC<IPost> = ({
           </Link>
           <p className="text-white text-xs mb-3">
             Level Required - {level} - Posted {/* @ts-ignore */}
-            {' ' + dayjs(createdAt.seconds * 1000).fromNow()}
+            {' ' + dayjs(createdAt).fromNow()}
           </p>
           <p className="text-white font-sans mb-6 text-xs">
             {description?.split(' ').length > 25 ? (
@@ -75,7 +65,6 @@ const Post: React.FC<IPost> = ({
       <div className="flex items-center justify-between">
         <div className="flex gap-2 w-[80%]">
           {tags?.map((tag) => {
-            console.log(tag);
             return (
               <span
                 key={tag.id}

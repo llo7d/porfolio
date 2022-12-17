@@ -5,7 +5,7 @@ import { doc, updateDoc } from 'firebase/firestore';
 import { firestore } from '../lib/firebase';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 
 interface Props {
   userInfo: IUserInfo;
@@ -18,6 +18,12 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
     discord: userInfo.discordName,
     twitter: userInfo.twitterUsername,
   });
+
+  // Check if the userInfo matches with the url uid, if yes
+  // then let them update their profile
+  const router = useRouter();
+
+  console.log('router: ', router);
 
   const handleClick: MouseEventHandler<HTMLButtonElement> = async (e) => {
     e.preventDefault();

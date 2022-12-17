@@ -20,7 +20,7 @@ const postLimit = 3;
 export const getServerSideProps: GetStaticProps = async () => {
   const postsQuery = query(
     collectionGroup(firestore, 'posts'),
-    orderBy('createdAt', 'asc'),
+    orderBy('createdAt', 'desc'),
     limit(postLimit)
   );
   const postsDocs = await getDocs(postsQuery);

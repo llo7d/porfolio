@@ -9,6 +9,7 @@ import { FirebaseContext } from '../lib/context';
 import { useContext } from 'react';
 import { collection, doc, getDocs, setDoc } from 'firebase/firestore';
 import { firestore } from '../lib/firebase';
+import { useRouter } from 'next/router';
 
 const SkillToObj = (skills: number[]) => {
   const skillsAsObj: Array<{
@@ -96,6 +97,7 @@ type postType = {
 };
 const CreatePost: NextPage = () => {
   const { user, loadingUser } = useContext(FirebaseContext);
+  const router = useRouter();
 
   const [skillIDs, setSkillIDs] = useState<number[]>([]);
   const [levelID, setLevelID] = useState<number>(1);
@@ -162,29 +164,9 @@ const CreatePost: NextPage = () => {
     // Reformating the data
     const titleToKebabCase = post.title.toLowerCase().split(' ').join('-');
 
-    //@ts-ignore Grabbing the current user by using his uid from the auth context
-    // const userData = await getUserWithUID(user.uid);
-
-    // reformatData();
-
-    // setPost({
-    //   ...post,
-    //   skills: SkillToObj(skillIDs),
-    //   level: levelToString(levelID),
-    //   slug: titleToKebabCase,
-    //   createdAt: new Date().getTime(),
-    //   uid: user?.uid,
-    // });
-
-    // 5. if all the checks are passed, lets create the post
-    // Kinda works but broken
     if (user) {
       // create a reference to the user document
       const postRef = doc(firestore, 'users', user.uid);
-
-      // Maybe check if the user has a post with the same title and if so, dont create a new post
-      // Maybe check the last time a user created a post and dont let him create it for next 15 hours.
-      // Dont allow more then 5 posts
 
       // create the reference to the users posts collection
       const postsRef = collection(postRef, 'posts');
@@ -208,6 +190,17 @@ const CreatePost: NextPage = () => {
       // check if the last post was created in the last 30 mintes ago
       const lastPost = postsSnap.docs[postsSnap.docs.length - 1];
 
+      // check if last post exists
+      if (!lastPost) {
+        // create the post with the kebab case as the id
+        await setDoc(doc(postsRef, titleToKebabCase), reformatData());
+
+        alert('Post created successfully!');
+
+        // redirect the user to the post page
+        router.push(`/${user.uid}/${titleToKebabCase}`);
+        return;
+      }
       // create a date object from the last post
       const lastPostDate = new Date(lastPost.data().createdAt);
       // get the current date
@@ -229,14 +222,10 @@ const CreatePost: NextPage = () => {
         );
         return;
       }
-
       // create the post with the kebab case as the id
       await setDoc(doc(postsRef, titleToKebabCase), reformatData());
 
       alert('Post created successfully!');
-
-      // redirect the user to the post page
-      // router.push(`/post/${titleToKebabCase}`);
     }
   };
 

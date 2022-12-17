@@ -1,30 +1,32 @@
 import React from 'react';
-import Link from 'next/link';
 import { useContext } from 'react';
 import { FirebaseContext } from '../lib/context';
 import MustBeSignedIn from './MustBeSignedIn';
+import { NextPage } from 'next';
 
-const AuthCheck = ({ children }: { children: JSX.Element }) => {
+type Props = {
+  uid?: string;
+  children: JSX.Element;
+};
+
+const AuthCheck: NextPage<Props> = ({ children, uid }) => {
   const { user, loadingUser } = useContext(FirebaseContext);
+
+  if (loadingUser)
+    return (
+      <div>
+        <h1>Loading...</h1>
+      </div>
+    );
 
   if (!user)
     return (
       <div>
         <MustBeSignedIn />
       </div>
-      //   <Link href="/enter">
-      //     <h1>You must be signed in</h1>
-      //   </Link>
     );
+
   return children;
-
-  //   return username ? props.children : props.fallback || <Link href="/enter">You must be signed in</Link>;
-
-  //   return (
-  //     <div>
-  //       <h1>AuthCheck</h1>
-  //     </div>
-  //   );
 };
 
 export default AuthCheck;
