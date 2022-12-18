@@ -12,6 +12,7 @@ import {
 import { firestore, getUserWithUID } from '../../lib/firebase';
 import { IPost, IUserInfo } from '../../lib/interfaces';
 import dayjs from 'dayjs';
+import MustBeSignedIn from '../../components/MustBeSignedIn';
 
 type Params = {
   uid: string;
@@ -30,6 +31,12 @@ export async function getServerSideProps({ params }: { params: Params }) {
       limit(1)
     )
   );
+
+  if (postsDocs.empty) {
+    return {
+      props: { error: true },
+    };
+  }
 
   // doc.data() and return as json
   const postData = postsDocs.docs.map((doc) => {
@@ -53,8 +60,18 @@ interface Props {
   user: IUserInfo;
   post: IPost;
   uid: string;
+  error: boolean;
 }
-const UserPost: NextPage<Props> = ({ user, post, uid }) => {
+const UserPost: NextPage<Props> = ({ user, post, uid, error }) => {
+  // If error, return 404 page
+  if (error) {
+    return (
+      <div>
+        <h1>Post not found</h1>
+      </div>
+    );
+  }
+
   // This is needed to display the date since the post was created
   dayjs().format();
   dayjs.extend(require('dayjs/plugin/relativeTime'));

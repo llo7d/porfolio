@@ -12,6 +12,7 @@ type Props = {
 const AuthCheck: NextPage<Props> = ({ children, uid }) => {
   const { user, loadingUser } = useContext(FirebaseContext);
 
+  // if user is loading, show loading screen
   if (loadingUser)
     return (
       <div>
@@ -19,6 +20,7 @@ const AuthCheck: NextPage<Props> = ({ children, uid }) => {
       </div>
     );
 
+  // if user is not logged in, show must be signed in screen
   if (!user)
     return (
       <div>
@@ -26,6 +28,16 @@ const AuthCheck: NextPage<Props> = ({ children, uid }) => {
       </div>
     );
 
+  // if logged user id does not match param uid, show 404 page
+  if (user?.uid !== uid) {
+    return (
+      <div>
+        <h1>404 thingy</h1>
+      </div>
+    );
+  }
+
+  // if user is logged in and uid matches, show children
   return children;
 };
 

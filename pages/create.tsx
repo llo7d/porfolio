@@ -265,11 +265,17 @@ const CreatePost: NextPage = () => {
                   value={post.title}
                   spellCheck={false}
                   onChange={(e) => {
-                    // clean up the title from any symbols etc..
+                    // Dont allow special characters in the title and _ and -
                     const cleanedTitle = e.target.value.replace(
-                      /[^\w\s]/gi,
+                      /[^a-zA-Z0-9\s]/g,
                       ''
                     );
+
+                    // const cleanedTitle = e.target.value.replace(
+                    //   /[^\w\s]/gi,
+                    //   ''
+                    // );
+
                     setPost({
                       ...post,
                       title: cleanedTitle,
@@ -301,7 +307,7 @@ const CreatePost: NextPage = () => {
                   onChange={(e) => {
                     // clean up the text from any symbols etc.. but allow emty string as spaces
                     const cleanedDescription = e.target.value.replace(
-                      /[^\w\s]/gi,
+                      /[^A-Za-z0-9\s\.\,\?]/g,
                       ''
                     );
 
