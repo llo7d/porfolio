@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import { FirebaseContext } from '../lib/context';
 import MustBeSignedIn from './MustBeSignedIn';
 import { NextPage } from 'next';
+import Custom404 from './Custom404';
 
 type Props = {
   uid?: string;
@@ -32,7 +33,7 @@ const AuthCheck: NextPage<Props> = ({ children, uid }) => {
   if (user?.uid !== uid) {
     return (
       <div>
-        <h1>404 thingy</h1>
+        <Custom404 ErrorType="This is not your profile" />
       </div>
     );
   }

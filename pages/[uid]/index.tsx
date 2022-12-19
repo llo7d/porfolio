@@ -8,6 +8,7 @@ import EditProfile from '../../components/EditProfile';
 import { IUserInfo } from '../../lib/interfaces';
 import { getUserWithUID } from '../../lib/firebase';
 import AuthCheck from '../../components/AuthCheck';
+import Custom404 from '../../components/Custom404';
 
 interface Params {
   uid: string;
@@ -42,7 +43,7 @@ const EditProfilePage: NextPage<Props> = ({ userInfo, uid, error }) => {
   if (error) {
     return (
       <div>
-        <h1>404</h1>
+        <Custom404 ErrorType="Page not found" />
       </div>
     );
   }
@@ -54,7 +55,7 @@ const EditProfilePage: NextPage<Props> = ({ userInfo, uid, error }) => {
   // if (user?.uid !== uid) {
   //   return (
   //     <div>
-  //       <h1>404</h1>
+  //       <Custom404 ErrorType="This is not your profile" />
   //     </div>
   //   );
   // }

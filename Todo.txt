@@ -30,6 +30,10 @@
 -> https://gyazo.com/4d74da0d53b9981b751659a817e42627
 -> When just going to /hey , need fix ( )
 
+- Checkout get statick paths ( )
+-> https://nextjs.org/docs/basic-features/pages
+
+
 -> Display user posts in the "My Posts" section (  )
 -> Posts delete themselfs after 15 days ( )
 

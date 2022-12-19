@@ -13,6 +13,7 @@ import { firestore, getUserWithUID } from '../../lib/firebase';
 import { IPost, IUserInfo } from '../../lib/interfaces';
 import dayjs from 'dayjs';
 import MustBeSignedIn from '../../components/MustBeSignedIn';
+import Custom404 from '../../components/Custom404';
 
 type Params = {
   uid: string;
@@ -66,9 +67,7 @@ const UserPost: NextPage<Props> = ({ user, post, uid, error }) => {
   // If error, return 404 page
   if (error) {
     return (
-      <div>
-        <h1>Post not found</h1>
-      </div>
+      <Custom404 ErrorType="The post you were searching for was not found" />
     );
   }
 
