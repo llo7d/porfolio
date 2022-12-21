@@ -86,6 +86,8 @@ const UserPost: NextPage<Props> = ({ user, post, uid, error }) => {
         </Head>
 
         <main className="bg-gray-900 min-h-screen pt-14 pb-48 px-28">
+
+
           <div className="flex items-center justify-between mb-16">
             <h1 className="text-white font-sans font-medium text-2xl">
               Project Details
@@ -164,7 +166,7 @@ const UserPost: NextPage<Props> = ({ user, post, uid, error }) => {
                   <div className="flex items-center gap-5 mb-24">
                     {/* I think later remake this as a component, too much shit and it looks shit */}
                     {user.discordName === 'false' ||
-                    user.discordName == null ? null : (
+                      user.discordName == null ? null : (
                       <button
                         type="button"
                         onClick={() => setIsDiscordOpen(true)}
@@ -176,10 +178,11 @@ const UserPost: NextPage<Props> = ({ user, post, uid, error }) => {
                       </button>
                     )}
                     {user.twitterUsername === 'false' ||
-                    user.twitterUsername == null ? null : (
+                      user.twitterUsername == null ? null : (
                       <a
                         href={`https://twitter.com/${user.twitterUsername}`}
                         target="_blank"
+                        rel="noreferrer"
                       >
                         <img
                           className="w-5 h-5"
@@ -190,6 +193,7 @@ const UserPost: NextPage<Props> = ({ user, post, uid, error }) => {
                     <a
                       href={`https://github.com/${user.githubUsername}`}
                       target="_blank"
+                      rel="noreferrer"
                     >
                       <img className="w-5 h-5" src="/images/icon-github.png" />
                     </a>
@@ -221,8 +225,8 @@ const UserPost: NextPage<Props> = ({ user, post, uid, error }) => {
           // link={`https://github.com/${user.githubUsername}`}
           link={user.githubUrl}
         /> */}
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 

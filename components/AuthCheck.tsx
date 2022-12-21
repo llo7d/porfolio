@@ -9,10 +9,12 @@ import Loading from './Loading';
 type Props = {
   uid?: string;
   children: JSX.Element;
+  fallback?: JSX.Element;
 };
 
-const AuthCheck: NextPage<Props> = ({ children, uid }) => {
+const AuthCheck: NextPage<Props> = ({ children, uid, fallback }) => {
   const { user, loadingUser } = useContext(FirebaseContext);
+
 
   // if user is loading, show loading screen
   if (loadingUser)
@@ -38,6 +40,7 @@ const AuthCheck: NextPage<Props> = ({ children, uid }) => {
       </div>
     );
   }
+
 
   // if user is logged in and uid matches, show children
   return children;

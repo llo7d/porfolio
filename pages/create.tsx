@@ -143,22 +143,58 @@ const CreatePost: NextPage = () => {
   const handleSubmit = async () => {
     // 1. Check if the user has written a title that is is longer the 5
     if (post.title.length < 5) {
-      alert('Please enter a title a longer title');
+      toast.info('🦄 Please enter a longer title', {
+        position: 'top-right',
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return;
     }
     // 2. check if the user has written a description
     if (post.description.length < 50) {
-      alert('Please enter a longer description');
+      toast.info('🦄 Please enter a longer description', {
+        position: 'top-right',
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return;
     }
     // 3. lets check if the user has selected any skills
     if (skillIDs.length === 0) {
-      alert('Please select at least one skill');
+      toast.info('🦄 Please select atleast 1 skill', {
+        position: 'top-right',
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return;
     }
     // 4. check if user hasnt selected more then 3 skills
     if (skillIDs.length > 3) {
-      alert('Please select at most 3 skills');
+      toast.info('🦄 Please select at most 3 skills', {
+        position: 'top-right',
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });;
       return;
     }
     // Reformating the data
@@ -176,12 +212,30 @@ const CreatePost: NextPage = () => {
 
       // if the user has more then 5 posts, dont let him create a new one
       if (postsSnap.size >= 5) {
-        alert('You have reached the limit of 5 posts');
+        toast.warning('🦄 You have reached post limit', {
+          position: 'top-right',
+          autoClose: 2500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
         return;
       }
 
       if (postsSnap.docs.find((doc) => doc.id === reformatData().slug)) {
-        alert('You already have a post with this title');
+        toast.info('🦄 You already have a post with this title', {
+          position: 'top-right',
+          autoClose: 2500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });;
         return;
       }
 
@@ -196,7 +250,7 @@ const CreatePost: NextPage = () => {
         router.push(`/${user.uid}/${titleToKebabCase}`);
 
         toast.success('🦄 You have created your 1st Post! ', {
-          position: 'top-center',
+          position: 'top-right',
           autoClose: 2500,
           hideProgressBar: false,
           closeOnClick: true,
@@ -225,15 +279,22 @@ const CreatePost: NextPage = () => {
       //   (currentDate.getTime() - lastPostDate.getTime()) / 1000 / 60
       // );
 
-      console.log('diffrentceInMinutes:', differenceInMinutes);
+      // console.log('diffrentceInMinutes:', differenceInMinutes);
 
       // if the difference is less then 60 minutes, dont let the user create a new post
       if (differenceInMinutes < 60) {
-        alert(
-          `You have to wait ${
-            60 - differenceInMinutes
-          } minutes before you can create a new post`
-        );
+        toast.info(`🦄 You have to wait ${60 - differenceInMinutes
+          } minutes before you can create a new post`, {
+          position: 'top-right',
+          autoClose: 2500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });;
+
         return;
       }
       // create the post with the kebab case as the id
@@ -241,7 +302,7 @@ const CreatePost: NextPage = () => {
       router.push(`/${user.uid}/${titleToKebabCase}`);
 
       toast.success('🦄 Post created ', {
-        position: 'top-center',
+        position: 'top-right',
         autoClose: 2500,
         hideProgressBar: false,
         closeOnClick: true,

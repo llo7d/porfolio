@@ -57,35 +57,38 @@ export default function Home(props: { posts: IPost[] }) {
       </Head>
 
       <main className="bg-gray-900 min-h-screen py-14 px-28">
-        {/* Top bar */}
-        <div className="flex items-center justify-between mb-16">
-          <h1 className="text-white font-sans font-medium text-2xl">
-            Projects
-          </h1>
-          <Link legacyBehavior href="/create">
-            <button
-              type="button"
-              className="flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2.5"
-            >
-              <PlusIcon className="w-6 h-6 mr-2" />
-              <span>Create Project</span>
-            </button>
-          </Link>
-        </div>
-        {/* Posts */}
-        <div>
-          {posts.map((post) => (
-            <Post
-              key={post.slug}
-              title={post.title}
-              description={post.description}
-              tags={post.tags}
-              level={post.level}
-              slug={post.slug}
-              createdAt={post.createdAt}
-              uid={post.uid}
-            />
-          ))}
+        <div className='w-[960px] mx-auto'>
+
+          {/* Top bar */}
+          <div className="flex items-center justify-between mb-16">
+            <h1 className="text-white font-sans font-medium text-2xl">
+              Projects
+            </h1>
+            <Link legacyBehavior href="/create">
+              <button
+                type="button"
+                className="flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2.5"
+              >
+                <PlusIcon className="w-6 h-6 mr-2" />
+                <span>Create Project</span>
+              </button>
+            </Link>
+          </div>
+          {/* Posts */}
+          <div>
+            {posts.map((post) => (
+              <Post
+                key={post.slug}
+                title={post.title}
+                description={post.description}
+                tags={post.tags}
+                level={post.level}
+                slug={post.slug}
+                createdAt={post.createdAt}
+                uid={post.uid}
+              />
+            ))}
+          </div>
         </div>
       </main>
     </div>

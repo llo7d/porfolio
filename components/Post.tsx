@@ -27,12 +27,10 @@ const Post: React.FC<IPost> = ({
     <div className="py-6 px-8 bg-gray-800 rounded-xl mb-8 transition-shadow duration-300 hover:shadow-2xl">
       <div className="flex justify-between">
         <div className="w-[80%]">
-          <Link legacyBehavior href={`/${uid}/${slug}`}>
-            <a>
-              <h2 className="text-xl text-white font-medium mb-5">{title}</h2>
-            </a>
+          <Link href={`/${uid}/${slug}`}>
+            <h2 className="text-xl text-white font-medium mb-5">{title}</h2>
           </Link>
-          <p className="text-white text-xs mb-3">
+          <p className="text-white text-xs mb-3 ">
             Level Required - {level} - Posted {/* @ts-ignore */}
             {' ' + dayjs(createdAt).fromNow()}
           </p>
@@ -45,7 +43,9 @@ const Post: React.FC<IPost> = ({
                 </Link>
               </>
             ) : (
-              description
+              <h1 className="text-white font-medium">
+                {description}
+              </h1>
             )}
           </p>
         </div>
