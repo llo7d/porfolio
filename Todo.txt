@@ -8,14 +8,13 @@
 
 - Create firebase database and fill homepage with fake posts. ( X )
 -> Display the data on the homepage in the post component ( X )
--> Add a load more button posts ( )
 -> Navigate to the full post ( X )
 --> Display posts and user data ( X )
 --> Update discord/twitter in database or else show none ( X )
 
 - Profile update name / bio or social info ( X )
 
-- When Github login, setup that the profile is setup correctly (   )
+- When Github login, setup that the profile is setup correctly ( X )
 
 - Create login with github & grab github data as a outside function in firebase ts. ( X )
 
@@ -26,20 +25,19 @@
 -> Allow users to put commas and a dot in create a post ( X )
 -> When user registers with github, add all the necessery data. ( X )
 
--> When going to links that it doesnt parse just redirects to 404 ( )
+-> When going to links that it doesnt parse just redirects to 404 ( X )
 -> https://gyazo.com/4d74da0d53b9981b751659a817e42627
--> When just going to /hey , need fix ( )
-
-- Checkout get statick paths ( )
--> https://nextjs.org/docs/basic-features/pages
+-> When just going to /hey , need fix ( X )
 
 
+-> Fix creating multtiple post without timer ( )
+-> Fix creating post developer getting a "-" after example: http://localhost:3000/dcVsC8Y1hMVZ73yjJDhyDo7ZrGH3/developer- ( )
+
+-> Fix this : https://gyazo.com/89aad81ad8177ee147b0ec2dd4435940
+-> If limit stil somehow submits post ( )
 -> Display user posts in the "My Posts" section (  )
 -> Posts delete themselfs after 15 days ( )
 
-
-- Maybe in the future check fallbacks ( )
-- Add profile/post also having github link
-
+-> Add a load more button posts ( )
 
 

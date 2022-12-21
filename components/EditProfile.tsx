@@ -19,8 +19,6 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
     twitter: userInfo.twitterUsername ? userInfo.twitterUsername : null,
   });
 
-  console.log('profile', updateProfile);
-
   // Check if the userInfo matches with the url uid, if yes
   // then let them update their profile
   const router = useRouter();
@@ -36,16 +34,16 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
       const diffHours = diff / (1000 * 3600);
       const diffMinutes = diff / (1000 * 60);
 
-      console.log(
-        'lastUpdated: ',
-        lastUpdated,
-        'now:',
-        now,
-        diffHours,
-        diff,
-        'diffMinutes: ',
-        diffMinutes
-      );
+      // console.log(
+      //   'lastUpdated: ',
+      //   lastUpdated,
+      //   'now:',
+      //   now,
+      //   diffHours,
+      //   diff,
+      //   'diffMinutes: ',
+      //   diffMinutes
+      // );
 
       // If diffrence is less than 60 minute, dont let them update their profile
       if (diffMinutes < 60) {
@@ -111,7 +109,7 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
           theme: 'light',
         });
       } else if (updateProfile.shortDescription === '') {
-        toast.error('🦄 Cant leave shortDescriptio field emtpy', {
+        toast.error('🦄 Cant leave Short Description field emtpy', {
           position: 'top-center',
           autoClose: 2500,
           hideProgressBar: false,
@@ -128,7 +126,7 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
           longDescription: '',
         });
 
-        toast.error('🦄 Cant leave longDescription field emtpy', {
+        toast.error('🦄 Cant leave Long Description field emtpy', {
           position: 'top-center',
           autoClose: 2500,
           hideProgressBar: false,

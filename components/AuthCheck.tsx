@@ -4,6 +4,7 @@ import { FirebaseContext } from '../lib/context';
 import MustBeSignedIn from './MustBeSignedIn';
 import { NextPage } from 'next';
 import Custom404 from './Custom404';
+import Loading from './Loading';
 
 type Props = {
   uid?: string;
@@ -17,7 +18,7 @@ const AuthCheck: NextPage<Props> = ({ children, uid }) => {
   if (loadingUser)
     return (
       <div>
-        <h1>Loading...</h1>
+        <Loading />
       </div>
     );
 

@@ -174,8 +174,6 @@ const CreatePost: NextPage = () => {
       // check how many posts the user has
       const postsSnap = await getDocs(postsRef);
 
-      // console.log(postsSnap);
-
       // if the user has more then 5 posts, dont let him create a new one
       if (postsSnap.size >= 5) {
         alert('You have reached the limit of 5 posts');
@@ -194,11 +192,20 @@ const CreatePost: NextPage = () => {
       if (!lastPost) {
         // create the post with the kebab case as the id
         await setDoc(doc(postsRef, titleToKebabCase), reformatData());
-
-        alert('Post created successfully!');
-
         // redirect the user to the post page
         router.push(`/${user.uid}/${titleToKebabCase}`);
+
+        toast.success('🦄 You have created your 1st Post! ', {
+          position: 'top-center',
+          autoClose: 2500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+
         return;
       }
       // create a date object from the last post
@@ -206,15 +213,22 @@ const CreatePost: NextPage = () => {
       // get the current date
       const currentDate = new Date();
 
+      console.log('lastPostDate:', lastPostDate);
+      console.log('currentDate:', currentDate);
+
       // get the difference between the last post and the current date in minutes
       const differenceInMinutes = Math.floor(
         (currentDate.getTime() - lastPostDate.getTime()) / 1000 / 60
       );
 
-      console.log('differenceInMinutes: ', differenceInMinutes);
+      // const differenceInMinutes = Math.floor(
+      //   (currentDate.getTime() - lastPostDate.getTime()) / 1000 / 60
+      // );
+
+      console.log('diffrentceInMinutes:', differenceInMinutes);
 
       // if the difference is less then 60 minutes, dont let the user create a new post
-      if (differenceInMinutes < 30) {
+      if (differenceInMinutes < 60) {
         alert(
           `You have to wait ${
             60 - differenceInMinutes
@@ -224,13 +238,25 @@ const CreatePost: NextPage = () => {
       }
       // create the post with the kebab case as the id
       await setDoc(doc(postsRef, titleToKebabCase), reformatData());
+      router.push(`/${user.uid}/${titleToKebabCase}`);
 
-      alert('Post created successfully!');
+      toast.success('🦄 Post created ', {
+        position: 'top-center',
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+
+      return;
     }
   };
 
   return (
-    <AuthCheck>
+    <AuthCheck uid={user?.uid}>
       <div>
         <Head>
           <title>Create Project | Project Listings</title>
@@ -307,7 +333,7 @@ const CreatePost: NextPage = () => {
                   onChange={(e) => {
                     // clean up the text from any symbols etc.. but allow emty string as spaces
                     const cleanedDescription = e.target.value.replace(
-                      /[^A-Za-z0-9\s\.\,\?]/g,
+                      /[^A-Za-z0-9\s\.\,\?\!]/g,
                       ''
                     );
 
