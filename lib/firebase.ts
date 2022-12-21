@@ -1,6 +1,6 @@
 import { initializeApp, getApp, getApps } from "firebase/app";
 import { getAuth, GithubAuthProvider, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { getFirestore, query, collectionGroup, where, limit, getDocs, doc, getDoc, serverTimestamp, setDoc,  } from "firebase/firestore";
+import { getFirestore, query, collectionGroup, where, limit, getDocs, doc, getDoc, serverTimestamp, setDoc, } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import Router from "next/router";
 import { IUserInfo } from "./interfaces";
@@ -41,7 +41,7 @@ export async function getUserWithUID(uid: string) {
     limit(1)
   );
 
-  
+
   const postQuerySnapshot = await getDocs(postQuery)
 
   if (postQuerySnapshot.empty) {
@@ -59,58 +59,58 @@ export async function getUserWithUID(uid: string) {
  * Sign in and or Sign Up a user with GitHub, then Grab his data from GitHub and then create a new user in firestore
 */
 export const handleSignInWithGithub = async (): Promise<any> => {
-    // Grabs GitHub user data with the users github id
-    const getGitHubUserData = async (githubIdOrLogin: string | undefined) => {
-      return fetch(`https://api.github.com/user/${githubIdOrLogin}`, {
-        headers: { Accept: 'application/json' },
-      }).then((res) => {
-        return res.json();
+  // Grabs GitHub user data with the users github id
+  const getGitHubUserData = async (githubIdOrLogin: string | undefined) => {
+    return fetch(`https://api.github.com/user/${githubIdOrLogin}`, {
+      headers: { Accept: 'application/json' },
+    }).then((res) => {
+      return res.json();
+    });
+  };
+
+  // Sign in using a redirect.
+  const provider = new GithubAuthProvider();
+
+  // Add scope to only grab user profile and username
+  provider.addScope('read:user user:email');
+  await signInWithPopup(auth, provider);
+
+  // Redirect to the home page with Router
+  Router.push("/");
+
+  let loggedUser = auth.currentUser;
+
+  if (loggedUser) {
+    // Check if user exists in firestore
+    const docSnap = await getDoc(doc(firestore, 'users', loggedUser.uid));
+
+    // If user does not exist, create it
+    if (!docSnap.exists()) {
+      // Calling github api with githubUserId to get github data
+      const { html_url, login } = await getGitHubUserData(
+        loggedUser.providerData.map((data) => data.uid)[0]
+      );
+
+      // Write a new document in the users collection
+      await setDoc(doc(firestore, 'users', loggedUser.uid), {
+        discordName: null,
+        twitterUsername: null,
+        lastUpdated: null,
+        longDescription: "I have not written anything about myself yet",
+        shortDescription: "I have not written anything about myself yet",
+        githubUsername: login,
+        githubUrl: html_url,
+        githubId: loggedUser.providerData.map((data) => data.uid)[0],
+        email: loggedUser.email,
+        photoURL: loggedUser.photoURL,
+        createdAt: serverTimestamp(),
+        provider: loggedUser.providerData[0].providerId,
+        uid: loggedUser.uid,
+        displayName: loggedUser.displayName,
       });
-    };
 
-    // Sign in using a redirect.
-    const provider = new GithubAuthProvider();
-
-    // Add scope to only grab user profile and username
-    provider.addScope('read:user user:email');
-    await signInWithPopup(auth, provider);
-
-    // Redirect to the home page with Router
-    Router.push("/");
-
-    let loggedUser = auth.currentUser;
-
-    if (loggedUser) {
-      // Check if user exists in firestore
-      const docSnap = await getDoc(doc(firestore, 'users', loggedUser.uid));
-
-      // If user does not exist, create it
-      if (!docSnap.exists()) {
-        // Calling github api with githubUserId to get github data
-        const { html_url, login } = await getGitHubUserData(
-          loggedUser.providerData.map((data) => data.uid)[0]
-        );
-
-        // Write a new document in the users collection
-        await setDoc(doc(firestore, 'users', loggedUser.uid), {
-          discordName: null,
-          twitterUsername: null,
-          lastUpdated: null,
-          longDescription: "I have not written anything about myself yet",
-          shortDescription: "I have not written anything about myself yet",
-          githubUsername: login,
-          githubUrl: html_url,
-          githubId: loggedUser.providerData.map((data) => data.uid)[0],
-          email: loggedUser.email,
-          photoURL: loggedUser.photoURL,
-          createdAt: serverTimestamp(),
-          provider: loggedUser.providerData[0].providerId,
-          uid: loggedUser.uid,
-          displayName: loggedUser.displayName,
-        });
-
-      } else {
-        console.log('User already exists in firestore');
-      }
+    } else {
+      console.log('User already exists in firestore');
     }
+  }
 };

@@ -1,8 +1,6 @@
 - Create document of user on signin ( check if alrdy exists ) ( X )
 -> With Github, grab username + profile link. ( X )
 
-- this is a test pull ( )
-
 - Fix the data hydration,  either some useeffect or load state not sure ( X )
 -> Seems to be fixxed due to me having the h2 in h1 but double check later ( )
 
