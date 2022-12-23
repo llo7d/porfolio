@@ -32,7 +32,7 @@
 -> If limit stil somehow submits post ( )
 -> Display user posts in the "My Posts" section ( X )
 --> Try bbrake it somehow (  )
---> Add a delete button instead of the heard icon ( )
+--> Add a delete button instead of the heard icon ( X )
 -> Fix creating post developer getting a "-" after example: http://localhost:3000/dcVsC8Y1hMVZ73yjJDhyDo7ZrGH3/developer- ( )
 
 -> Fix this : https://gyazo.com/89aad81ad8177ee147b0ec2dd4435940 ( also remove double spaces)

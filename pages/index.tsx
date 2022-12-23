@@ -14,7 +14,6 @@ import {
 } from 'firebase/firestore';
 import { IPost } from '../lib/interfaces';
 import { GetStaticProps } from 'next';
-import { async } from '@firebase/util';
 
 const postLimit = 3;
 export const getServerSideProps: GetStaticProps = async () => {

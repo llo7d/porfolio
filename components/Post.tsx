@@ -1,6 +1,12 @@
 import Link from 'next/link';
 import { IPost } from '../lib/interfaces';
 import dayjs from 'dayjs';
+import { HeartIcon, TrashIcon } from '@heroicons/react/24/solid';
+import { doc, deleteDoc, getDoc } from "firebase/firestore";
+import { firestore } from '../lib/firebase';
+import { useRouter } from 'next/router';
+import { FirebaseContext } from '../lib/context';
+import { useContext, useState } from 'react';
 
 const Post: React.FC<IPost> = ({
   title,
@@ -10,8 +16,15 @@ const Post: React.FC<IPost> = ({
   level,
   tags,
   uid,
+  deletePost,
+  handleDelete,
 }) => {
   const shortDescription = description?.split(' ').slice(0, 25).join(' ');
+
+
+  const { user, loadingUser } = useContext(FirebaseContext);
+  const [canDelete, setCanDelete] = useState(false);
+
 
   // This is needed to display the date since the post was created
   dayjs().format();
@@ -22,6 +35,52 @@ const Post: React.FC<IPost> = ({
     month: 'long',
     year: 'numeric',
   });
+
+  const router = useRouter();
+
+
+
+
+  // Delete post
+  const handleDelete1 = async (slug: string, uid: string) => {
+    // Delete the post from the database
+    const postRef = doc(firestore, 'users', uid, 'posts', slug);
+
+    // Grab the post data
+    const postDoc = await getDoc(postRef);
+
+    if (postDoc.exists()) {
+
+      if (user) {
+
+        // Check if the user uid matches the post uid
+        if (postDoc.data().uid === user.uid && user.uid === uid) {
+          console.log("User uid matches post uid", postDoc.data().uid, user.uid);
+
+          // Delete the post
+          // await deleteDoc(postRef);
+
+
+          // alert the user that the post was deleted
+          alert("Post deleted");
+
+
+
+
+        } else {
+          // If the user uid does not match the post uid, do nothing
+          console.log("Not your post, you can't delete it");
+
+
+          return;
+        }
+      }
+
+    }
+  };
+
+
+
 
   return (
     <div className="py-6 px-8 bg-gray-800 rounded-xl mb-8 transition-shadow duration-300 hover:shadow-2xl">
@@ -49,6 +108,26 @@ const Post: React.FC<IPost> = ({
             )}
           </p>
         </div>
+
+        {/* Delete icon */}
+        {deletePost ? (
+          <button
+            className="w-7 h-7 rounded-full bg-gray-900 flex items-center justify-center"
+            type="button"
+            onClick={() => {
+              handleDelete(slug, uid);
+            }}
+          >
+            <TrashIcon
+              className={`w-4 h-4 ${true ? 'text-red-500' : 'text-gray-700'
+                }`}
+            />
+          </button>
+        ) : (
+          null
+        )}
+
+
         {/* // Heart posts as favourite, in the future. */}
         {/* <button
           className="w-7 h-7 rounded-full bg-gray-900 flex items-center justify-center"
@@ -80,7 +159,7 @@ const Post: React.FC<IPost> = ({
         </div>
         <p className="text-xs text-gray-400">{readableDate}</p>
       </div>
-    </div>
+    </div >
   );
 };
 

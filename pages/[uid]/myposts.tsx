@@ -1,14 +1,14 @@
 import React from 'react';
 import AuthCheck from '../../components/AuthCheck';
 import { firestore, getUserWithUID } from '../../lib/firebase';
-import { type } from 'os';
 import { NextPage } from 'next';
-import { IUserInfo } from '../../lib/interfaces';
+import { IPost, IUserInfo } from '../../lib/interfaces';
 import Custom404 from '../../components/Custom404';
-import { collection, getDocs, limit, orderBy, query, doc, } from 'firebase/firestore';
+import { collection, getDocs, limit, orderBy, query, doc, getDoc, deleteDoc } from 'firebase/firestore';
 import Link from 'next/link';
 import { PlusIcon } from '@heroicons/react/24/solid';
 import Post from '../../components/Post';
+import { useState } from 'react';
 
 interface Params {
   uid: string;
@@ -26,6 +26,7 @@ export async function getServerSideProps({ params }: { params: Params }) {
     };
   }
 
+  // Check if the user 
   // Grab the posts data
 
   const postsRef = query(collection(firestore, 'users', uid, 'posts'));
@@ -69,6 +70,8 @@ type Props = {
 
 
 const MyPosts: NextPage<Props> = ({ userInfo, uid, error, posts }) => {
+  const [postsArray, setPostsArray] = useState<IPost>(posts);
+
   if (error) {
     return (
       <div>
@@ -77,7 +80,37 @@ const MyPosts: NextPage<Props> = ({ userInfo, uid, error, posts }) => {
     );
   }
 
-  console.log(posts);
+  const handleDelete = async (slug: string, uid: string) => {
+    console.log(slug, uid);
+    // delete the post from the database
+    console.log("Cool")
+
+    // Delete the post from the database
+    const postRef = doc(firestore, 'users', uid, 'posts', slug);
+
+    // Grab the post data
+    const postDoc = await getDoc(postRef);
+
+    // If the post exists, delete it
+    // if (postDoc.exists()) {
+    //   await deleteDoc(postRef);
+    // }
+
+    // Delete the post from the posts array
+    const newPostsArray = postsArray.filter((post: IPost) => post.slug !== slug);
+
+    // Set the posts array to the new posts array
+    setPostsArray(newPostsArray);
+
+    console.log("Deleted");
+
+
+
+
+
+
+  }
+  // delete the post from the database
 
   return (
     <>
@@ -123,7 +156,7 @@ const MyPosts: NextPage<Props> = ({ userInfo, uid, error, posts }) => {
 
                 <div>
                   {/* @ts-ignore */}
-                  {posts.map((post) => (
+                  {postsArray.map((post) => (
                     <Post
                       key={post.slug}
                       title={post.title}
@@ -133,6 +166,9 @@ const MyPosts: NextPage<Props> = ({ userInfo, uid, error, posts }) => {
                       slug={post.slug}
                       createdAt={post.createdAt}
                       uid={post.uid}
+                      deletePost={true}
+                      handleDelete={handleDelete}
+
                     />
                   ))}
                 </div>
