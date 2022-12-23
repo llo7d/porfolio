@@ -321,7 +321,6 @@ const CreatePost: NextPage = () => {
       <div>
         <Head>
           <title>Create Project | Project Listings</title>
-          <link rel="icon" href="/favicon.ico" />
         </Head>
 
         <main className="bg-gray-900 min-h-screen py-14 px-28">

@@ -70,7 +70,7 @@ type Props = {
 
 
 const MyPosts: NextPage<Props> = ({ userInfo, uid, error, posts }) => {
-  const [postsArray, setPostsArray] = useState<IPost>(posts);
+  const [postsArray, setPostsArray] = useState<IPost[]>(posts);
 
   if (error) {
     return (
@@ -80,45 +80,11 @@ const MyPosts: NextPage<Props> = ({ userInfo, uid, error, posts }) => {
     );
   }
 
-  const handleDelete = async (slug: string, uid: string) => {
-    console.log(slug, uid);
-    // delete the post from the database
-    console.log("Cool")
-
-    // Delete the post from the database
-    const postRef = doc(firestore, 'users', uid, 'posts', slug);
-
-    // Grab the post data
-    const postDoc = await getDoc(postRef);
-
-    // If the post exists, delete it
-    // if (postDoc.exists()) {
-    //   await deleteDoc(postRef);
-    // }
-
-    // Delete the post from the posts array
-    const newPostsArray = postsArray.filter((post: IPost) => post.slug !== slug);
-
-    // Set the posts array to the new posts array
-    setPostsArray(newPostsArray);
-
-    console.log("Deleted");
-
-
-
-
-
-
-  }
-  // delete the post from the database
-
   return (
     <>
       {/* <AuthCheck fallback={<SignIn />}> */}
       <AuthCheck uid={uid} fallback={<h1>Sorry, you must be signed in to view this page.</h1>}>
         <div>
-
-
           <main className="bg-gray-900 min-h-screen py-14 px-28">
             {/* Top bar */}
             <div className='w-[960px] mx-auto'>
@@ -128,7 +94,6 @@ const MyPosts: NextPage<Props> = ({ userInfo, uid, error, posts }) => {
                 <h1 className="text-4xl font-bold text-white">My posts</h1>
               </div>
 
-
               <div className="flex items-center justify-between mb-16">
 
               </div>
@@ -136,7 +101,6 @@ const MyPosts: NextPage<Props> = ({ userInfo, uid, error, posts }) => {
               {posts.length === 0 ? (
                 <>
                   {/* // text in white that says "You have no posts..." */}
-
 
                   <div className="flex items-center justify-center">
                     {/* // button that says "create post" */}
@@ -167,8 +131,8 @@ const MyPosts: NextPage<Props> = ({ userInfo, uid, error, posts }) => {
                       createdAt={post.createdAt}
                       uid={post.uid}
                       deletePost={true}
-                      handleDelete={handleDelete}
-
+                      postsArray={postsArray}
+                      setPostsArray={setPostsArray}
                     />
                   ))}
                 </div>

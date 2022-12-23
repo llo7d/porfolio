@@ -1,12 +1,13 @@
 import Link from 'next/link';
 import { IPost } from '../lib/interfaces';
 import dayjs from 'dayjs';
-import { HeartIcon, TrashIcon } from '@heroicons/react/24/solid';
+import { TrashIcon } from '@heroicons/react/24/solid';
 import { doc, deleteDoc, getDoc } from "firebase/firestore";
 import { firestore } from '../lib/firebase';
-import { useRouter } from 'next/router';
 import { FirebaseContext } from '../lib/context';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Post: React.FC<IPost> = ({
   title,
@@ -17,14 +18,12 @@ const Post: React.FC<IPost> = ({
   tags,
   uid,
   deletePost,
-  handleDelete,
+  postsArray,
+  setPostsArray,
 }) => {
   const shortDescription = description?.split(' ').slice(0, 25).join(' ');
 
-
   const { user, loadingUser } = useContext(FirebaseContext);
-  const [canDelete, setCanDelete] = useState(false);
-
 
   // This is needed to display the date since the post was created
   dayjs().format();
@@ -36,13 +35,8 @@ const Post: React.FC<IPost> = ({
     year: 'numeric',
   });
 
-  const router = useRouter();
-
-
-
-
   // Delete post
-  const handleDelete1 = async (slug: string, uid: string) => {
+  const handleDelete = async (slug: string, uid: string) => {
     // Delete the post from the database
     const postRef = doc(firestore, 'users', uid, 'posts', slug);
 
@@ -52,34 +46,49 @@ const Post: React.FC<IPost> = ({
     if (postDoc.exists()) {
 
       if (user) {
-
         // Check if the user uid matches the post uid
         if (postDoc.data().uid === user.uid && user.uid === uid) {
           console.log("User uid matches post uid", postDoc.data().uid, user.uid);
 
           // Delete the post
-          // await deleteDoc(postRef);
+          await deleteDoc(postRef);
 
+          //@ts-ignore Delete the post from the posts array
+          const newPostsArray = postsArray.filter((post: IPost) => post.slug !== slug);
+
+          //@ts-ignore Set the posts array to the new posts array
+          setPostsArray(newPostsArray);
 
           // alert the user that the post was deleted
-          alert("Post deleted");
-
-
-
+          toast.success('🦄 Post has been deleted', {
+            position: 'top-center',
+            autoClose: 2500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+          });
 
         } else {
           // If the user uid does not match the post uid, do nothing
-          console.log("Not your post, you can't delete it");
-
-
+          toast.error('Something went wrong ', {
+            position: 'top-right',
+            autoClose: 2500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+          });
           return;
         }
       }
 
     }
   };
-
-
 
 
   return (
@@ -89,11 +98,11 @@ const Post: React.FC<IPost> = ({
           <Link href={`/${uid}/${slug}`}>
             <h2 className="text-xl text-white font-medium mb-5">{title}</h2>
           </Link>
-          <p className="text-white text-xs mb-3 ">
+          <div className="text-white text-xs mb-3 ">
             Level Required - {level} - Posted {/* @ts-ignore */}
             {' ' + dayjs(createdAt).fromNow()}
-          </p>
-          <p className="text-white font-sans mb-6 text-xs">
+          </div>
+          <div className="text-white font-sans mb-6 text-xs">
             {description?.split(' ').length > 25 ? (
               <>
                 {shortDescription}
@@ -106,7 +115,7 @@ const Post: React.FC<IPost> = ({
                 {description}
               </h1>
             )}
-          </p>
+          </div>
         </div>
 
         {/* Delete icon */}
@@ -115,6 +124,7 @@ const Post: React.FC<IPost> = ({
             className="w-7 h-7 rounded-full bg-gray-900 flex items-center justify-center"
             type="button"
             onClick={() => {
+              // @ts-ignore
               handleDelete(slug, uid);
             }}
           >
@@ -143,7 +153,7 @@ const Post: React.FC<IPost> = ({
       </div>
       <div className="flex items-center justify-between">
         <div className="flex gap-2 w-[80%]">
-          {tags?.map((tag) => {
+          {tags.map((tag) => {
             return (
               <span
                 key={tag.id}

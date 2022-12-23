@@ -19,7 +19,9 @@ export interface IPost {
   uid: string;
   url?: string;
   deletePost?: boolean;
-  handleDelete?: (uid: string, slug: string) => void;
+  handleDelete?: (slug: string, uid: string) => void
+  postsArray?: IPost[];
+  setPostsArray?: (postsArray: IPost[]) => void;
 }
 
 
