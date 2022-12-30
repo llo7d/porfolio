@@ -309,8 +309,7 @@ const CreatePost: NextPage = () => {
       // if the difference is less then 60 minutes, dont let the user create a new post
       if (differenceInMinutes < 60) {
         toast.info(
-          `🦄 You have to wait ${
-            60 - differenceInMinutes
+          `🦄 You have to wait ${60 - differenceInMinutes
           } minutes before you can create a new post`,
           {
             position: 'top-right',
@@ -421,10 +420,11 @@ const CreatePost: NextPage = () => {
                   maxLength={600}
                   onChange={(e) => {
                     // clean up the text from any symbols etc.. but allow emty string as spaces
+                    // also no single word can be longer than 20 characters long
                     const cleanedDescription = e.target.value.replace(
                       /[^A-Za-z0-9\s\.\,\?\!]/g,
                       ''
-                    );
+                    ).replace(/\b\w{30,}\b/g, '')
 
                     setPost({
                       ...post,
