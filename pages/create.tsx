@@ -126,18 +126,37 @@ const CreatePost: NextPage = () => {
   };
 
   const reformatData = () => {
-    const titleToKebabCase = post.title.toLowerCase().split(' ').join('-');
+    // const titleToKebabCase = post.title.toLowerCase().split(' ').join('-');
 
     const reformetedData = {
       ...post,
       level: levelToString(levelID),
       tags: SkillToObj(skillIDs),
-      slug: titleToKebabCase,
+      slug: titleToKebabCase(post.title),
       createdAt: new Date().getTime(),
       uid: user?.uid,
     };
 
     return reformetedData;
+  };
+
+  const titleToKebabCase = (title: string) => {
+    // Remove any duble spaces from the title
+    const titleWithoutDubleSpaces = title.replace(/\s+/g, ' ').trim();
+
+    // Remove the space from start or end of the title
+    const titleWithoutSpaces = titleWithoutDubleSpaces.replace(
+      /^\s+|\s+$/g,
+      ''
+    );
+
+    // Transform the title to kebab case
+    const titleToKebabCase = titleWithoutSpaces
+      .toLowerCase()
+      .split(' ')
+      .join('-');
+
+    return titleToKebabCase;
   };
 
   const handleSubmit = async () => {
@@ -194,11 +213,14 @@ const CreatePost: NextPage = () => {
         draggable: true,
         progress: undefined,
         theme: 'light',
-      });;
+      });
       return;
     }
+
+    // Remove all the emty spaces after the final word from the title
+
     // Reformating the data
-    const titleToKebabCase = post.title.toLowerCase().split(' ').join('-');
+    // const titleToKebabCase = post.title.toLowerCase().split(' ').join('-');
 
     if (user) {
       // create a reference to the user document
@@ -210,8 +232,8 @@ const CreatePost: NextPage = () => {
       // check how many posts the user has
       const postsSnap = await getDocs(postsRef);
 
-      // if the user has more then 5 posts, dont let him create a new one
-      if (postsSnap.size >= 5) {
+      // if the user has more then 3 posts, dont let him create a new one
+      if (postsSnap.size >= 3) {
         toast.warning('🦄 You have reached post limit', {
           position: 'top-right',
           autoClose: 2500,
@@ -235,7 +257,7 @@ const CreatePost: NextPage = () => {
           draggable: true,
           progress: undefined,
           theme: 'light',
-        });;
+        });
         return;
       }
 
@@ -245,9 +267,12 @@ const CreatePost: NextPage = () => {
       // check if last post exists
       if (!lastPost) {
         // create the post with the kebab case as the id
-        await setDoc(doc(postsRef, titleToKebabCase), reformatData());
+        await setDoc(
+          doc(postsRef, titleToKebabCase(post.title)),
+          reformatData()
+        );
         // redirect the user to the post page
-        router.push(`/${user.uid}/${titleToKebabCase}`);
+        router.push(`/${user.uid}/${titleToKebabCase(post.title)}`);
 
         toast.success('🦄 You have created your 1st Post! ', {
           position: 'top-right',
@@ -283,23 +308,27 @@ const CreatePost: NextPage = () => {
 
       // if the difference is less then 60 minutes, dont let the user create a new post
       if (differenceInMinutes < 60) {
-        toast.info(`🦄 You have to wait ${60 - differenceInMinutes
-          } minutes before you can create a new post`, {
-          position: 'top-right',
-          autoClose: 2500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
-        });;
+        toast.info(
+          `🦄 You have to wait ${
+            60 - differenceInMinutes
+          } minutes before you can create a new post`,
+          {
+            position: 'top-right',
+            autoClose: 2500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+          }
+        );
 
         return;
       }
       // create the post with the kebab case as the id
-      await setDoc(doc(postsRef, titleToKebabCase), reformatData());
-      router.push(`/${user.uid}/${titleToKebabCase}`);
+      await setDoc(doc(postsRef, titleToKebabCase(post.title)), reformatData());
+      router.push(`/${user.uid}/${titleToKebabCase(post.title)}`);
 
       toast.success('🦄 Post created ', {
         position: 'top-right',

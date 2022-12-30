@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { IPost } from '../lib/interfaces';
 import dayjs from 'dayjs';
 import { TrashIcon } from '@heroicons/react/24/solid';
-import { doc, deleteDoc, getDoc } from "firebase/firestore";
+import { doc, deleteDoc, getDoc } from 'firebase/firestore';
 import { firestore } from '../lib/firebase';
 import { FirebaseContext } from '../lib/context';
 import { useContext } from 'react';
@@ -44,17 +44,22 @@ const Post: React.FC<IPost> = ({
     const postDoc = await getDoc(postRef);
 
     if (postDoc.exists()) {
-
       if (user) {
         // Check if the user uid matches the post uid
         if (postDoc.data().uid === user.uid && user.uid === uid) {
-          console.log("User uid matches post uid", postDoc.data().uid, user.uid);
+          console.log(
+            'User uid matches post uid',
+            postDoc.data().uid,
+            user.uid
+          );
 
           // Delete the post
           await deleteDoc(postRef);
 
           //@ts-ignore Delete the post from the posts array
-          const newPostsArray = postsArray.filter((post: IPost) => post.slug !== slug);
+          const newPostsArray = postsArray.filter(
+            (post: IPost) => post.slug !== slug
+          );
 
           //@ts-ignore Set the posts array to the new posts array
           setPostsArray(newPostsArray);
@@ -70,7 +75,6 @@ const Post: React.FC<IPost> = ({
             progress: undefined,
             theme: 'light',
           });
-
         } else {
           // If the user uid does not match the post uid, do nothing
           toast.error('Something went wrong ', {
@@ -86,10 +90,8 @@ const Post: React.FC<IPost> = ({
           return;
         }
       }
-
     }
   };
-
 
   return (
     <div className="py-6 px-8 bg-gray-800 rounded-xl mb-8 transition-shadow duration-300 hover:shadow-2xl">
@@ -111,9 +113,7 @@ const Post: React.FC<IPost> = ({
                 </Link>
               </>
             ) : (
-              <h1 className="text-white font-medium">
-                {description}
-              </h1>
+              <h1 className="text-white font-medium">{description}</h1>
             )}
           </div>
         </div>
@@ -129,14 +129,10 @@ const Post: React.FC<IPost> = ({
             }}
           >
             <TrashIcon
-              className={`w-4 h-4 ${true ? 'text-red-500' : 'text-gray-700'
-                }`}
+              className={`w-4 h-4 ${true ? 'text-red-500' : 'text-gray-700'}`}
             />
           </button>
-        ) : (
-          null
-        )}
-
+        ) : null}
 
         {/* // Heart posts as favourite, in the future. */}
         {/* <button
@@ -169,7 +165,7 @@ const Post: React.FC<IPost> = ({
         </div>
         <p className="text-xs text-gray-400">{readableDate}</p>
       </div>
-    </div >
+    </div>
   );
 };
 
