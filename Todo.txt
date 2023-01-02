@@ -42,7 +42,11 @@
 -> fix when going to create ( ) -> https://gyazo.com/fee8a6712f4917699a8130c5358f1a51 ( )
 
 -> Posts delete themselfs after 15 days ( )
-
 -> Add a load more button posts ( )
+
+Securuity:
+- dont allow create post if user has more then 3 posts ( )
+- 
+
 
 
