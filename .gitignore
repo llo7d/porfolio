@@ -37,3 +37,4 @@ next-env.d.ts
 
 # ignore local env files
 .env.local
+firebase.rule
