@@ -144,17 +144,6 @@ const CreatePost: NextPage = () => {
 
     return reformetedData;
   };
-  // q: What does new Date().getTime() return?
-  // a: It returns the number of milliseconds since January 1, 1970, 00:00:00 UTC.
-
-  // I made a small change here
-
-  // q: What does new Date() return and in what format?
-  // a: It returns the current date and time in the format: "Wed Jun 16 2021 15:00:00 GMT+0200 (Central European Summer Time)"
-
-
-
-
   const titleToKebabCase = (title: string) => {
     // Remove any duble spaces from the title
     const titleWithoutDubleSpaces = title.replace(/\s+/g, ' ').trim();
@@ -248,19 +237,19 @@ const CreatePost: NextPage = () => {
       const postsSnap = await getDocs(postsRef);
 
       // if the user has more then 3 posts, dont let him create a new one
-      // if (postsSnap.size >= 3) {
-      //   toast.warning('🦄 You have reached post limit', {
-      //     position: 'top-right',
-      //     autoClose: 2500,
-      //     hideProgressBar: false,
-      //     closeOnClick: true,
-      //     pauseOnHover: true,
-      //     draggable: true,
-      //     progress: undefined,
-      //     theme: 'light',
-      //   });
-      //   return;
-      // }
+      if (postsSnap.size >= 3) {
+        toast.warning('🦄 You have reached post limit', {
+          position: 'top-right',
+          autoClose: 2500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+        return;
+      }
 
       if (postsSnap.docs.find((doc) => doc.id === reformatData().slug)) {
         toast.info('🦄 You already have a post with this title', {
