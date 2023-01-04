@@ -4,7 +4,10 @@ export interface IPost {
   //   seconds: number;
   //   nanoseconds: number;
   // };
-  createdAt: number;
+  createdAt: {
+    inMiliseconds: number;
+    inFirebaseFormat?: Date;
+  }
   description: string;
   level: string;
   slug: string;
@@ -43,6 +46,10 @@ export interface IUserInfo {
   twitterUsername: null | string | boolean;
   shortDescription: string;
   longDescription: string;
-  lastUpdated: number;
+  lastUpdated: {
+    inMiliseconds: number;
+    // inDate that is Timestamp type object
+    inFirebaseDate: Date;
+  },
 
 }

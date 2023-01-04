@@ -45,7 +45,7 @@
 -> Add a load more button posts ( )
 
 Securuity:
-- dont allow create post if user has more then 3 posts ( )
+- update profile once every 60 minutes. Create a firebase date. ( )
 - 
 
 

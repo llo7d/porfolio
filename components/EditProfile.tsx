@@ -1,7 +1,7 @@
 import React, { MouseEventHandler, useState } from 'react';
 import type { NextPage } from 'next';
 import { IUserInfo } from '../lib/interfaces';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { firestore } from '../lib/firebase';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -28,7 +28,7 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
     // Check the last time the user updated their profile and if it was less than 24 hours ago, dont let them update it
     if (userInfo.lastUpdated) {
       // create a new date object from the lastUpdated timestamp which is in seconds
-      const lastUpdated = new Date(userInfo.lastUpdated);
+      const lastUpdated = new Date(userInfo.lastUpdated.inMiliseconds);
       const now = new Date();
       const diff = now.getTime() - lastUpdated.getTime();
       const diffHours = diff / (1000 * 3600);
@@ -45,23 +45,23 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
       //   diffMinutes
       // );
 
-      // If diffrence is less than 60 minute, dont let them update their profile
-      if (diffMinutes < 60) {
-        toast.error(
-          '🦄 You can only update your profile once every 60 minute',
-          {
-            position: 'top-center',
-            autoClose: 2500,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
-            theme: 'light',
-          }
-        );
-        return;
-      }
+      // // If diffrence is less than 60 minute, dont let them update their profile
+      // if (diffMinutes < 60) {
+      //   toast.error(
+      //     '🦄 You can only update your profile once every 60 minute',
+      //     {
+      //       position: 'top-center',
+      //       autoClose: 2500,
+      //       hideProgressBar: false,
+      //       closeOnClick: true,
+      //       pauseOnHover: false,
+      //       draggable: true,
+      //       progress: undefined,
+      //       theme: 'light',
+      //     }
+      //   );
+      //   return;
+      // }
     }
 
     // Check if there is any changes in the form
@@ -151,7 +151,12 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
       discordName: updateProfile.discord,
       twitterUsername: updateProfile.twitter,
       // update the lastUpdated field with the current time in seconds
-      lastUpdated: new Date().getTime(),
+      //lastUpdated: new Date().getTime(),
+      lastUpdated: {
+        inMiliseconds: new Date().getTime(),
+        // inDate that is Timestamp type object
+        inFirebaseDate: serverTimestamp(),
+      },
     });
 
     //@ts-ignore Reload the page with nextjs
