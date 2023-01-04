@@ -95,7 +95,11 @@ export const handleSignInWithGithub = async (): Promise<any> => {
       await setDoc(doc(firestore, 'users', loggedUser.uid), {
         discordName: null,
         twitterUsername: null,
-        lastUpdated: null,
+        lastUpdated: {
+          inMiliseconds: new Date().getTime(),
+          // inDate that is Timestamp type object
+          inFirebaseDate: serverTimestamp(),
+        },
         longDescription: "I have not written anything about myself yet",
         shortDescription: "I have not written anything about myself yet",
         githubUsername: login,

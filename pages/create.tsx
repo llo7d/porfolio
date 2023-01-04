@@ -236,7 +236,7 @@ const CreatePost: NextPage = () => {
       // check how many posts the user has
       const postsSnap = await getDocs(postsRef);
 
-      // if the user has more then 3 posts, dont let him create a new one
+      // // if the user has more then 3 posts, dont let him create a new one
       if (postsSnap.size >= 3) {
         toast.warning('🦄 You have reached post limit', {
           position: 'top-right',

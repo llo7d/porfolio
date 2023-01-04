@@ -64,6 +64,10 @@ interface Props {
   error: boolean;
 }
 const UserPost: NextPage<Props> = ({ user, post, uid, error }) => {
+
+
+  const [isDiscordOpen, setIsDiscordOpen] = useState(false);
+
   // If error, return 404 page
   if (error) {
     return (
@@ -75,7 +79,6 @@ const UserPost: NextPage<Props> = ({ user, post, uid, error }) => {
   dayjs().format();
   dayjs.extend(require('dayjs/plugin/relativeTime'));
 
-  const [isDiscordOpen, setIsDiscordOpen] = useState(false);
 
   return (
     <div>
@@ -140,12 +143,12 @@ const UserPost: NextPage<Props> = ({ user, post, uid, error }) => {
                   </div>
                   <p className="text-white text-xs mt-7">
                     Level Required - Beginner - {/*@ts-ignore  */}
-                    {dayjs(post.createdAt).fromNow()}
+                    {dayjs(post.createdAt.inMiliseconds).fromNow()}
                   </p>
                 </div>
 
                 <p className="text-xs text-gray-400 mt-16">
-                  Posted on {dayjs(post.createdAt).format('MMM D, YYYY')}
+                  Posted on {dayjs(post.createdAt.inMiliseconds).format('MMM D, YYYY')}
                 </p>
               </div>
 

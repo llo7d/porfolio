@@ -29,7 +29,7 @@ const Post: React.FC<IPost> = ({
   dayjs().format();
   dayjs.extend(require('dayjs/plugin/relativeTime'));
 
-  const readableDate = new Date(createdAt).toLocaleDateString('en-US', {
+  const readableDate = new Date(createdAt.inMiliseconds).toLocaleDateString('en-US', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
@@ -102,7 +102,7 @@ const Post: React.FC<IPost> = ({
           </Link>
           <div className="text-white text-xs mb-3 ">
             Level Required - {level} - Posted {/* @ts-ignore */}
-            {' ' + dayjs(createdAt).fromNow()}
+            {' ' + dayjs(createdAt.inMiliseconds).fromNow()}
           </div>
           <div className="text-white font-sans mb-6 text-xs">
             {description?.split(' ').length > 25 ? (
