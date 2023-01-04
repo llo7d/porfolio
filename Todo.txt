@@ -45,8 +45,10 @@
 -> Add a load more button posts ( )
 
 Securuity:
-- update profile once every 60 minutes. Create a firebase date. ( )
-- 
+- update profile once every 60 minutes. Create a firebase date. ( X )
+- check when title created security rules ( )
+-> when creating profile, create the last updated object for the "update profile"
+
 
 
 
