@@ -14,6 +14,7 @@ import { IPost, IUserInfo } from '../../lib/interfaces';
 import dayjs from 'dayjs';
 import MustBeSignedIn from '../../components/MustBeSignedIn';
 import Custom404 from '../../components/Custom404';
+import Image from 'next/image';
 
 type Params = {
   uid: string;
@@ -154,10 +155,7 @@ const UserPost: NextPage<Props> = ({ user, post, uid, error }) => {
 
               <div className="w-[30%] bg-[#1b232e] pb-8 pt-10 flex flex-col items-center">
                 <div className="w-40 h-40 mb-8">
-                  <img
-                    className="w-40 h-40 rounded-full object-cover"
-                    src={user.photoURL}
-                  />
+                  <Image src={user.photoURL} width={160} height={160} className="w-40 h-40 rounded-full object-cover" alt='user image' />
                 </div>
                 <div className="w-full px-10 flex flex-col items-center">
                   <p className="text-center font-sans text-white font-bold text-xl mb-8">
@@ -174,10 +172,7 @@ const UserPost: NextPage<Props> = ({ user, post, uid, error }) => {
                         type="button"
                         onClick={() => setIsDiscordOpen(true)}
                       >
-                        <img
-                          className="w-5 h-5"
-                          src="/images/icon-discord.png"
-                        />
+                        <Image src="/images/icon-discord.png" width={20} height={20} alt='discord icon' />
                       </button>
                     )}
                     {user.twitterUsername === 'false' ||
@@ -187,10 +182,13 @@ const UserPost: NextPage<Props> = ({ user, post, uid, error }) => {
                         target="_blank"
                         rel="noreferrer"
                       >
-                        <img
-                          className="w-5 h-5"
+                        <Image
                           src="/images/icon-twitter.png"
+                          width={20}
+                          height={20}
+                          alt='twitter icon'
                         />
+
                       </a>
                     )}
                     <a
@@ -198,7 +196,12 @@ const UserPost: NextPage<Props> = ({ user, post, uid, error }) => {
                       target="_blank"
                       rel="noreferrer"
                     >
-                      <img className="w-5 h-5" src="/images/icon-github.png" />
+                      <Image
+                        src="/images/icon-github.png"
+                        width={20}
+                        height={20}
+                        alt='github icon'
+                      />
                     </a>
                   </div>
                   <div className="border-t border-gray-500 w-full mt-auto" />
@@ -220,14 +223,6 @@ const UserPost: NextPage<Props> = ({ user, post, uid, error }) => {
           onRequestClose={() => setIsDiscordOpen(false)}
           link="https://discord.com"
         />
-        {/* <ModalSocialMediaUsername
-          socialMedia="Github"
-          username={user.githubUsername}
-          isOpen={isGithubOpen}
-          onRequestClose={() => setIsGithubOpen(false)}
-          // link={`https://github.com/${user.githubUsername}`}
-          link={user.githubUrl}
-        /> */}
       </div >
     </div >
   );

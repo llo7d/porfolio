@@ -221,11 +221,6 @@ const CreatePost: NextPage = () => {
       return;
     }
 
-    // Remove all the emty spaces after the final word from the title
-
-    // Reformating the data
-    // const titleToKebabCase = post.title.toLowerCase().split(' ').join('-');
-
     if (user) {
       // create a reference to the user document
       const postRef = doc(firestore, 'users', user.uid);
@@ -295,19 +290,13 @@ const CreatePost: NextPage = () => {
       // get the current date
       const currentDate = new Date();
 
-      console.log('lastPostDate:', lastPostDate);
-      console.log('currentDate:', currentDate);
+      // console.log('lastPostDate:', lastPostDate);
+      // console.log('currentDate:', currentDate);
 
       // get the difference between the last post and the current date in minutes
       const differenceInMinutes = Math.floor(
         (currentDate.getTime() - lastPostDate.getTime()) / 1000 / 60
       );
-
-      // const differenceInMinutes = Math.floor(
-      //   (currentDate.getTime() - lastPostDate.getTime()) / 1000 / 60
-      // );
-
-      // console.log('diffrentceInMinutes:', differenceInMinutes);
 
       // if the difference is less then 60 minutes, dont let the user create a new post
       if (differenceInMinutes < 60) {
@@ -383,25 +372,10 @@ const CreatePost: NextPage = () => {
                   value={post.title}
                   spellCheck={false}
                   onChange={(e) => {
-                    // Dont allow special characters in the title and _ and - but allow spaces and numbers and ? and !
-                    // const cleanedTitle = e.target.value.replace(
-                    //   /[^A-Za-z0-9\s\?\!]/gi,
-                    //   ''
-                    // );
-
-
                     const cleanedTitle = e.target.value.replace(
                       /[^a-zA-Z0-9\s]/g,
                       ''
                     );
-
-
-
-                    // const cleanedTitle = e.target.value.replace(
-                    //   /[^\w\s]/gi,
-                    //   ''
-                    // );
-
                     setPost({
                       ...post,
                       title: cleanedTitle,
@@ -451,7 +425,7 @@ const CreatePost: NextPage = () => {
                 <p className="block mb-2 text-sm font-sans font-medium text-gray-400">
                   I need help with
                 </p>
-                <div className="grid grid-cols-4 gap-5">
+                <div className="grid grid-cols-4 gap-5" onChange={() => { }}>
                   <SelectionItem
                     name="skill"
                     label="Frontend"
@@ -528,7 +502,7 @@ const CreatePost: NextPage = () => {
                 <p className="block mb-2 text-sm font-sans font-medium text-gray-400">
                   Level Recommended
                 </p>
-                <div className="grid grid-cols-4 gap-5">
+                <div className="grid grid-cols-4 gap-5" onChange={() => { }}>
                   <SelectionItem
                     name="level"
                     label="Beginner"

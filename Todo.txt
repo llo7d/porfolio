@@ -39,15 +39,25 @@
 
 -> Fixed the hydration thing, was just a <p> error nothing more ( X )
 -> Fix this : https://gyazo.com/89aad81ad8177ee147b0ec2dd4435940 ( X ) 
--> fix when going to create ( ) -> https://gyazo.com/fee8a6712f4917699a8130c5358f1a51 ( )
-
--> Posts delete themselfs after 15 days ( )
--> Add a load more button posts ( )
+-> fix when going to create ( ) -> https://gyazo.com/fee8a6712f4917699a8130c5358f1a51 (  ) <- will fix later.
 
 Securuity:
 - update profile once every 60 minutes. Create a firebase date. ( X )
-- check when title created security rules ( )
--> when creating profile, create the last updated object for the "update profile"
+- check when title created security rules ( X )
+-> when creating profile, create the last updated object for the "update profile" ( X )
+
+Last todo:
+- Give a full test by logging out and deleting github and logging in and trying all the things (  )
+
+- Add a load more button posts ( )
+
+- add filter buttons ( beginner, int, expert ) ( )
+- add tag filters ( )
+
+- Post on vercel ( )
+
+-> Posts delete themselfs after 15 days ( )
+
 
 
 

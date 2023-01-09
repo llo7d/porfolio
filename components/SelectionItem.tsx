@@ -5,6 +5,7 @@ type Props = {
   icon: string;
   isSelected?: boolean;
   onClick?: () => void;
+  onChange?: () => void; // this is just needed to remove the error: next-dev.js?3515:20 Warning: You provided a `checked` prop to a form field without an `onChange` handler. This will render a read-only field
 };
 
 const SelectionItem: React.FC<Props> = ({

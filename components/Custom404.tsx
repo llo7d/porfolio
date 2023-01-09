@@ -1,4 +1,5 @@
 import { NextPage } from 'next';
+import Link from 'next/link';
 import React from 'react';
 
 type props = {
@@ -13,13 +14,14 @@ const Custom404: NextPage<props> = ({ ErrorType }) => {
             {ErrorType}
           </p>
           <div className="flex justify-center mt-6">
-            {/* // Button that redirects to the front page of the website and is styled with Tailwind CSS classes and while on hover it changes the background color to gray-700 */}
-            <a
-              href="/"
-              className="bg-gray-800 hover:bg-gray-700 text-white font-sans font-medium text-sm px-6 py-2 rounded-md"
-            >
-              Go to Home
-            </a>
+            <div className="bg-gray-800 hover:bg-gray-700 text-white font-sans font-medium text-sm px-6 py-2 rounded-md" >
+              {/* // Button that redirects to the front page of the website and is styled with Tailwind CSS classes and while on hover it changes the background color to gray-700 */}
+              <Link href="/">
+                <span>
+                  Go to Home
+                </span>
+              </Link>
+            </div>
           </div>
         </div>
       </div>

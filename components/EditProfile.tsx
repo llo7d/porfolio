@@ -6,6 +6,7 @@ import { firestore } from '../lib/firebase';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 interface Props {
   userInfo: IUserInfo;
@@ -45,23 +46,23 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
       //   diffMinutes
       // );
 
-      // // If diffrence is less than 60 minute, dont let them update their profile
-      // if (diffMinutes < 60) {
-      //   toast.error(
-      //     '🦄 You can only update your profile once every 60 minute',
-      //     {
-      //       position: 'top-center',
-      //       autoClose: 2500,
-      //       hideProgressBar: false,
-      //       closeOnClick: true,
-      //       pauseOnHover: false,
-      //       draggable: true,
-      //       progress: undefined,
-      //       theme: 'light',
-      //     }
-      //   );
-      //   return;
-      // }
+      // If diffrence is less than 60 minute, dont let them update their profile
+      if (diffMinutes < 60) {
+        toast.error(
+          '🦄 You can only update your profile once every 60 minute',
+          {
+            position: 'top-center',
+            autoClose: 2500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+          }
+        );
+        return;
+      }
     }
 
     // Check if there is any changes in the form
@@ -98,7 +99,7 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
           name: '',
         });
 
-        toast.error('🦄 Cant leave the NAME field empty', {
+        toast.error('🦄 Cant leave the name field empty', {
           position: 'top-center',
           autoClose: 2500,
           hideProgressBar: false,
@@ -109,7 +110,7 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
           theme: 'light',
         });
       } else if (updateProfile.shortDescription === '') {
-        toast.error('🦄 Cant leave Short Description field emtpy', {
+        toast.error('🦄 Cant leave short description field emtpy', {
           position: 'top-center',
           autoClose: 2500,
           hideProgressBar: false,
@@ -126,7 +127,7 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
           longDescription: '',
         });
 
-        toast.error('🦄 Cant leave Long Description field emtpy', {
+        toast.error('🦄 Cant leave long description field emtpy', {
           position: 'top-center',
           autoClose: 2500,
           hideProgressBar: false,
@@ -199,11 +200,6 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
                 name="name"
                 className="bg-gray-700 border border-gray-600 placeholder-gray-400 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 value={updateProfile.name}
-                // placeholder={
-                //   userInfo.displayName
-                //     ? userInfo.displayName
-                //     : userInfo.githubUsername
-                // }
                 onChange={(e) =>
                   setUpdateProfile({
                     ...updateProfile,
@@ -276,10 +272,8 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
                 </p>
                 <div className="flex mb-4">
                   <div className="inline-flex items-center w-28 px-2 pr-3 text-sm text-gray-900 bg-gray-600 rounded-l-md border border-r-0 border-gray-600 select-none">
-                    <img
-                      className="w-8 h-8 mr-2"
-                      src={'/images/icon-discord-framed.png'}
-                    />
+                    <Image src="/images/icon-discord-framed.png" width={20} height={20} className="w-8 h-8 mr-2" alt="discord" />
+
                     <p className="font-sans text-white font-medium">
                       {'Discord'}
                     </p>
@@ -309,10 +303,8 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
               <div className="col-span-5">
                 <div className="flex mb-4">
                   <div className="inline-flex items-center w-28 px-2 pr-3 text-sm text-gray-900 bg-gray-600 rounded-l-md border border-r-0 border-gray-600 select-none">
-                    <img
-                      className="w-8 h-8 mr-2"
-                      src={'/images/icon-twitter-framed.png'}
-                    />
+
+                    <Image src="/images/icon-twitter-framed.png" width={20} height={20} className="w-8 h-8 mr-2" alt="twitter" />
                     <p className="font-sans text-white font-medium">
                       {'Twitter'}
                     </p>
