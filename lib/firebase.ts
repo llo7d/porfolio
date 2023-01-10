@@ -96,9 +96,14 @@ export const handleSignInWithGithub = async (): Promise<any> => {
         discordName: null,
         twitterUsername: null,
         lastUpdated: {
-          inMiliseconds: new Date().getTime(),
-          // inDate that is Timestamp type object
-          inFirebaseDate: serverTimestamp(),
+          //inMiliseconds: new Date().getTime(),
+          // inMiliseconds value newDate that is 2 hours ago
+          inMiliseconds: new Date(new Date().getTime() - 2 * 60 * 60 * 1000).getTime(),
+
+          // create a new Date object that is 2 hours ago
+          inFirebaseDate: new Date(new Date().getTime() - 2 * 60 * 60 * 1000),
+
+
         },
         longDescription: "I have not written anything about myself yet",
         shortDescription: "I have not written anything about myself yet",
