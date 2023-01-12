@@ -11,17 +11,22 @@ import {
   query,
   orderBy,
   limit,
+  startAfter,
+  startAt,
 } from 'firebase/firestore';
 import { IPost } from '../lib/interfaces';
 import { GetStaticProps } from 'next';
 
-const postLimit = 3;
+const postLimit = 2;
 export const getServerSideProps: GetStaticProps = async () => {
+
+
   const postsQuery = query(
     collectionGroup(firestore, 'posts'),
-    orderBy('createdAt', 'desc'),
+    orderBy('createdAtInFirebaseDate', 'desc'),
     limit(postLimit)
   );
+
   const postsDocs = await getDocs(postsQuery);
 
   // doc.data() and return as json
@@ -46,7 +51,40 @@ export default function Home(props: { posts: IPost[] }) {
   const [loading, setLoading] = useState(false);
   const [postEnd, setPostEnd] = useState(false);
 
-  // console.log(posts);
+  const getMorePosts = async () => {
+    setLoading(true);
+
+    const lastPost = posts[posts.length - 1];
+
+    // Get the last visible document
+    console.log("last", lastPost);
+
+    const cursor = lastPost
+
+
+    const postsQuery = query(
+      collectionGroup(firestore, 'posts'),
+      orderBy('createdAtInFirebaseDate', 'desc'),
+      startAfter(cursor.createdAtInFirebaseDate),
+      limit(postLimit)
+    );
+
+    const postsDocs = await getDocs(postsQuery);
+
+
+    const newPosts = postsDocs.docs.map((doc) => {
+      const data = doc.data();
+
+      const json = JSON.parse(JSON.stringify(data));
+
+      return json;
+    }
+
+    );
+
+    setPosts([...posts, ...newPosts]);
+  };
+
 
   return (
     <div>
@@ -87,7 +125,22 @@ export default function Home(props: { posts: IPost[] }) {
               />
             ))}
           </div>
+          {/* Load more */}
+          {!loading && !postEnd && (
+            <button
+              onClick={() => {
+                getMorePosts();
+                console.log(posts);
+
+              }}
+              type="button"
+              className="flex items-center justify-center w-full text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2.5"
+            >
+              <span>Load More</span>
+            </button>
+          )}
         </div>
+
       </main>
     </div>
   );

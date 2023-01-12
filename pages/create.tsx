@@ -139,6 +139,7 @@ const CreatePost: NextPage = () => {
         inFirebaseDate: serverTimestamp(),
 
       },
+      createdAtInFirebaseDate: serverTimestamp(),
       uid: user?.uid,
     };
 
@@ -286,7 +287,7 @@ const CreatePost: NextPage = () => {
         return;
       }
       // create a date object from the last post
-      const lastPostDate = new Date(lastPost.data().createdAt);
+      const lastPostDate = new Date(lastPost.data().createdAt.inMiliseconds);
       // get the current date
       const currentDate = new Date();
 
@@ -298,25 +299,25 @@ const CreatePost: NextPage = () => {
         (currentDate.getTime() - lastPostDate.getTime()) / 1000 / 60
       );
 
-      // if the difference is less then 60 minutes, dont let the user create a new post
-      if (differenceInMinutes < 60) {
-        toast.info(
-          `🦄 You have to wait ${60 - differenceInMinutes
-          } minutes before you can create a new post`,
-          {
-            position: 'top-right',
-            autoClose: 2500,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'light',
-          }
-        );
+      // // if the difference is less then 60 minutes, dont let the user create a new post
+      // if (differenceInMinutes < 60) {
+      //   toast.info(
+      //     `🦄 You have to wait ${60 - differenceInMinutes
+      //     } minutes before you can create a new post`,
+      //     {
+      //       position: 'top-right',
+      //       autoClose: 2500,
+      //       hideProgressBar: false,
+      //       closeOnClick: true,
+      //       pauseOnHover: true,
+      //       draggable: true,
+      //       progress: undefined,
+      //       theme: 'light',
+      //     }
+      //   );
 
-        return;
-      }
+      //   return;
+      // }
       // create the post with the kebab case as the id
       await setDoc(doc(postsRef, titleToKebabCase(post.title)), reformatData())
 

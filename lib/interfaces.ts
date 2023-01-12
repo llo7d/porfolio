@@ -1,13 +1,11 @@
 
 export interface IPost {
-  // createdAt: {
-  //   seconds: number;
-  //   nanoseconds: number;
-  // };
+
   createdAt: {
     inMiliseconds: number;
-    inFirebaseFormat?: Date;
+    inFirebaseDate?: Date;
   }
+  createdAtInFirebaseDate?: Date;
   description: string;
   level: string;
   slug: string;
