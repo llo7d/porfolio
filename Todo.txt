@@ -53,6 +53,7 @@ Last todo:
 -> Add a 60 mintute timer on "canCreatePost" firebase ( ) ( maybe later )
 
 - Add a load more button posts ( )
+-> wip but faking does not work ( )
 
 - add filter buttons ( beginner, int, expert ) ( )
 - add tag filters ( )

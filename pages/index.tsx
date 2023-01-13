@@ -65,7 +65,7 @@ export default function Home(props: { posts: IPost[] }) {
     const postsQuery = query(
       collectionGroup(firestore, 'posts'),
       orderBy('createdAtInFirebaseDate', 'desc'),
-      startAfter(cursor.createdAtInFirebaseDate),
+      startAfter(cursor),
       limit(postLimit)
     );
 
