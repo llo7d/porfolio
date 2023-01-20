@@ -52,13 +52,15 @@ Last todo:
 -> Bug that Cannot edit profile after just creating an account ( X ) Fixed, but check again later. 
 -> Add a 60 mintute timer on "canCreatePost" firebase ( ) ( maybe later )
 
-- Add a load more button posts ( )
--> wip but faking does not work ( )
+- Add a load more button posts ( X )
+-> works but should be redone with a cursor later ( )
+
+- run one last test ( X )
+- Post on vercel ( )
 
 - add filter buttons ( beginner, int, expert ) ( )
 - add tag filters ( )
 
-- Post on vercel ( )
 
 -> Posts delete themselfs after 15 days ( )
 

@@ -23,7 +23,7 @@ export const getServerSideProps: GetStaticProps = async () => {
   const postsQuery = query(
     collectionGroup(firestore, 'posts'),
     orderBy('createdAt', 'desc'),
-    limit(1)
+    limit(5)
   );
 
   const postsDocs = await getDocs(postsQuery);
@@ -49,7 +49,7 @@ export default function Home(props: { posts: IPost[] }) {
   const [posts, setPosts] = useState<IPost[]>(props.posts);
   const [loading, setLoading] = useState(false);
   const [postEnd, setPostEnd] = useState(false);
-  const [postLimit, setPostLimit] = useState(2);
+  const [postLimit, setPostLimit] = useState(10);
 
   const getMorePosts = async () => {
     setLoading(true);
@@ -71,7 +71,7 @@ export default function Home(props: { posts: IPost[] }) {
     }
     );
 
-    setPostLimit(postLimit + 1);
+    setPostLimit(postLimit + 5);
     setLoading(false);
     setPosts([...newPosts]);
 

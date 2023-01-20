@@ -5,14 +5,25 @@ import { getStorage } from "firebase/storage";
 import Router from "next/router";
 import { IUserInfo } from "./interfaces";
 
+// const firebaseConfig = {
+//   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+//   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+//   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+//   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+//   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+//   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+// };
+
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  apiKey: "AIzaSyBQ4zafWbth79R0k2BShnegeKZWz7g71A8",
+  authDomain: "portfolier-7d958.firebaseapp.com",
+  projectId: "portfolier-7d958",
+  storageBucket: "portfolier-7d958.appspot.com",
+  messagingSenderId: "500134491013",
+  appId: "1:500134491013:web:9410d4a8097255a6b00aec",
+  measurementId: "G-JW62CVYT83"
 };
+
 
 
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
