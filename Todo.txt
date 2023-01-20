@@ -56,7 +56,7 @@ Last todo:
 -> works but should be redone with a cursor later ( )
 
 - run one last test ( X )
-- Post on vercel ( )
+- Post on vercel ( X )
 
 - add filter buttons ( beginner, int, expert ) ( )
 - add tag filters ( )

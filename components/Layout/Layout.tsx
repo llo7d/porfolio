@@ -377,7 +377,7 @@ const Layout: React.FC<Props> = ({ children }) => {
         </a>
 
         <p className="text-gray-500 font-sans font-medium text-sm absolute left-1/2 -translate-x-1/2">
-          &copy; 2022 - All Rights Reserved
+          &copy; 2023 - All Rights Reserved
         </p>
       </div>
     </div>
