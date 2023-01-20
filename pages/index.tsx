@@ -97,6 +97,8 @@ export default function Home(props: { posts: IPost[] }) {
     <div>
       <Head>
         <title>Home | Project Listings</title>
+        <meta property="og:title" content="Project Listings" key="projects" />
+        <link rel="icon" href="/images/favicon.png" />
       </Head>
 
       <main className="bg-gray-900 min-h-screen py-14 px-28">
