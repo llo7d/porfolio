@@ -70,7 +70,7 @@ const Layout: React.FC<Props> = ({ children }) => {
             onShow: () => {
               document.body.style.overflow = 'hidden';
             },
-            onToggle: () => {},
+            onToggle: () => { },
           };
 
           refModalLogin.current = new Modal(
@@ -104,13 +104,13 @@ const Layout: React.FC<Props> = ({ children }) => {
         <div className="flex flex-wrap justify-between items-center mx-auto h-16">
           <Link href="/" legacyBehavior>
             <a className="flex items-center">
-              <img
-                src="https://flowbite.com/docs/images/logo.svg"
+              {/* <img
+                src="/images/portfolio-my-profile-browser-svgrepo-com.svg"
                 className="mr-3 h-6 sm:h-9"
                 alt="Flowbite Logo"
-              />
+              /> */}
               <span className="self-center text-xl text-white font-semibold whitespace-nowrap">
-                Portfolior
+                Porfolio
               </span>
             </a>
           </Link>
@@ -153,7 +153,7 @@ const Layout: React.FC<Props> = ({ children }) => {
                 </Link>
               </li>
               <li>
-                <Link legacyBehavior href="/">
+                <Link legacyBehavior href="/how-it-works">
                   <a className="flex items-center py-2 pr-4 pl-3 text-gray-500 rounded md:hover:bg-transparent md:p-0">
                     <QuestionMarkCircleIcon className="w-6 h-6 mr-2" />
                     <span>How It Works</span>

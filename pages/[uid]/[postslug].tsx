@@ -84,9 +84,11 @@ const UserPost: NextPage<Props> = ({ user, post, uid, error }) => {
   return (
     <div>
       <div>
+
         <Head>
-          <title>Project Details {post.title}</title>
-          <link rel="icon" href="/favicon.ico" />
+          <title>Project {post.title}</title>
+          <meta property="og:title" content="Project" key="project" />
+          <link rel="icon" href="/images/favicon.png" />
         </Head>
 
         <main className="bg-gray-900 min-h-screen pt-14 pb-48 px-28">

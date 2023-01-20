@@ -18,6 +18,7 @@ import Link from 'next/link';
 import { PlusIcon } from '@heroicons/react/24/solid';
 import Post from '../../components/Post';
 import { useState } from 'react';
+import Head from 'next/head';
 
 interface Params {
   uid: string;
@@ -94,6 +95,12 @@ const MyPosts: NextPage<Props> = ({ userInfo, uid, error, posts }) => {
         fallback={<h1>Sorry, you must be signed in to view this page.</h1>}
       >
         <div>
+          <Head>
+            <title>My posts</title>
+            <meta property="og:title" content="My posts" key="myposts" />
+            <link rel="icon" href="/images/favicon.png" />
+          </Head>
+
           <main className="bg-gray-900 min-h-screen py-14 px-28">
             {/* Top bar */}
             <div className="w-[960px] mx-auto">

@@ -342,7 +342,9 @@ const CreatePost: NextPage = () => {
     <AuthCheck uid={user?.uid}>
       <div>
         <Head>
-          <title>Create Project | Project Listings</title>
+          <title>Create post</title>
+          <meta property="og:title" content="Create post" key="create" />
+          <link rel="icon" href="/images/favicon.png" />
         </Head>
 
         <main className="bg-gray-900 min-h-screen py-14 px-28">
