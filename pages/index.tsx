@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useContext, useRef, useState } from 'react';
 import Post from '../components/Post';
 import { FirebaseContext } from '../lib/context';
-import { firestore } from '../lib/firebase';
+import { firestore, fromMillis } from '../lib/firebase';
 import {
   collectionGroup,
   getDocs,
@@ -56,17 +56,18 @@ export default function Home(props: { posts: IPost[] }) {
 
     const lastPost = posts[posts.length - 1];
 
+
+
     // Get the last visible document
     console.log("last", lastPost);
 
-    const cursor = lastPost
+    const cursor = typeof lastPost.createdAtInFirebaseDate === 'number' ? fromMillis(lastPost.createdAtInFirebaseDate) : lastPost.createdAtInFirebaseDate;
 
 
     const postsQuery = query(
       collectionGroup(firestore, 'posts'),
       orderBy('createdAtInFirebaseDate', 'desc'),
-      startAfter(cursor),
-      limit(postLimit)
+      limit(10)
     );
 
     const postsDocs = await getDocs(postsQuery);
@@ -82,7 +83,7 @@ export default function Home(props: { posts: IPost[] }) {
 
     );
 
-    setPosts([...posts, ...newPosts]);
+    setPosts([...newPosts]);
   };
 
 

@@ -1,6 +1,6 @@
 import { initializeApp, getApp, getApps } from "firebase/app";
 import { getAuth, GithubAuthProvider, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { getFirestore, query, collectionGroup, where, limit, getDocs, doc, getDoc, serverTimestamp, setDoc, } from "firebase/firestore";
+import { getFirestore, query, collectionGroup, where, limit, getDocs, doc, getDoc, serverTimestamp, setDoc, Timestamp, } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import Router from "next/router";
 import { IUserInfo } from "./interfaces";
@@ -23,10 +23,13 @@ const firestore = getFirestore(app);
 const auth = getAuth(app);
 const googleAuthProvider = new GoogleAuthProvider();
 
+// export const fromMillis = firebase.firestore.Timestamp.fromMillis;
+const fromMillis = Timestamp.fromMillis;
+
 
 const storage = getStorage(app);
 
-export { app, auth, firestore, storage, googleAuthProvider };
+export { app, auth, firestore, storage, googleAuthProvider, fromMillis };
 
 // Helper functions
 
