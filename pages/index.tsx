@@ -2,6 +2,8 @@ import { PlusIcon } from '@heroicons/react/24/solid';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useContext, useRef, useState } from 'react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Post from '../components/Post';
 import { FirebaseContext } from '../lib/context';
 import { firestore, fromMillis } from '../lib/firebase';
@@ -11,20 +13,17 @@ import {
   query,
   orderBy,
   limit,
-  startAfter,
-  startAt,
 } from 'firebase/firestore';
 import { IPost } from '../lib/interfaces';
 import { GetStaticProps } from 'next';
+import PostLoader from '../components/PostLoader';
 
-const postLimit = 2;
 export const getServerSideProps: GetStaticProps = async () => {
-
 
   const postsQuery = query(
     collectionGroup(firestore, 'posts'),
-    orderBy('createdAtInFirebaseDate', 'desc'),
-    limit(postLimit)
+    orderBy('createdAt', 'desc'),
+    limit(1)
   );
 
   const postsDocs = await getDocs(postsQuery);
@@ -50,40 +49,47 @@ export default function Home(props: { posts: IPost[] }) {
   const [posts, setPosts] = useState<IPost[]>(props.posts);
   const [loading, setLoading] = useState(false);
   const [postEnd, setPostEnd] = useState(false);
+  const [postLimit, setPostLimit] = useState(2);
 
   const getMorePosts = async () => {
     setLoading(true);
 
-    const lastPost = posts[posts.length - 1];
-
-
-
-    // Get the last visible document
-    console.log("last", lastPost);
-
-    const cursor = typeof lastPost.createdAtInFirebaseDate === 'number' ? fromMillis(lastPost.createdAtInFirebaseDate) : lastPost.createdAtInFirebaseDate;
-
-
     const postsQuery = query(
       collectionGroup(firestore, 'posts'),
-      orderBy('createdAtInFirebaseDate', 'desc'),
-      limit(10)
+      orderBy('createdAt', 'desc'),
+      limit(postLimit),
     );
 
     const postsDocs = await getDocs(postsQuery);
 
-
     const newPosts = postsDocs.docs.map((doc) => {
-      const data = doc.data();
+      const data = doc.data()
 
       const json = JSON.parse(JSON.stringify(data));
 
       return json;
     }
-
     );
 
+    setPostLimit(postLimit + 1);
+    setLoading(false);
     setPosts([...newPosts]);
+
+    // If post are same lenght as newposts, then there are no more posts
+    if (posts.length === newPosts.length) {
+      setPostEnd(true);
+
+      toast.error('🦄 No more posts', {
+        position: 'top-right',
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+    }
   };
 
 
@@ -127,6 +133,8 @@ export default function Home(props: { posts: IPost[] }) {
             ))}
           </div>
           {/* Load more */}
+
+          {loading && <PostLoader />}
           {!loading && !postEnd && (
             <button
               onClick={() => {
