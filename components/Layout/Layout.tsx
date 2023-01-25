@@ -154,7 +154,15 @@ const Layout: React.FC<Props> = ({ children }) => {
               </li>
               <li>
                 <Link legacyBehavior href="/how-it-works">
-                  <a className="flex items-center py-2 pr-4 pl-3 text-gray-500 rounded md:hover:bg-transparent md:p-0">
+                <a
+                    className={classnames(
+                      'flex items-center py-2 pr-4 pl-3 rounded md:bg-transparent md:p-0',
+                      {
+                        'text-white': router.pathname === '/how-it-works',
+                        'text-gray-500': router.pathname !== '/how-it-works',
+                      }
+                    )}
+                  >
                     <QuestionMarkCircleIcon className="w-6 h-6 mr-2" />
                     <span>How It Works</span>
                   </a>
