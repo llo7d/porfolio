@@ -154,7 +154,7 @@ const Layout: React.FC<Props> = ({ children }) => {
               </li>
               <li>
                 <Link legacyBehavior href="/how-it-works">
-                <a
+                  <a
                     className={classnames(
                       'flex items-center py-2 pr-4 pl-3 rounded md:bg-transparent md:p-0',
                       {
@@ -380,9 +380,15 @@ const Layout: React.FC<Props> = ({ children }) => {
 
       {/* Footer */}
       <div className="h-16 bg-gray-800 border-t border-gray-700 flex items-center px-28">
-        <a href="#" className="mr-4">
-          <img className="w-6" src="/images/icon-twitter-gray.png" />
-        </a>
+
+        {/* Link to twitter */}
+
+
+
+        <Link href="https://twitter.com/llo7d" className="mr-4" rel="noopener noreferrer" target="_blank">
+          {/* <img className="w-6" src="/images/icon-twitter-gray.png" /> */}
+          <Image src="/images/icon-twitter-gray.png" width={24} height={24} alt="twitter" />
+        </Link>
 
         <p className="text-gray-500 font-sans font-medium text-sm absolute left-1/2 -translate-x-1/2">
           &copy; 2023 - All Rights Reserved
