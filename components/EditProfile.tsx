@@ -2,7 +2,7 @@ import React, { MouseEventHandler, useState } from 'react';
 import type { NextPage } from 'next';
 import { IUserInfo } from '../lib/interfaces';
 import { deleteDoc, doc, getDoc, serverTimestamp, updateDoc } from 'firebase/firestore';
-import { auth, firestore } from '../lib/firebase';
+import { auth, firestore, getUserWithUID } from '../lib/firebase';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/router';
@@ -179,6 +179,10 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
   };
 
 
+  // Create function to get user collection from database
+  // delete all posts associated with the user before deleting the user
+
+  const removeUserData = async () => {}
 
   const handleDelete: MouseEventHandler<HTMLButtonElement> = async () => {
     const user = auth.currentUser
@@ -198,26 +202,19 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
       return
     }
 
-    // remove all associated posts 
-    const postRef = doc(firestore,'users', user.uid)
+    // call the delete data functions 
+    removeUserData()
 
-    const postDoc = await getDoc(postRef)
-
-    if (postDoc.exists()) {
-      // await deleteDoc(postRef)
-      await console.log(postDoc)
-    }
-
-
+    // delete user 
     const provider = new GithubAuthProvider()
-    // await signInWithPopup(auth, provider)
+    await signInWithPopup(auth, provider)
 
-    // deleteUser(user)
-    // .then(() => {
-    //   console.log('user removed successfully')
-    //   router.push('/')
-    // })
-    // .catch(err => console.log('error found: ', err))
+    deleteUser(user)
+    .then(() => {
+      console.log('user removed successfully')
+      router.push('/')
+    })
+    .catch(err => console.log('error found: ', err))
   }
 
   return (
