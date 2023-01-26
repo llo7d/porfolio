@@ -1,12 +1,15 @@
 import React, { MouseEventHandler, useState } from 'react';
 import type { NextPage } from 'next';
 import { IUserInfo } from '../lib/interfaces';
-import { doc, serverTimestamp, updateDoc } from 'firebase/firestore';
-import { firestore } from '../lib/firebase';
+import { deleteDoc, doc, getDoc, serverTimestamp, updateDoc } from 'firebase/firestore';
+import { auth, firestore } from '../lib/firebase';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import { TrashIcon } from '@heroicons/react/24/solid';
+import { deleteUser, GithubAuthProvider, reauthenticateWithCredential, signInWithPopup } from 'firebase/auth';
+
 
 interface Props {
   userInfo: IUserInfo;
@@ -175,6 +178,48 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
     });
   };
 
+
+
+  const handleDelete: MouseEventHandler<HTMLButtonElement> = async () => {
+    const user = auth.currentUser
+
+    // check if url match current user uid
+    if(router.query.uid !== user?.uid) {
+      toast.error('🛠 Error Deleting User...', {
+        position: 'top-right',
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      }); 
+      return
+    }
+
+    // remove all associated posts 
+    const postRef = doc(firestore,'users', user.uid)
+
+    const postDoc = await getDoc(postRef)
+
+    if (postDoc.exists()) {
+      // await deleteDoc(postRef)
+      await console.log(postDoc)
+    }
+
+
+    const provider = new GithubAuthProvider()
+    // await signInWithPopup(auth, provider)
+
+    // deleteUser(user)
+    // .then(() => {
+    //   console.log('user removed successfully')
+    //   router.push('/')
+    // })
+    // .catch(err => console.log('error found: ', err))
+  }
+
   return (
     <div>
       <main className="bg-gray-900 min-h-screen py-14 px-28">
@@ -340,6 +385,22 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
               </button>
             </div>
           </form>
+        </div>
+        <div className="mt-6 py-6 px-8 bg-gray-900 border-red-500 border rounded-xl mb-8 transition-shadow duration-300 hover:shadow-2xl">
+          <h2 className='text-xl text-white font-medium mb-5 border-b-2 border-gray-800 pb-3'>Danger Zone</h2>
+          <p className='text-white text-sm mb-3'>Once you DELETE your account, you will not be able to retrieve it again. Please be 100% certain.</p>
+          <button
+            className="h-12 rounded-lg bg-red-500 hover:bg-transparent flex items-center justify-center p-3 text-white hover:text-red-500 font-bold"
+            type="button"
+            onClick={() => {
+              // @ts-ignore
+              handleDelete();
+            }}
+          >DELETE MY ACCOUNT 
+            <TrashIcon
+              className={`w-4 h-4 ml-2 ${true ? 'text-white-900' : 'text-gray-700'}`}
+            />
+          </button>
         </div>
       </main>
     </div>
