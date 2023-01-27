@@ -124,7 +124,7 @@ const Layout: React.FC<Props> = ({ children }) => {
                 <Link href="/" legacyBehavior>
                   <a
                     className={classnames(
-                      'flex items-center py-2 pr-4 pl-3 rounded md:bg-transparent md:p-0',
+                      'flex items-center py-2 pr-4 pl-3 rounded md:bg-transparent md:p-0 hover:text-gray-300',
                       {
                         'text-white': router.pathname === '/',
                         'text-gray-500': router.pathname !== '/',
@@ -140,7 +140,7 @@ const Layout: React.FC<Props> = ({ children }) => {
                 <Link href="/news" legacyBehavior>
                   <a
                     className={classnames(
-                      'flex items-center py-2 pr-4 pl-3 rounded md:bg-transparent md:p-0',
+                      'flex items-center py-2 pr-4 pl-3 rounded md:bg-transparent md:p-0 hover:text-gray-300',
                       {
                         'text-white': router.pathname === '/news',
                         'text-gray-500': router.pathname !== '/news',
@@ -156,7 +156,7 @@ const Layout: React.FC<Props> = ({ children }) => {
                 <Link legacyBehavior href="/how-it-works">
                   <a
                     className={classnames(
-                      'flex items-center py-2 pr-4 pl-3 rounded md:bg-transparent md:p-0',
+                      'flex items-center py-2 pr-4 pl-3 rounded md:bg-transparent md:p-0 hover:text-gray-300',
                       {
                         'text-white': router.pathname === '/how-it-works',
                         'text-gray-500': router.pathname !== '/how-it-works',
