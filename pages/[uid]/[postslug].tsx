@@ -91,20 +91,20 @@ const UserPost: NextPage<Props> = ({ user, post, uid, error }) => {
           <link rel="icon" href="/images/favicon.png" />
         </Head>
 
-        <main className="bg-gray-900 min-h-screen pt-14 pb-48 px-28">
+        <main className="bg-gray-900 min-h-screen pt-14 pb-48 px-10 md:px-28">
 
 
-          <div className="flex items-center justify-between mb-16">
+          <div className="xl:w-[960px] flex items-center justify-between mb-16">
             <h1 className="text-white font-sans font-medium text-2xl">
               Project Details
             </h1>
           </div>
 
-          <div className="w-[960px] mx-auto">
-            <div className="flex bg-gray-800 rounded-xl overflow-hidden">
-              <div className="w-[70%] flex flex-col py-8 px-12">
+          <div className="xl:w-[960px] mx-auto">
+            <div className="lg:flex-row flex flex-col bg-gray-800 rounded-xl overflow-hidden">
+              <div className="lg:w-[70%] w-[100%] flex flex-col py-8 px-12">
                 <div className="flex justify-between">
-                  <div className="w-[80%] mb-10">
+                  <div className="w-[100%] text-center lg:text-left lg:w-[80%] mb-10">
                     <h2 className="text-xl text-white font-medium mb-5">
                       {post.title}
                     </h2>
@@ -125,11 +125,11 @@ const UserPost: NextPage<Props> = ({ user, post, uid, error }) => {
                   </button> */}
                 </div>
 
-                <div className="mb-auto">
+                <div className="mb-auto text-center lg:text-left">
                   <h3 className="text-sm text-white font-bold mb-3">
                     Skills and Expertise
                   </h3>
-                  <div className="flex gap-2 w-[80%]">
+                  <div className="flex justify-center items-center lg:justify-start gap-2 lg:w-[80%] w-[100%]">
                     {post.tags.map((tag) => {
                       return (
                         <span
@@ -150,12 +150,12 @@ const UserPost: NextPage<Props> = ({ user, post, uid, error }) => {
                   </p>
                 </div>
 
-                <p className="text-xs text-gray-400 mt-16">
+                <p className="text-xs text-gray-400 text-center lg:text-left mt-16">
                   Posted on {dayjs(post.createdAt.inMiliseconds).format('MMM D, YYYY')}
                 </p>
               </div>
 
-              <div className="w-[30%] bg-[#1b232e] pb-8 pt-10 flex flex-col items-center">
+              <div className="lg:w-[30%] w-[100%] bg-[#1b232e] pb-8 pt-10 flex flex-col items-center">
                 <div className="w-40 h-40 mb-8">
                   <Image src={user.photoURL} width={160} height={160} className="w-40 h-40 rounded-full object-cover" alt='user image' />
                 </div>
