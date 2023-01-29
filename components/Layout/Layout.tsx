@@ -6,6 +6,8 @@ import {
   GlobeAmericasIcon,
   QuestionMarkCircleIcon,
   DocumentIcon,
+  Bars3BottomRightIcon,
+  XMarkIcon
 } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -27,6 +29,11 @@ type Props = {
 
 const Layout: React.FC<Props> = ({ children }) => {
   const { user, loadingUser } = useContext(FirebaseContext);
+  const [nav, setNav] = useState(true);
+
+  const handleNav = () => {
+    setNav(!nav);
+  };
 
   const handleSignOut = async () => {
     try {
@@ -48,6 +55,19 @@ const Layout: React.FC<Props> = ({ children }) => {
   };
 
   const router = useRouter();
+
+  //reset the nav when the route changes
+  useEffect(() => {
+    const handleRouteChange = (url: string) => {
+      setNav(true);
+    };
+
+    router.events.on('routeChangeStart', handleRouteChange);
+
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange);
+    };
+  }, [router.events]);
 
   const refModalLoginElement = useRef(null);
   const refModalLogin = useRef<any>(null);
@@ -99,9 +119,15 @@ const Layout: React.FC<Props> = ({ children }) => {
 
   return (
     <div className="pt-16">
-      <nav className="fixed top-0 w-full bg-gray-800 border-b border-gray-700 px-28">
+      <nav className="fixed top-0 w-full bg-gray-800 border-b border-gray-700 px-10 md:px-28">
         {/* Left side of the navbar */}
         <div className="flex flex-wrap justify-between items-center mx-auto h-16">
+          <div className='flex justify-center items-center gap-3'>
+          <div className='text-white md:hidden' onClick={handleNav}>
+            {nav?<Bars3BottomRightIcon className = 'w-[40px]' />  : <XMarkIcon className = 'w-[40px]'/> 
+          }
+          </div>
+
           <Link href="/" legacyBehavior>
             <a className="flex items-center">
               {/* <img
@@ -114,12 +140,15 @@ const Layout: React.FC<Props> = ({ children }) => {
               </span>
             </a>
           </Link>
-
+          
+          </div>
+      
+          {/* uses the set nav state to change the mobile menu and vice versa  */}
           <div
-            className="hidden justify-between items-center w-full absolute left-1/2 -translate-x-1/2 md:flex md:w-auto"
+            className={nav? 'hidden justify-between items-center w-full md:flex md:w-auto ':'justify-between items-center w-full absolute top-16 left-0 bg-gray-900 md:flex md:w-auto border ' }
             id="mobile-menu-2"
           >
-            <ul className="flex flex-col p-4 mt-4 rounded-lg border md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0">
+            <ul className="flex flex-col p-4 mt-4 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium transition-all duration-1000 ease-linear">
               <li>
                 <Link href="/" legacyBehavior>
                   <a
@@ -379,7 +408,7 @@ const Layout: React.FC<Props> = ({ children }) => {
       {children}
 
       {/* Footer */}
-      <div className="h-16 bg-gray-800 border-t border-gray-700 flex items-center px-28">
+      <div className="h-16 bg-gray-800 border-t border-gray-700 flex items-center px-10 md:px-28">
 
         {/* Link to twitter */}
 
