@@ -347,9 +347,9 @@ const CreatePost: NextPage = () => {
           <link rel="icon" href="/images/favicon.png" />
         </Head>
 
-        <main className="bg-gray-900 min-h-screen py-14 px-28">
+        <main className="bg-gray-900 min-h-screen py-14 px-10 md:px-28">
           <div className="mb-20">
-            <h1 className="text-white font-sans font-medium text-2xl mb-16">
+            <h1 className="text-white text-center md:text-left font-sans font-medium text-2xl mb-16">
               Projects
             </h1>
 
@@ -428,7 +428,7 @@ const CreatePost: NextPage = () => {
                 <p className="block mb-2 text-sm font-sans font-medium text-gray-400">
                   I need help with
                 </p>
-                <div className="grid grid-cols-4 gap-5" onChange={() => { }}>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5" onChange={() => { }}>
                   <SelectionItem
                     name="skill"
                     label="Frontend"
@@ -505,7 +505,7 @@ const CreatePost: NextPage = () => {
                 <p className="block mb-2 text-sm font-sans font-medium text-gray-400">
                   Level Recommended
                 </p>
-                <div className="grid grid-cols-4 gap-5" onChange={() => { }}>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5" onChange={() => { }}>
                   <SelectionItem
                     name="level"
                     label="Beginner"
