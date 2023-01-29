@@ -101,11 +101,11 @@ export default function Home(props: { posts: IPost[] }) {
         <link rel="icon" href="/images/favicon.png" />
       </Head>
 
-      <main className="bg-gray-900 min-h-screen py-14 px-28">
-        <div className='w-[960px] mx-auto'>
+      <main className="bg-gray-900 min-h-screen py-14 px-10 md:px-28">
+        <div className='md:w-[80%] lg:w-[70%] w-[100%] transition-all duration-300 ease-in-out mx-auto'>
 
           {/* Top bar */}
-          <div className="flex items-center justify-between mb-16">
+          <div className="flex flex-col gap-5 md:flex-row md:gap-0 items-center justify-between mb-16">
             <h1 className="text-white font-sans font-medium text-2xl">
               Projects
             </h1>
@@ -120,7 +120,8 @@ export default function Home(props: { posts: IPost[] }) {
             </Link>
           </div>
           {/* Posts */}
-          <div>
+          <div className='flex justify-center flex-col'>
+            <div>
             {posts.map((post) => (
               <Post
                 key={post.slug}
@@ -133,6 +134,7 @@ export default function Home(props: { posts: IPost[] }) {
                 uid={post.uid}
               />
             ))}
+            </div>
           </div>
           {/* Load more */}
 

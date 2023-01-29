@@ -94,11 +94,11 @@ const Post: React.FC<IPost> = ({
   };
 
   return (
-    <div className="py-6 px-8 bg-gray-800 rounded-xl mb-8 transition-shadow duration-300 hover:shadow-2xl">
+    <div className="py-6 px-8 bg-gray-800 rounded-xl mb-8 transition-shadow duration-300 hover:shadow-2xl h-auto">
       <div className="flex justify-between">
-        <div className="w-[80%]">
+        <div className="w-[100%] md:w-[90%]">
           <Link href={`/${uid}/${slug}`}>
-            <h2 className="text-xl text-white font-medium mb-5">{title}</h2>
+            <h2 className="text-xl text-white text-center sm:text-left font-medium mb-5">{title}</h2>
           </Link>
           <div className="text-white text-xs mb-3 ">
             Level Required - {level} - Posted {/* @ts-ignore */}
@@ -147,8 +147,8 @@ const Post: React.FC<IPost> = ({
           />
         </button> */}
       </div>
-      <div className="flex items-center justify-between">
-        <div className="flex gap-2 w-[80%]">
+      <div className="flex-col gap-5 flex items-center md:justify-between justify-center md:flex-row md:gap-0">
+        <div className="flex items-center justify-center md:items-start md:justify-start gap-2 w-[80%]">
           {tags.map((tag) => {
             return (
               <span
