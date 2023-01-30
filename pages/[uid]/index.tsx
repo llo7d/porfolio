@@ -70,7 +70,7 @@ const EditProfilePage: NextPage<Props> = ({ userInfo, uid, error }) => {
           <meta property="og:title" content="Edit profile" key="editprofile" />
           <link rel="icon" href="/images/favicon.png" />
         </Head>
-        <main className="bg-gray-900 min-h-screen py-14 px-28">
+        <main className="bg-gray-900 min-h-screen py-14 px-10 md:px-28">
           {/* // Add check later if user doesnt exist, redirect to 404 page */}
 
           <div>
