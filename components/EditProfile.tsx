@@ -221,7 +221,7 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
 
   return (
     <div>
-      <main className="bg-gray-900 min-h-screen py-14 px-28">
+      <main className="bg-gray-900 min-h-screen py-14">
         <div>
           <h1 className="text-white font-sans font-medium text-2xl mb-10">
             Profile
@@ -309,8 +309,8 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
               />
             </div>
             {/* Discord */}
-            <div className="grid grid-cols-12 gap-12 mb-2">
-              <div className="col-span-5">
+            <div className="grid grid-cols-20 md:grid-cols-12 sm:gap-24 md:gap-12 mb-2">
+              <div className="col-span-5 ">
                 <p className="block mb-3 text-sm font-sans font-medium text-gray-400">
                   Links
                 </p>
@@ -326,11 +326,11 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
                     maxLength={32}
                     type="text"
                     name={'discordUsername'}
-                    className="rounded-none placeholder:text-gray-400 text-center rounded-r-lg bg-gray-700 border text-white focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-600 p-2.5"
+                    className="rounded-none placeholder:text-gray-400 text-left rounded-r-lg bg-gray-700 border text-white focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-600 p-2.5"
                     placeholder={
                       userInfo.discordName
                         ? (userInfo.discordName as string)
-                        : `Enter your discord username`
+                        : 'Discord Username'
                     }
                     onChange={(e) =>
                       setUpdateProfile({
@@ -343,7 +343,7 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
               </div>
             </div>
             {/* Twitter */}
-            <div className="grid grid-cols-12 gap-12 mb-24">
+            <div className="grid grid-cols-20 md:grid-cols-12 sm:gap-24 md:gap-12 mb-24">
               <div className="col-span-5">
                 <div className="flex mb-4">
                   <div className="inline-flex items-center w-28 px-2 pr-3 text-sm text-gray-900 bg-gray-600 rounded-l-md border border-r-0 border-gray-600 select-none">
@@ -357,11 +357,11 @@ const EditProfile: NextPage<Props> = ({ userInfo }) => {
                     maxLength={20}
                     type="text"
                     name={'twitterUsername'}
-                    className="rounded-none placeholder:text-gray-400 text-center rounded-r-lg bg-gray-700 border text-white focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-600 p-2.5"
+                    className="rounded-none placeholder:text-gray-400 text-left rounded-r-lg bg-gray-700 border text-white focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-600 p-2.5"
                     placeholder={
                       userInfo.twitterUsername
                         ? (userInfo.twitterUsername as string)
-                        : `Enter your twitter username`
+                        : `Twitter username`
                     }
                     onChange={(e) =>
                       setUpdateProfile({
