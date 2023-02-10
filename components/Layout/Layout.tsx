@@ -7,21 +7,21 @@ import {
   QuestionMarkCircleIcon,
   DocumentIcon,
   Bars3BottomRightIcon,
-  XMarkIcon
-} from '@heroicons/react/24/solid';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
-import classnames from 'classnames';
-import { auth, handleSignInWithGithub } from '../../lib/firebase';
+  XMarkIcon,
+} from "@heroicons/react/24/solid";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useRef, useState } from "react";
+import classnames from "classnames";
+import { auth, handleSignInWithGithub } from "../../lib/firebase";
 
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-import { signOut } from 'firebase/auth';
-import { useContext } from 'react';
-import { FirebaseContext } from '../../lib/context';
-import Image from 'next/image';
+import { signOut } from "firebase/auth";
+import { useContext } from "react";
+import { FirebaseContext } from "../../lib/context";
+import Image from "next/image";
 
 type Props = {
   children?: JSX.Element | JSX.Element[];
@@ -39,15 +39,15 @@ const Layout: React.FC<Props> = ({ children }) => {
     try {
       await signOut(auth);
 
-      toast.success('🦄 You have logged out!', {
-        position: 'top-center',
+      toast.success("🦄 You have logged out!", {
+        position: "top-center",
         autoClose: 2500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: 'light',
+        theme: "light",
       });
     } catch (error) {
       console.log(error);
@@ -62,10 +62,10 @@ const Layout: React.FC<Props> = ({ children }) => {
       setNav(true);
     };
 
-    router.events.on('routeChangeStart', handleRouteChange);
+    router.events.on("routeChangeStart", handleRouteChange);
 
     return () => {
-      router.events.off('routeChangeStart', handleRouteChange);
+      router.events.off("routeChangeStart", handleRouteChange);
     };
   }, [router.events]);
 
@@ -78,19 +78,19 @@ const Layout: React.FC<Props> = ({ children }) => {
 
   // Responsible for the dropdown menu.
   useEffect(() => {
-    import('flowbite').then(() => {
-      if (typeof window !== 'undefined') {
+    import("flowbite").then(() => {
+      if (typeof window !== "undefined") {
         if (refModalLoginElement.current) {
           const options = {
             backdropClasses:
-              'bg-black bg-opacity-70 backdrop-blur-sm fixed inset-0 z-40',
+              "bg-black bg-opacity-70 backdrop-blur-sm fixed inset-0 z-40",
             onHide: () => {
-              document.body.style.overflow = 'auto';
+              document.body.style.overflow = "auto";
             },
             onShow: () => {
-              document.body.style.overflow = 'hidden';
+              document.body.style.overflow = "hidden";
             },
-            onToggle: () => { },
+            onToggle: () => {},
           };
 
           refModalLogin.current = new Modal(
@@ -122,30 +122,36 @@ const Layout: React.FC<Props> = ({ children }) => {
       <nav className="fixed top-0 w-full bg-gray-800 border-b border-gray-700 px-10 md:px-28">
         {/* Left side of the navbar */}
         <div className="flex flex-wrap justify-between items-center mx-auto h-16">
-          <div className='flex justify-center items-center gap-3'>
-          <div className='text-white md:hidden' onClick={handleNav}>
-            {nav?<Bars3BottomRightIcon className = 'w-[40px]' />  : <XMarkIcon className = 'w-[40px]'/> 
-          }
-          </div>
+          <div className="flex justify-center items-center gap-3">
+            <div className="text-white md:hidden" onClick={handleNav}>
+              {nav ? (
+                <Bars3BottomRightIcon className="w-[40px]" />
+              ) : (
+                <XMarkIcon className="w-[40px]" />
+              )}
+            </div>
 
-          <Link href="/" legacyBehavior>
-            <a className="flex items-center">
-              {/* <img
+            <Link href="/" legacyBehavior>
+              <a className="flex items-center">
+                {/* <img
                 src="/images/portfolio-my-profile-browser-svgrepo-com.svg"
                 className="mr-3 h-6 sm:h-9"
                 alt="Flowbite Logo"
               /> */}
-              <span className="self-center text-xl text-white font-semibold whitespace-nowrap">
-                Porfolio
-              </span>
-            </a>
-          </Link>
-          
+                <span className="self-center text-xl text-white font-semibold whitespace-nowrap">
+                  Porfolio
+                </span>
+              </a>
+            </Link>
           </div>
-      
+
           {/* uses the set nav state to change the mobile menu and vice versa  */}
           <div
-            className={nav? 'hidden justify-between items-center w-full md:flex md:w-auto ':'justify-between items-center w-full absolute top-16 left-0 bg-gray-900 md:flex md:w-auto border ' }
+            className={
+              nav
+                ? "hidden justify-between items-center w-full md:flex md:w-auto "
+                : "justify-between items-center w-full absolute top-16 left-0 bg-gray-900 md:flex md:w-auto border "
+            }
             id="mobile-menu-2"
           >
             <ul className="flex flex-col p-4 mt-4 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium transition-all duration-1000 ease-linear">
@@ -153,10 +159,10 @@ const Layout: React.FC<Props> = ({ children }) => {
                 <Link href="/" legacyBehavior>
                   <a
                     className={classnames(
-                      'flex items-center py-2 pr-4 pl-3 rounded md:bg-transparent md:p-0 hover:text-gray-300',
+                      "flex items-center py-2 pr-4 pl-3 rounded md:bg-transparent md:p-0 hover:text-gray-300",
                       {
-                        'text-white': router.pathname === '/',
-                        'text-gray-500': router.pathname !== '/',
+                        "text-white": router.pathname === "/",
+                        "text-gray-500": router.pathname !== "/",
                       }
                     )}
                   >
@@ -169,10 +175,10 @@ const Layout: React.FC<Props> = ({ children }) => {
                 <Link href="/news" legacyBehavior>
                   <a
                     className={classnames(
-                      'flex items-center py-2 pr-4 pl-3 rounded md:bg-transparent md:p-0 hover:text-gray-300',
+                      "flex items-center py-2 pr-4 pl-3 rounded md:bg-transparent md:p-0 hover:text-gray-300",
                       {
-                        'text-white': router.pathname === '/news',
-                        'text-gray-500': router.pathname !== '/news',
+                        "text-white": router.pathname === "/news",
+                        "text-gray-500": router.pathname !== "/news",
                       }
                     )}
                   >
@@ -185,10 +191,10 @@ const Layout: React.FC<Props> = ({ children }) => {
                 <Link legacyBehavior href="/how-it-works">
                   <a
                     className={classnames(
-                      'flex items-center py-2 pr-4 pl-3 rounded md:bg-transparent md:p-0 hover:text-gray-300',
+                      "flex items-center py-2 pr-4 pl-3 rounded md:bg-transparent md:p-0 hover:text-gray-300",
                       {
-                        'text-white': router.pathname === '/how-it-works',
-                        'text-gray-500': router.pathname !== '/how-it-works',
+                        "text-white": router.pathname === "/how-it-works",
+                        "text-gray-500": router.pathname !== "/how-it-works",
                       }
                     )}
                   >
@@ -393,7 +399,7 @@ const Layout: React.FC<Props> = ({ children }) => {
                   className="text-blue-500 hover:underline"
                   type="button"
                   onClick={() => {
-                    router.push('/about');
+                    router.push("/about");
                   }}
                 >
                   Learn more
@@ -409,14 +415,21 @@ const Layout: React.FC<Props> = ({ children }) => {
 
       {/* Footer */}
       <div className="h-16 bg-gray-800 border-t border-gray-700 flex items-center px-10 md:px-28">
-
         {/* Link to twitter */}
 
-
-
-        <Link href="https://twitter.com/llo7d" className="mr-4" rel="noopener noreferrer" target="_blank">
+        <Link
+          href="https://twitter.com/llo7d"
+          className="mr-4"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
           {/* <img className="w-6" src="/images/icon-twitter-gray.png" /> */}
-          <Image src="/images/icon-twitter-gray.png" width={24} height={24} alt="twitter" />
+          <Image
+            src="/images/icon-twitter-gray.png"
+            width={24}
+            height={24}
+            alt="twitter"
+          />
         </Link>
 
         <p className="text-gray-500 font-sans font-medium text-sm absolute left-1/2 -translate-x-1/2">

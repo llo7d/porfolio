@@ -1,13 +1,14 @@
-import Link from 'next/link';
-import { IPost } from '../lib/interfaces';
-import dayjs from 'dayjs';
-import { TrashIcon } from '@heroicons/react/24/solid';
-import { doc, deleteDoc, getDoc } from 'firebase/firestore';
-import { firestore } from '../lib/firebase';
-import { FirebaseContext } from '../lib/context';
-import { useContext } from 'react';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import Link from "next/link";
+import { IPost } from "../lib/interfaces";
+import dayjs from "dayjs";
+import { TrashIcon } from "@heroicons/react/24/solid";
+import { doc, deleteDoc, getDoc } from "firebase/firestore";
+import { firestore } from "../lib/firebase";
+import { FirebaseContext } from "../lib/context";
+import { useContext } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { motion } from "framer-motion";
 
 const Post: React.FC<IPost> = ({
   title,
@@ -21,24 +22,27 @@ const Post: React.FC<IPost> = ({
   postsArray,
   setPostsArray,
 }) => {
-  const shortDescription = description?.split(' ').slice(0, 25).join(' ');
+  const shortDescription = description?.split(" ").slice(0, 25).join(" ");
 
   const { user, loadingUser } = useContext(FirebaseContext);
 
   // This is needed to display the date since the post was created
   dayjs().format();
-  dayjs.extend(require('dayjs/plugin/relativeTime'));
+  dayjs.extend(require("dayjs/plugin/relativeTime"));
 
-  const readableDate = new Date(createdAt.inMiliseconds).toLocaleDateString('en-US', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  });
+  const readableDate = new Date(createdAt.inMiliseconds).toLocaleDateString(
+    "en-US",
+    {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }
+  );
 
   // Delete post
   const handleDelete = async (slug: string, uid: string) => {
     // Delete the post from the database
-    const postRef = doc(firestore, 'users', uid, 'posts', slug);
+    const postRef = doc(firestore, "users", uid, "posts", slug);
 
     // Grab the post data
     const postDoc = await getDoc(postRef);
@@ -48,7 +52,7 @@ const Post: React.FC<IPost> = ({
         // Check if the user uid matches the post uid
         if (postDoc.data().uid === user.uid && user.uid === uid) {
           console.log(
-            'User uid matches post uid',
+            "User uid matches post uid",
             postDoc.data().uid,
             user.uid
           );
@@ -65,27 +69,27 @@ const Post: React.FC<IPost> = ({
           setPostsArray(newPostsArray);
 
           // alert the user that the post was deleted
-          toast.success('🦄 Post has been deleted', {
-            position: 'top-center',
+          toast.success("🦄 Post has been deleted", {
+            position: "top-center",
             autoClose: 2500,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            theme: 'light',
+            theme: "light",
           });
         } else {
           // If the user uid does not match the post uid, do nothing
-          toast.error('Something went wrong ', {
-            position: 'top-right',
+          toast.error("Something went wrong ", {
+            position: "top-right",
             autoClose: 2500,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            theme: 'light',
+            theme: "light",
           });
           return;
         }
@@ -94,18 +98,23 @@ const Post: React.FC<IPost> = ({
   };
 
   return (
-    <div className="py-6 px-8 bg-gray-800 rounded-xl mb-8 transition-shadow duration-300 hover:shadow-2xl h-auto">
+    <motion.div
+      layout
+      className="py-6 px-8 bg-gray-800 rounded-xl mb-8 transition-shadow duration-300 hover:shadow-2xl h-auto"
+    >
       <div className="flex justify-between">
         <div className="w-[100%] md:w-[90%]">
           <Link href={`/${uid}/${slug}`}>
-            <h2 className="text-xl text-white text-center sm:text-left font-medium mb-5">{title}</h2>
+            <h2 className="text-xl text-white text-center sm:text-left font-medium mb-5">
+              {title}
+            </h2>
           </Link>
           <div className="text-white text-xs mb-3 ">
             Level Required - {level} - Posted {/* @ts-ignore */}
-            {' ' + dayjs(createdAt.inMiliseconds).fromNow()}
+            {" " + dayjs(createdAt.inMiliseconds).fromNow()}
           </div>
           <div className="text-white font-sans mb-6 text-xs">
-            {description?.split(' ').length > 25 ? (
+            {description?.split(" ").length > 25 ? (
               <>
                 {shortDescription}
                 <Link legacyBehavior href={`/${uid}/${slug}`}>
@@ -129,7 +138,7 @@ const Post: React.FC<IPost> = ({
             }}
           >
             <TrashIcon
-              className={`w-4 h-4 ${true ? 'text-red-500' : 'text-gray-700'}`}
+              className={`w-4 h-4 ${true ? "text-red-500" : "text-gray-700"}`}
             />
           </button>
         ) : null}
@@ -165,7 +174,7 @@ const Post: React.FC<IPost> = ({
         </div>
         <p className="text-xs text-gray-400">{readableDate}</p>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
