@@ -22,6 +22,9 @@ import { signOut } from "firebase/auth";
 import { useContext } from "react";
 import { FirebaseContext } from "../../lib/context";
 import Image from "next/image";
+import { AnimatePresence } from "framer-motion";
+import NavMobile from "./NavMobile";
+import Nav from "./Nav";
 
 type Props = {
   children?: JSX.Element | JSX.Element[];
@@ -119,7 +122,7 @@ const Layout: React.FC<Props> = ({ children }) => {
 
   return (
     <div className="pt-16">
-      <nav className="fixed top-0 w-full bg-gray-800 border-b border-gray-700 px-10 md:px-28">
+      <nav className="fixed top-0 w-full bg-gray-800 border-b border-gray-700 px-10 md:px-28 z-40">
         {/* Left side of the navbar */}
         <div className="flex flex-wrap justify-between items-center mx-auto h-16">
           <div className="flex justify-center items-center gap-3">
@@ -146,65 +149,8 @@ const Layout: React.FC<Props> = ({ children }) => {
           </div>
 
           {/* uses the set nav state to change the mobile menu and vice versa  */}
-          <div
-            className={
-              nav
-                ? "hidden justify-between items-center w-full md:flex md:w-auto "
-                : "justify-between items-center w-full absolute top-16 left-0 bg-gray-900 md:flex md:w-auto border "
-            }
-            id="mobile-menu-2"
-          >
-            <ul className="flex flex-col p-4 mt-4 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium transition-all duration-1000 ease-linear">
-              <li>
-                <Link href="/" legacyBehavior>
-                  <a
-                    className={classnames(
-                      "flex items-center py-2 pr-4 pl-3 rounded md:bg-transparent md:p-0 hover:text-gray-300",
-                      {
-                        "text-white": router.pathname === "/",
-                        "text-gray-500": router.pathname !== "/",
-                      }
-                    )}
-                  >
-                    <Squares2X2Icon className="w-6 h-6 mr-2" />
-                    <span>Projects</span>
-                  </a>
-                </Link>
-              </li>
-              <li>
-                <Link href="/news" legacyBehavior>
-                  <a
-                    className={classnames(
-                      "flex items-center py-2 pr-4 pl-3 rounded md:bg-transparent md:p-0 hover:text-gray-300",
-                      {
-                        "text-white": router.pathname === "/news",
-                        "text-gray-500": router.pathname !== "/news",
-                      }
-                    )}
-                  >
-                    <GlobeAmericasIcon className="w-6 h-6 mr-2" />
-                    <span>News</span>
-                  </a>
-                </Link>
-              </li>
-              <li>
-                <Link legacyBehavior href="/how-it-works">
-                  <a
-                    className={classnames(
-                      "flex items-center py-2 pr-4 pl-3 rounded md:bg-transparent md:p-0 hover:text-gray-300",
-                      {
-                        "text-white": router.pathname === "/how-it-works",
-                        "text-gray-500": router.pathname !== "/how-it-works",
-                      }
-                    )}
-                  >
-                    <QuestionMarkCircleIcon className="w-6 h-6 mr-2" />
-                    <span>How It Works</span>
-                  </a>
-                </Link>
-              </li>
-            </ul>
-          </div>
+          <AnimatePresence>{!nav && <NavMobile />}</AnimatePresence>
+          <AnimatePresence>{nav && <Nav router={router} />}</AnimatePresence>
 
           {/* Logged in User */}
           {loadingUser ? (
@@ -286,7 +232,8 @@ const Layout: React.FC<Props> = ({ children }) => {
                       </li>
                     </ul>
                   </div>
-                  <button
+                  {/* I dont think this was being used...
+                    <button
                     data-collapse-toggle="mobile-menu-2"
                     type="button"
                     className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
@@ -307,7 +254,7 @@ const Layout: React.FC<Props> = ({ children }) => {
                         clipRule="evenodd"
                       ></path>
                     </svg>
-                  </button>
+                        </button> */}
                 </div>
               )}
               {/* User NOT LoggedIn*/}
