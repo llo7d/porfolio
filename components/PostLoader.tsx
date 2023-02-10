@@ -20,11 +20,11 @@ const PostLoader: React.FC<Props> = ({}) => {
             duration: 0.3,
           }}
         >
-          <motion.div className="md:w-32 w-24 h-4 rounded-full bg-gray-600 mb-8" />
-          <motion.div className="md:w-48 w-32 h-2 rounded-full bg-gray-600 mb-2" />
-          <motion.div className="md:w-96 w-56 h-2 rounded-full bg-gray-600 mb-2" />
-          <motion.div className="md:w-96 w-56 h-2 rounded-full bg-gray-600 mb-2" />
-          <motion.div className="md:w-96 w-56 h-2 rounded-full bg-gray-600" />
+          <div className="md:w-32 w-24 h-4 rounded-full bg-gray-600 mb-8" />
+          <div className="md:w-48 w-32 h-2 rounded-full bg-gray-600 mb-2" />
+          <div className="md:w-96 w-56 h-2 rounded-full bg-gray-600 mb-2" />
+          <div className="md:w-96 w-56 h-2 rounded-full bg-gray-600 mb-2" />
+          <div className="md:w-96 w-56 h-2 rounded-full bg-gray-600" />
         </motion.div>
         <div className="w-7 h-7 rounded-full bg-gray-600" />
       </div>
