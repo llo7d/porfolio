@@ -7,7 +7,13 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FirebaseContext } from '../lib/context';
 import { useContext } from 'react';
-import { collection, doc, getDocs, serverTimestamp, setDoc } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  getDocs,
+  serverTimestamp,
+  setDoc,
+} from 'firebase/firestore';
 import { firestore } from '../lib/firebase';
 import { useRouter } from 'next/router';
 
@@ -137,7 +143,6 @@ const CreatePost: NextPage = () => {
         inMiliseconds: new Date().getTime(),
         // inDate that is Timestamp type object
         inFirebaseDate: serverTimestamp(),
-
       },
       createdAtInFirebaseDate: serverTimestamp(),
       uid: user?.uid,
@@ -319,7 +324,7 @@ const CreatePost: NextPage = () => {
       //   return;
       // }
       // create the post with the kebab case as the id
-      await setDoc(doc(postsRef, titleToKebabCase(post.title)), reformatData())
+      await setDoc(doc(postsRef, titleToKebabCase(post.title)), reformatData());
 
       router.push(`/${user.uid}/${titleToKebabCase(post.title)}`);
 
@@ -343,35 +348,35 @@ const CreatePost: NextPage = () => {
       <div>
         <Head>
           <title>Create post</title>
-          <meta property="og:title" content="Create post" key="create" />
-          <link rel="icon" href="/images/favicon.png" />
+          <meta property='og:title' content='Create post' key='create' />
+          <link rel='icon' href='/images/favicon.png' />
         </Head>
 
-        <main className="bg-gray-900 min-h-screen py-14 px-10 md:px-28">
-          <div className="mb-20">
-            <h1 className="text-white text-center md:text-left font-sans font-medium text-2xl mb-16">
+        <main className='bg-gray-900 min-h-screen py-14 px-10 md:px-28'>
+          <div className='mb-20'>
+            <h1 className='text-white text-center md:text-left font-sans font-medium text-2xl mb-16'>
               Projects
             </h1>
 
             <form>
-              <div className="mb-14">
+              <div className='mb-14'>
                 <label
-                  htmlFor="title"
-                  className="block mb-2 text-sm font-sans font-medium text-gray-400"
+                  htmlFor='title'
+                  className='block mb-2 text-sm font-sans font-medium text-gray-400'
                 >
                   Title
                 </label>
-                <p className="text-sm text-gray-400 font-sans mb-2">
+                <p className='text-sm text-gray-400 font-sans mb-2'>
                   For example: &quot;Need help with a wireframe&quot;
                 </p>
                 <input
-                  pattern="[A-Za-z]"
+                  pattern='[A-Za-z]'
                   maxLength={50}
-                  type="text"
-                  id="title"
-                  name="title"
-                  className="bg-gray-700 border border-gray-600 placeholder:text-gray-400 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                  placeholder="Enter project title"
+                  type='text'
+                  id='title'
+                  name='title'
+                  className='bg-gray-700 border border-gray-600 placeholder:text-gray-400 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'
+                  placeholder='Enter project title'
                   value={post.title}
                   spellCheck={false}
                   onChange={(e) => {
@@ -387,22 +392,22 @@ const CreatePost: NextPage = () => {
                   required
                 />
               </div>
-              <div className="mb-14">
+              <div className='mb-14'>
                 <label
-                  htmlFor="description"
-                  className="block mb-2 text-sm font-sans font-medium text-gray-400"
+                  htmlFor='description'
+                  className='block mb-2 text-sm font-sans font-medium text-gray-400'
                 >
                   Description
                 </label>
-                <p className="text-sm text-gray-400 font-sans mb-2">
+                <p className='text-sm text-gray-400 font-sans mb-2'>
                   For example: &quot;I am trying to figure out how to wireframe
                   this new website...&quot;
                 </p>
                 <textarea
-                  id="description"
-                  name="description"
-                  className="bg-gray-700 border border-gray-600 placeholder:text-gray-400 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                  placeholder="Enter project description"
+                  id='description'
+                  name='description'
+                  className='bg-gray-700 border border-gray-600 placeholder:text-gray-400 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'
+                  placeholder='Enter project description'
                   rows={10}
                   value={post.description}
                   required
@@ -410,10 +415,9 @@ const CreatePost: NextPage = () => {
                   onChange={(e) => {
                     // clean up the text from any symbols etc.. but allow emty string as spaces
                     // also no single word can be longer than 20 characters long
-                    const cleanedDescription = e.target.value.replace(
-                      /[^A-Za-z0-9\s\.\,\?\!]/g,
-                      ''
-                    ).replace(/\b\w{30,}\b/g, '')
+                    const cleanedDescription = e.target.value
+                      .replace(/[^A-Za-z0-9\s\.\,\?\!]/g, '')
+                      .replace(/\b\w{30,}\b/g, '');
 
                     setPost({
                       ...post,
@@ -424,76 +428,79 @@ const CreatePost: NextPage = () => {
               </div>
 
               {/* I need help with */}
-              <div className="mb-8">
-                <p className="block mb-2 text-sm font-sans font-medium text-gray-400">
+              <div className='mb-8'>
+                <p className='block mb-2 text-sm font-sans font-medium text-gray-400'>
                   I need help with
                 </p>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5" onChange={() => { }}>
+                <div
+                  className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5'
+                  onChange={() => {}}
+                >
                   <SelectionItem
-                    name="skill"
-                    label="Frontend"
-                    value="frontend"
-                    icon="/images/icon-frontend.png"
+                    name='skill'
+                    label='Frontend'
+                    value='frontend'
+                    icon='/images/icon-frontend.png'
                     isSelected={skillIDs.includes(1)}
                     onClick={() => toggleSkill(1)}
                   />
                   <SelectionItem
-                    name="skill"
-                    label="Wireframe"
-                    value="wireframe"
-                    icon="/images/icon-wireframe.png"
+                    name='skill'
+                    label='Wireframe'
+                    value='wireframe'
+                    icon='/images/icon-wireframe.png'
                     isSelected={skillIDs.includes(2)}
                     onClick={() => toggleSkill(2)}
                   />
                   <SelectionItem
-                    name="skill"
-                    label="Scripts"
-                    value="scripts"
-                    icon="/images/icon-scripts.png"
+                    name='skill'
+                    label='Scripts'
+                    value='scripts'
+                    icon='/images/icon-scripts.png'
                     isSelected={skillIDs.includes(3)}
                     onClick={() => toggleSkill(3)}
                   />
                   <SelectionItem
-                    name="skill"
-                    label="Just Talk"
-                    value="just_talk"
-                    icon="/images/icon-just-talk.png"
+                    name='skill'
+                    label='Just Talk'
+                    value='just_talk'
+                    icon='/images/icon-just-talk.png'
                     isSelected={skillIDs.includes(4)}
                     onClick={() => toggleSkill(4)}
                   />
                   <SelectionItem
-                    name="skill"
-                    label="Backend"
-                    value="backend"
-                    icon="/images/icon-backend.png"
+                    name='skill'
+                    label='Backend'
+                    value='backend'
+                    icon='/images/icon-backend.png'
                     isSelected={skillIDs.includes(5)}
                     onClick={() => toggleSkill(5)}
                   />
                   <SelectionItem
-                    name="skill"
-                    label="UI/UX"
-                    value="ui_ux"
-                    icon="/images/icon-uiux.png"
+                    name='skill'
+                    label='UI/UX'
+                    value='ui_ux'
+                    icon='/images/icon-uiux.png'
                     isSelected={skillIDs.includes(6)}
                     onClick={() => toggleSkill(6)}
                   />
                   <SelectionItem
-                    name="skill"
-                    label="Just Code"
-                    value="just_code"
-                    icon="/images/icon-just-code.png"
+                    name='skill'
+                    label='Just Code'
+                    value='just_code'
+                    icon='/images/icon-just-code.png'
                     isSelected={skillIDs.includes(7)}
                     onClick={() => toggleSkill(7)}
                   />
                   <button
-                    type="button"
-                    className="flex justify-center text-gray-400 bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-xl text-sm px-3 py-2.5"
+                    type='button'
+                    className='flex justify-center text-gray-400 bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-xl text-sm px-3 py-2.5'
                     onClick={() => {
                       // Redirect to twitter.com, but open in a new tab
                       window.open('https://twitter.com/@dogoo00d');
                     }}
                   >
-                    <span className="whitespace-pre-line">
+                    <span className='whitespace-pre-line'>
                       Recommend a new one?{'\n'}Contact support
                     </span>
                   </button>
@@ -501,42 +508,45 @@ const CreatePost: NextPage = () => {
               </div>
 
               {/* Level Recommended */}
-              <div className="mb-24">
-                <p className="block mb-2 text-sm font-sans font-medium text-gray-400">
+              <div className='mb-24'>
+                <p className='block mb-2 text-sm font-sans font-medium text-gray-400'>
                   Level Recommended
                 </p>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5" onChange={() => { }}>
+                <div
+                  className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5'
+                  onChange={() => {}}
+                >
                   <SelectionItem
-                    name="level"
-                    label="Beginner"
-                    value="beginner"
-                    icon="/images/icon-beginner.png"
+                    name='level'
+                    label='Beginner'
+                    value='beginner'
+                    icon='/images/icon-beginner.png'
                     isSelected={levelID === 1}
                     onClick={() => setLevelID(1)}
                   />
                   <SelectionItem
-                    name="level"
-                    label="Intermediate"
-                    value="intermediate"
-                    icon="/images/icon-intermediate.png"
+                    name='level'
+                    label='Intermediate'
+                    value='intermediate'
+                    icon='/images/icon-intermediate.png'
                     isSelected={levelID === 2}
                     onClick={() => setLevelID(2)}
                   />
                   <SelectionItem
-                    name="level"
-                    label="Expert"
-                    value="expert"
-                    icon="/images/icon-expert.png"
+                    name='level'
+                    label='Expert'
+                    value='expert'
+                    icon='/images/icon-expert.png'
                     isSelected={levelID === 3}
                     onClick={() => setLevelID(3)}
                   />
                 </div>
               </div>
 
-              <div className="flex flex-col items-center">
+              <div className='flex flex-col items-center'>
                 <button
-                  type="button"
-                  className="mx-auto text-white hover:text-gray-600 border border-blue-500 hover:border-gray-600 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  type='button'
+                  className='mx-auto text-white hover:text-gray-600 border border-blue-500 hover:border-gray-600 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center'
                   onClick={() => handleSubmit()}
                 >
                   Create Task

@@ -8,6 +8,7 @@ import { FirebaseContext } from '../lib/context';
 import { useContext } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { motion } from 'framer-motion';
 
 const Post: React.FC<IPost> = ({
   title,
@@ -29,11 +30,14 @@ const Post: React.FC<IPost> = ({
   dayjs().format();
   dayjs.extend(require('dayjs/plugin/relativeTime'));
 
-  const readableDate = new Date(createdAt.inMiliseconds).toLocaleDateString('en-US', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  });
+  const readableDate = new Date(createdAt.inMiliseconds).toLocaleDateString(
+    'en-US',
+    {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    }
+  );
 
   // Delete post
   const handleDelete = async (slug: string, uid: string) => {
@@ -94,26 +98,31 @@ const Post: React.FC<IPost> = ({
   };
 
   return (
-    <div className="py-6 px-8 bg-gray-800 rounded-xl mb-8 transition-shadow duration-300 hover:shadow-2xl h-auto">
-      <div className="flex justify-between">
-        <div className="w-[100%] md:w-[90%]">
+    <motion.div
+      layout
+      className='py-6 px-8 bg-gray-800 rounded-xl mb-8 transition-shadow duration-300 hover:shadow-2xl h-auto'
+    >
+      <div className='flex justify-between'>
+        <div className='w-[100%] md:w-[90%]'>
           <Link href={`/${uid}/${slug}`}>
-            <h2 className="text-xl text-white text-center sm:text-left font-medium mb-5">{title}</h2>
+            <h2 className='text-xl text-white text-center sm:text-left font-medium mb-5'>
+              {title}
+            </h2>
           </Link>
-          <div className="text-white text-xs mb-3 ">
+          <div className='text-white text-xs mb-3 '>
             Level Required - {level} - Posted {/* @ts-ignore */}
             {' ' + dayjs(createdAt.inMiliseconds).fromNow()}
           </div>
-          <div className="text-white font-sans mb-6 text-xs">
+          <div className='text-white font-sans mb-6 text-xs'>
             {description?.split(' ').length > 25 ? (
               <>
                 {shortDescription}
                 <Link legacyBehavior href={`/${uid}/${slug}`}>
-                  <a className="text-white font-medium"> ...read more</a>
+                  <a className='text-white font-medium'> ...read more</a>
                 </Link>
               </>
             ) : (
-              <h1 className="text-white font-medium">{description}</h1>
+              <h1 className='text-white font-medium'>{description}</h1>
             )}
           </div>
         </div>
@@ -121,8 +130,8 @@ const Post: React.FC<IPost> = ({
         {/* Delete icon */}
         {deletePost ? (
           <button
-            className="w-7 h-7 rounded-full bg-gray-900 flex items-center justify-center"
-            type="button"
+            className='w-7 h-7 rounded-full bg-gray-900 flex items-center justify-center'
+            type='button'
             onClick={() => {
               // @ts-ignore
               handleDelete(slug, uid);
@@ -147,8 +156,8 @@ const Post: React.FC<IPost> = ({
           />
         </button> */}
       </div>
-      <div className="flex-col gap-5 flex items-center md:justify-between justify-center md:flex-row md:gap-0">
-        <div className="flex items-center justify-center md:items-start md:justify-start gap-2 w-[80%]">
+      <div className='flex-col gap-5 flex items-center md:justify-between justify-center md:flex-row md:gap-0'>
+        <div className='flex items-center justify-center md:items-start md:justify-start gap-2 w-[80%]'>
           {tags.map((tag) => {
             return (
               <span
@@ -163,9 +172,9 @@ const Post: React.FC<IPost> = ({
             );
           })}
         </div>
-        <p className="text-xs text-gray-400">{readableDate}</p>
+        <p className='text-xs text-gray-400'>{readableDate}</p>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

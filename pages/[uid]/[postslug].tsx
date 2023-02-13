@@ -65,14 +65,12 @@ interface Props {
   error: boolean;
 }
 const UserPost: NextPage<Props> = ({ user, post, uid, error }) => {
-
-
   const [isDiscordOpen, setIsDiscordOpen] = useState(false);
 
   // If error, return 404 page
   if (error) {
     return (
-      <Custom404 ErrorType="The post you were searching for was not found" />
+      <Custom404 ErrorType='The post you were searching for was not found' />
     );
   }
 
@@ -80,35 +78,31 @@ const UserPost: NextPage<Props> = ({ user, post, uid, error }) => {
   dayjs().format();
   dayjs.extend(require('dayjs/plugin/relativeTime'));
 
-
   return (
     <div>
       <div>
-
         <Head>
           <title>Project {post.title}</title>
-          <meta property="og:title" content="Project" key="project" />
-          <link rel="icon" href="/images/favicon.png" />
+          <meta property='og:title' content='Project' key='project' />
+          <link rel='icon' href='/images/favicon.png' />
         </Head>
 
-        <main className="bg-gray-900 min-h-screen pt-14 pb-48 px-10 md:px-28">
-
-
-          <div className="xl:w-[960px] flex items-center justify-between mb-16">
-            <h1 className="text-white font-sans font-medium text-2xl">
+        <main className='bg-gray-900 min-h-screen pt-14 pb-48 px-10 md:px-28'>
+          <div className='xl:w-[960px] flex items-center justify-between mb-16'>
+            <h1 className='text-white font-sans font-medium text-2xl'>
               Project Details
             </h1>
           </div>
 
-          <div className="xl:w-[960px] mx-auto">
-            <div className="lg:flex-row flex flex-col bg-gray-800 rounded-xl overflow-hidden">
-              <div className="lg:w-[70%] w-[100%] flex flex-col py-8 px-12">
-                <div className="flex justify-between">
-                  <div className="w-[100%] text-center lg:text-left lg:w-[80%] mb-10">
-                    <h2 className="text-xl text-white font-medium mb-5">
+          <div className='xl:w-[960px] mx-auto'>
+            <div className='lg:flex-row flex flex-col bg-gray-800 rounded-xl overflow-hidden'>
+              <div className='lg:w-[70%] w-[100%] flex flex-col py-8 px-12'>
+                <div className='flex justify-between'>
+                  <div className='w-[100%] text-center lg:text-left lg:w-[80%] mb-10'>
+                    <h2 className='text-xl text-white font-medium mb-5'>
                       {post.title}
                     </h2>
-                    <p className="text-white font-sans text-sm whitespace-pre-line leading-5">
+                    <p className='text-white font-sans text-sm whitespace-pre-line leading-5'>
                       {post.description}
                     </p>
                   </div>
@@ -125,11 +119,11 @@ const UserPost: NextPage<Props> = ({ user, post, uid, error }) => {
                   </button> */}
                 </div>
 
-                <div className="mb-auto text-center lg:text-left">
-                  <h3 className="text-sm text-white font-bold mb-3">
+                <div className='mb-auto text-center lg:text-left'>
+                  <h3 className='text-sm text-white font-bold mb-3'>
                     Skills and Expertise
                   </h3>
-                  <div className="flex justify-center items-center lg:justify-start gap-2 lg:w-[80%] w-[100%]">
+                  <div className='flex justify-center items-center lg:justify-start gap-2 lg:w-[80%] w-[100%]'>
                     {post.tags.map((tag) => {
                       return (
                         <span
@@ -144,70 +138,81 @@ const UserPost: NextPage<Props> = ({ user, post, uid, error }) => {
                       );
                     })}
                   </div>
-                  <p className="text-white text-xs mt-7">
+                  <p className='text-white text-xs mt-7'>
                     Level Required - Beginner - {/*@ts-ignore  */}
                     {dayjs(post.createdAt.inMiliseconds).fromNow()}
                   </p>
                 </div>
 
-                <p className="text-xs text-gray-400 text-center lg:text-left mt-16">
-                  Posted on {dayjs(post.createdAt.inMiliseconds).format('MMM D, YYYY')}
+                <p className='text-xs text-gray-400 text-center lg:text-left mt-16'>
+                  Posted on{' '}
+                  {dayjs(post.createdAt.inMiliseconds).format('MMM D, YYYY')}
                 </p>
               </div>
 
-              <div className="lg:w-[30%] w-[100%] bg-[#1b232e] pb-8 pt-10 flex flex-col items-center">
-                <div className="w-40 h-40 mb-8">
-                  <Image src={user.photoURL} width={160} height={160} className="w-40 h-40 rounded-full object-cover" alt='user image' />
+              <div className='lg:w-[30%] w-[100%] bg-[#1b232e] pb-8 pt-10 flex flex-col items-center'>
+                <div className='w-40 h-40 mb-8'>
+                  <Image
+                    src={user.photoURL}
+                    width={160}
+                    height={160}
+                    className='w-40 h-40 rounded-full object-cover'
+                    alt='user image'
+                  />
                 </div>
-                <div className="w-full px-10 flex flex-col items-center">
-                  <p className="text-center font-sans text-white font-bold text-xl mb-8">
+                <div className='w-full px-10 flex flex-col items-center'>
+                  <p className='text-center font-sans text-white font-bold text-xl mb-8'>
                     {user.displayName ? user.displayName : user.githubUsername}
                   </p>
-                  <p className="text-center font-sans text-gray-500 text-sm mb-14">
+                  <p className='text-center font-sans text-gray-500 text-sm mb-14'>
                     {user.longDescription}
                   </p>
-                  <div className="flex items-center gap-5 mb-24">
+                  <div className='flex items-center gap-5 mb-24'>
                     {/* I think later remake this as a component, too much shit and it looks shit */}
                     {user.discordName === 'false' ||
-                      user.discordName == null ? null : (
+                    user.discordName == null ? null : (
                       <button
-                        type="button"
+                        type='button'
                         onClick={() => setIsDiscordOpen(true)}
                       >
-                        <Image src="/images/icon-discord.png" width={20} height={20} alt='discord icon' />
+                        <Image
+                          src='/images/icon-discord.png'
+                          width={20}
+                          height={20}
+                          alt='discord icon'
+                        />
                       </button>
                     )}
                     {user.twitterUsername === 'false' ||
-                      user.twitterUsername == null ? null : (
+                    user.twitterUsername == null ? null : (
                       <a
                         href={`https://twitter.com/${user.twitterUsername}`}
-                        target="_blank"
-                        rel="noreferrer"
+                        target='_blank'
+                        rel='noreferrer'
                       >
                         <Image
-                          src="/images/icon-twitter.png"
+                          src='/images/icon-twitter.png'
                           width={20}
                           height={20}
                           alt='twitter icon'
                         />
-
                       </a>
                     )}
                     <a
                       href={`https://github.com/${user.githubUsername}`}
-                      target="_blank"
-                      rel="noreferrer"
+                      target='_blank'
+                      rel='noreferrer'
                     >
                       <Image
-                        src="/images/icon-github.png"
+                        src='/images/icon-github.png'
                         width={20}
                         height={20}
                         alt='github icon'
                       />
                     </a>
                   </div>
-                  <div className="border-t border-gray-500 w-full mt-auto" />
-                  <p className="text-xs text-gray-500 mt-8">
+                  <div className='border-t border-gray-500 w-full mt-auto' />
+                  <p className='text-xs text-gray-500 mt-8'>
                     Member since{' '}
                     {dayjs(user.createdAt.seconds * 1000).format('MMM D, YYYY')}
                   </p>
@@ -218,15 +223,15 @@ const UserPost: NextPage<Props> = ({ user, post, uid, error }) => {
         </main>
 
         <ModalSocialMediaUsername
-          socialMedia="Discord"
+          socialMedia='Discord'
           // @ts-ignore
           username={user.discordName}
           isOpen={isDiscordOpen}
           onRequestClose={() => setIsDiscordOpen(false)}
-          link="https://discord.com"
+          link='https://discord.com'
         />
-      </div >
-    </div >
+      </div>
+    </div>
   );
 };
 
