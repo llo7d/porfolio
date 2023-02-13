@@ -82,7 +82,7 @@ const MyPosts: NextPage<Props> = ({ userInfo, uid, error, posts }) => {
   if (error) {
     return (
       <div>
-        <Custom404 ErrorType="Page not found" />
+        <Custom404 ErrorType='Page not found' />
       </div>
     );
   }
@@ -97,33 +97,33 @@ const MyPosts: NextPage<Props> = ({ userInfo, uid, error, posts }) => {
         <div>
           <Head>
             <title>My posts</title>
-            <meta property="og:title" content="My posts" key="myposts" />
-            <link rel="icon" href="/images/favicon.png" />
+            <meta property='og:title' content='My posts' key='myposts' />
+            <link rel='icon' href='/images/favicon.png' />
           </Head>
 
-          <main className="bg-gray-900 min-h-screen py-14 px-10 md:px-28">
+          <main className='bg-gray-900 min-h-screen py-14 px-10 md:px-28'>
             {/* Top bar */}
-            <div className="xl:w-[960px] mx-auto">
+            <div className='xl:w-[960px] mx-auto'>
               {/* Create a text that is in the center of the page, that says My POSTS */}
-              <div className="flex items-center justify-center ">
-                <h1 className="text-4xl font-bold text-white">My posts</h1>
+              <div className='flex items-center justify-center '>
+                <h1 className='text-4xl font-bold text-white'>My posts</h1>
               </div>
 
-              <div className="flex items-center justify-between mb-16"></div>
+              <div className='flex items-center justify-between mb-16'></div>
               {/* If posts array is empty show a button that says "create post" else show the posts */}
               {posts.length === 0 ? (
                 <>
                   {/* // text in white that says "You have no posts..." */}
 
-                  <div className="flex items-center justify-center">
+                  <div className='flex items-center justify-center'>
                     {/* // button that says "create post" */}
 
-                    <Link href="/create">
+                    <Link href='/create'>
                       <button
-                        type="button"
-                        className="flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2.5"
+                        type='button'
+                        className='flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2.5'
                       >
-                        <PlusIcon className="w-6 h-6 mr-2" />
+                        <PlusIcon className='w-6 h-6 mr-2' />
                         <span>Create post</span>
                       </button>
                     </Link>

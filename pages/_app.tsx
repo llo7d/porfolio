@@ -15,7 +15,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <FirebaseContext.Provider value={{ user, loadingUser }}>
         {/* <ToastContainer /> */}
         <ToastContainer
-          position="top-center"
+          position='top-center'
           autoClose={2500}
           hideProgressBar={false}
           newestOnTop={false}
@@ -24,7 +24,7 @@ export default function App({ Component, pageProps }: AppProps) {
           pauseOnFocusLoss={false}
           draggable
           pauseOnHover={false}
-          theme="light"
+          theme='light'
         />
         <Layout>
           <Component {...pageProps} />

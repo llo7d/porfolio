@@ -15,7 +15,6 @@ type Props = {
 const AuthCheck: NextPage<Props> = ({ children, uid, fallback }) => {
   const { user, loadingUser } = useContext(FirebaseContext);
 
-
   // if user is loading, show loading screen
   if (loadingUser)
     return (
@@ -36,11 +35,10 @@ const AuthCheck: NextPage<Props> = ({ children, uid, fallback }) => {
   if (user?.uid !== uid) {
     return (
       <div>
-        <Custom404 ErrorType="This is not your profile" />
+        <Custom404 ErrorType='This is not your profile' />
       </div>
     );
   }
-
 
   // if user is logged in and uid matches, show children
   return children;
